@@ -6,7 +6,7 @@
 #include "PhysBody3D.h"
 #include "ModuleAudio.h"
 
-ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, start_enabled), vehicle(NULL)
+ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, start_enabled), vehicle(NULL), vehicle2(NULL)
 {
 	turn = acceleration = brake = turn2 = acceleration2 = brake2 = 0.0f;
 }
