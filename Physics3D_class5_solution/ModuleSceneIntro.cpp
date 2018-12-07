@@ -40,6 +40,9 @@ bool ModuleSceneIntro::Start()
 	pb_limit4 = App->physics->AddBody(limit4, limit_mass);
 
 
+	App->audio->PlayMusic("audio/track_intro.ogg", 0, 0.0f);
+
+
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 	return ret;
@@ -49,13 +52,17 @@ bool ModuleSceneIntro::Start()
 bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
-
 	return true;
 }
 
 // Update
 update_status ModuleSceneIntro::Update(float dt)
 {
+
+	if (Mix_PlayingMusic() == 0)
+		App->audio->PlayMusic("audio/track_loop.ogg", -1, 0.0f);
+
+
 	Plane p(0, 1, 0, 0);
 	p.axis = true;
 	p.Render();

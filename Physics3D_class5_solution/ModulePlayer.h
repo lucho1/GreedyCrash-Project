@@ -12,6 +12,7 @@ struct PhysVehicle3D;
 class ModulePlayer : public Module
 {
 public:
+	
 	ModulePlayer(Application* app, bool start_enabled = true);
 	virtual ~ModulePlayer();
 
@@ -19,10 +20,19 @@ public:
 	update_status Update(float dt);
 	bool CleanUp();
 
+	void HandleInput_P1();
+	void HandleInput_P2();
+
 public:
 
-	PhysVehicle3D* vehicle;
+	PhysVehicle3D* vehicle = nullptr;
 	float turn;
 	float acceleration;
 	float brake;
+
+	PhysVehicle3D* vehicle2 = nullptr;
+	float turn2;
+	float acceleration2;
+	float brake2;
+
 };

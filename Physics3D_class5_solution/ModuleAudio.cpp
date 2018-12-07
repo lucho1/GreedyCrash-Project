@@ -69,7 +69,7 @@ bool ModuleAudio::CleanUp()
 }
 
 // Play a music file
-bool ModuleAudio::PlayMusic(const char* path, float fade_time)
+bool ModuleAudio::PlayMusic(const char* path, int loops, float fade_time)
 {
 	bool ret = true;
 	
@@ -107,7 +107,7 @@ bool ModuleAudio::PlayMusic(const char* path, float fade_time)
 		}
 		else
 		{
-			if(Mix_PlayMusic(music, -1) < 0)
+			if(Mix_PlayMusic(music, loops) < 0)
 			{
 				LOG("Cannot play in music %s. Mix_GetError(): %s", path, Mix_GetError());
 				ret = false;
