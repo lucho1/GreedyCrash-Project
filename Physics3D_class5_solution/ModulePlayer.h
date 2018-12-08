@@ -20,8 +20,13 @@ public:
 	update_status Update(float dt);
 	bool CleanUp();
 
+private:
+
 	void HandleInput_P1();
 	void HandleInput_P2();
+
+	VehicleInfo SetDefaultCar();
+	void SetConstCarProperties(VehicleInfo* car, float connection_height, float wheel_radius, float wheel_width, float suspensionRestLength);
 
 public:
 

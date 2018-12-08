@@ -39,10 +39,13 @@ bool ModuleSceneIntro::Start()
 	pb_limit3 = App->physics->AddBody(limit3, limit_mass);
 	pb_limit4 = App->physics->AddBody(limit4, limit_mass);
 
-
+	
 	App->audio->PlayMusic("audio/track_intro.ogg", 0, 0.0f);
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
+
+	//To hear music, comment or delete the next line
+	Mix_VolumeMusic(0);
 	return ret;
 }
 
