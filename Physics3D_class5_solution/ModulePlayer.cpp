@@ -21,7 +21,6 @@ bool ModulePlayer::Start()
 
 	VehicleInfo car = SetDefaultCar(); //Default car
 	
-
 	vehicle = App->physics->AddVehicle(car);
 	vehicle->SetPos(0, 12, 10);
 
@@ -152,9 +151,9 @@ VehicleInfo ModulePlayer::SetDefaultCar() {
 	VehicleInfo car;
 
 	// Car properties ----------------------------------------
-	car.chassis_size.Set(2, 1, 4);
+	car.chassis_size.Set(4, 2, 8);
 	car.chassis_offset.Set(0, 1.5, 0);
-	car.mass = 300.0f;
+	car.mass = 100.0f;
 	car.suspensionStiffness = 40.0f;
 	car.suspensionCompression = 2.4f;
 	car.suspensionDamping = 2.3f;
@@ -163,10 +162,10 @@ VehicleInfo ModulePlayer::SetDefaultCar() {
 	car.maxSuspensionForce = 6000.0f;
 
 	// Wheel properties ---------------------------------------
-	float connection_height = 1.2f;
-	float wheel_radius = 0.3f;
-	float wheel_width = 0.5f;
-	float suspensionRestLength = 0.1f;
+	float connection_height = 1.0f;
+	float wheel_radius = 0.6f;
+	float wheel_width = 1.0f;
+	float suspensionRestLength = 0.2f;
 
 	SetConstCarProperties(&car, connection_height, wheel_radius, wheel_width, suspensionRestLength);
 	return car;
