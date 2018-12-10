@@ -18,14 +18,16 @@ ModulePlayer::~ModulePlayer()
 bool ModulePlayer::Start()
 {
 	LOG("Loading player");
+	IposP1 = vec3(0.0f, 0.0f, 10.0f);
+	IposP2 = vec3(0.0f, 0.0f, 50.0f);
 
 	VehicleInfo car = SetDefaultCar(); //Default car
 	
 	vehicle = App->physics->AddVehicle(car);
-	vehicle->SetPos(0, 12, 10);
+	vehicle->SetPos(IposP1.x, IposP1.y, IposP1.z);
 
 	vehicle2 = App->physics->AddVehicle(car);
-	vehicle2->SetPos(0, 0, 50);
+	vehicle2->SetPos(IposP2.x, IposP2.y, IposP2.z);
 
 	return true;
 }
@@ -72,8 +74,10 @@ update_status ModulePlayer::Update(float dt)
 
 void ModulePlayer::HandleInput_P1() {
 
-	if (App->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN)
-		vehicle->SetPos(0, 12, 10);
+	if (App->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN) {
+		vehicle->SetPos(IposP1.x, IposP1.y, IposP1.z);
+		
+	}
 
 	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 		acceleration = MAX_ACCELERATION;

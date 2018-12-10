@@ -34,10 +34,12 @@ public:
 	float turn;
 	float acceleration;
 	float brake;
+	vec3 IposP1;
 
 	PhysVehicle3D* vehicle2 = nullptr;
 	float turn2;
 	float acceleration2;
 	float brake2;
+	vec3 IposP2;
 
 };
