@@ -72,15 +72,8 @@ update_status ModulePlayer::Update(float dt)
 
 void ModulePlayer::HandleInput_P1() {
 
-	bool going_forward;
-
-	if (acceleration > 0)
-		going_forward = true;
-	else
-		going_forward = false;
-
-
-
+	if (App->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN)
+		vehicle->SetPos(0, 12, 10);
 
 	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 		acceleration = MAX_ACCELERATION;
@@ -88,7 +81,7 @@ void ModulePlayer::HandleInput_P1() {
 
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT) {
 
-		if (going_forward)
+		if (vehicle->GetKmh() >= 0)
 			brake = BRAKE_POWER;
 		else
 			acceleration = -MAX_ACCELERATION;
@@ -111,23 +104,13 @@ void ModulePlayer::HandleInput_P1() {
 
 void ModulePlayer::HandleInput_P2() {
 
-	bool going_forward;
-
-	if (acceleration > 0)
-		going_forward = true;
-	else
-		going_forward = false;
-
-
-
-
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 		acceleration2 = MAX_ACCELERATION;
 
 
 	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
 
-		if(going_forward)
+		if (vehicle2->GetKmh() >= 0)
 			brake2 = BRAKE_POWER;
 		else
 			acceleration2 = -MAX_ACCELERATION;

@@ -41,7 +41,9 @@ bool ModuleSceneIntro::Start()
 
 	
 	App->audio->PlayMusic("audio/track_intro.ogg", 0, 0.0f);
-	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
+
+	
+	App->camera->Move(vec3(0.0f, 103.28f, 167.10f));
 	App->camera->LookAt(vec3(0, 0, 0));
 
 	//To hear music, comment or delete the next line
@@ -80,7 +82,7 @@ update_status ModuleSceneIntro::Update(float dt)
 	pb_limit4->GetTransform(&limit4.transform);
 	limit4.Render();
 
-	LOG("CAMERA POS: %.2f %.2f %.2f", App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
+//	LOG("CAMERA POS: %.2f %.2f %.2f", App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
 	return UPDATE_CONTINUE;
 }
 
