@@ -49,8 +49,9 @@ void PhysBody3D::SetPos(float x, float y, float z)
 
 void PhysBody3D::SetRotation(float x, float y, float z, float angle) {
 
+	float angle_in_rad = angle * (M_PI / 180);
+
 	btTransform t = body->getWorldTransform();
-	float angle_in_rad = angle * (M_PI/180);
 	t.setRotation(btQuaternion(btVector3(x, y, z), angle_in_rad));
 	body->setWorldTransform(t);
 }
