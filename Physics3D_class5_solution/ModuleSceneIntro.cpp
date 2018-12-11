@@ -28,12 +28,12 @@ bool ModuleSceneIntro::Start()
 
 
 	float dFromAxis = 100.0f;
-	limit1.SetPos(-dFromAxis, 0.0f, 0.0f);
-	limit2.SetPos(dFromAxis, 0.0f, 0.0f);
-	limit3.SetPos(0.0f, 0.0f, -dFromAxis - 1.0f);
-	limit4.SetPos(0.0f, 0.0f, dFromAxis + 1.0f);
+	limit1.SetPos(-dFromAxis, height/2.0f, 0.0f);
+	limit2.SetPos(dFromAxis, height/2.0f, 0.0f);
+	limit3.SetPos(0.0f, height/2.0f, -dFromAxis - 1.0f);
+	limit4.SetPos(0.0f, height/2.0f, dFromAxis + 1.0f);
 
-	float limit_mass = 50000.0f;
+	float limit_mass = 0.0f; //0 for Static bodies
 	pb_limit1 = App->physics->AddBody(limit1, limit_mass);
 	pb_limit2 = App->physics->AddBody(limit2, limit_mass);
 	pb_limit3 = App->physics->AddBody(limit3, limit_mass);

@@ -28,6 +28,7 @@ bool ModulePlayer::Start()
 
 	vehicle2 = App->physics->AddVehicle(car);
 	vehicle2->SetPos(IposP2.x, IposP2.y, IposP2.z);
+	vehicle2->SetRotation(0.0f, 1.0f, 0.0f, 180.0f);
 
 	return true;
 }
