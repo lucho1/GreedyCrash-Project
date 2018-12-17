@@ -12,6 +12,7 @@ struct PhysMotor3D;
 class ModuleSceneIntro : public Module
 {
 public:
+
 	ModuleSceneIntro(Application* app, bool start_enabled = true);
 	~ModuleSceneIntro();
 
@@ -19,8 +20,7 @@ public:
 	update_status Update(float dt);
 	bool CleanUp();
 
-	void OnCollision(PhysBody3D* body1, PhysBody3D* body2);
-	void CreateSlope();
+	PhysBody3D * CreateSlope(Cube &slope, vec3 sizes, vec3 pos, float angle);
 
 public:
 
@@ -36,7 +36,17 @@ public:
 	PhysBody3D *pb_limit4 = nullptr;
 	Cube limit4;
 
+	//Slopes
 	PhysBody3D *pb_slope1 = nullptr;
 	Cube slope1;
+
+	PhysBody3D *pb_slope2 = nullptr;
+	Cube slope2;
+
+	PhysBody3D *pb_slope3 = nullptr;
+	Cube slope3;
+
+	PhysBody3D *pb_slope4 = nullptr;
+	Cube slope4;
 
 };

@@ -23,14 +23,11 @@ bool ModulePlayer::Start()
 	
 	vehicle = App->physics->AddVehicle(car);
 	vehicle2 = App->physics->AddVehicle(car);
-	
-	vehicle->SetPos(IposP1.x, IposP1.y, IposP1.z);
-	vehicle2->SetPos(IposP2.x, IposP2.y, IposP2.z);
-	vehicle2->SetRotation(0.0f, 1.0f, 0.0f, 180.0f);
 
 	IOrientation_vector = vehicle->vehicle->getForwardVector();
 	IOrientation_vector2 = vehicle2->vehicle->getForwardVector();
 
+	RestartCar(IOrientation_vector, vehicle,IposP1);
 	RestartCar(IOrientation_vector2, vehicle2, IposP2, true);
 
 	return true;
@@ -48,14 +45,6 @@ bool ModulePlayer::CleanUp()
 update_status ModulePlayer::Update(float dt)
 {
 	turn = acceleration = brake = turn2 = acceleration2 = brake2 = 0.0f;
-
-	if (App->input->GetKey(SDL_SCANCODE_Y) == KEY_DOWN) 
-		RestartCar(IOrientation_vector, vehicle, IposP1);
-		
-	if (App->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN) 
-		RestartCar(IOrientation_vector2, vehicle2, IposP2, true);
-
-	
 
 	HandleInput_P1();
 	HandleInput_P2();
@@ -86,6 +75,9 @@ update_status ModulePlayer::Update(float dt)
 
 void ModulePlayer::HandleInput_P1() {
 
+	if (App->input->GetKey(SDL_SCANCODE_Y) == KEY_DOWN)
+		RestartCar(IOrientation_vector, vehicle, IposP1);
+
 	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 		acceleration = MAX_ACCELERATION;
 
@@ -114,6 +106,9 @@ void ModulePlayer::HandleInput_P1() {
 
 
 void ModulePlayer::HandleInput_P2() {
+
+	if (App->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN)
+		RestartCar(IOrientation_vector2, vehicle2, IposP2, true);
 
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 		acceleration2 = MAX_ACCELERATION;
@@ -233,17 +228,14 @@ void ModulePlayer::RestartCar(btVector3 Iorientation, PhysVehicle3D* vehicle, ve
 
 	float fAngle = Iorientation.angle(vehicle->vehicle->getForwardVector());
 
-	if (fAngle != 0) {
-		vehicle->SetRotation(0.0f, 1.0f, 0.0f, -fAngle/*, false*/);
+	if (fAngle != 0)
+		vehicle->SetRotation(0.0f, 1.0f, 0.0f, -fAngle);
 
-		if(inverted)
-			vehicle->SetRotation(0.0f, 1.0f, 0.0f, 180.0f/*, false*/);
-
-	}
+	if (inverted == true)
+		vehicle->SetRotation(0.0f, 1.0f, 0.0f, 180.0f);
 
 	if (vehicle->GetKmh() > 0)
 		vehicle->SetLinearVelocity(vec3(0.0f, 0.0f, 0.0f));
-
 
 	vehicle->SetPos(Ipos.x, Ipos.y, Ipos.z);
 

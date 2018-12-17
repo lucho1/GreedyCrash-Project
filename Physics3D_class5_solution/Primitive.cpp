@@ -32,12 +32,14 @@ void Primitive::Render() const
 
 		glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
 
+		//X Axis line ("X" is two lines xD)
 		glVertex3f(0.0f, 0.0f, 0.0f); glVertex3f(1.0f, 0.0f, 0.0f);
 		glVertex3f(1.0f, 0.1f, 0.0f); glVertex3f(1.1f, -0.1f, 0.0f);
 		glVertex3f(1.1f, 0.1f, 0.0f); glVertex3f(1.0f, -0.1f, 0.0f);
 
 		glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
 
+		//Y Axis line
 		glVertex3f(0.0f, 0.0f, 0.0f); glVertex3f(0.0f, 1.0f, 0.0f);
 		glVertex3f(-0.05f, 1.25f, 0.0f); glVertex3f(0.0f, 1.15f, 0.0f);
 		glVertex3f(0.05f, 1.25f, 0.0f); glVertex3f(0.0f, 1.15f, 0.0f);
@@ -45,6 +47,7 @@ void Primitive::Render() const
 
 		glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
 
+		//Z Axis line
 		glVertex3f(0.0f, 0.0f, 0.0f); glVertex3f(0.0f, 0.0f, 1.0f);
 		glVertex3f(-0.05f, 0.1f, 1.05f); glVertex3f(0.05f, 0.1f, 1.05f);
 		glVertex3f(0.05f, 0.1f, 1.05f); glVertex3f(-0.05f, -0.1f, 1.05f);
