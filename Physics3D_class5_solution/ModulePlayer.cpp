@@ -231,10 +231,14 @@ void ModulePlayer::SetConstCarProperties(VehicleInfo* car, float connection_heig
 
 void ModulePlayer::RestartCar() {
 
-	float fAngle = vehicle2->vehicle->getForwardVector().angle(IOrientation_vector2);
+	float fAngle = IOrientation_vector2.angle(vehicle2->vehicle->getForwardVector());
+	
 
-	if (fAngle != 0)
-		vehicle2->SetRotation(0.0f, 1.0f, 0.0f, -fAngle, false);
+	if (fAngle != 0) {
+		vehicle2->SetRotation(0.0f, 1.0f, 0.0f, -fAngle/*, false*/);
+		vehicle2->SetRotation(0.0f, 1.0f, 0.0f, 180.0f/*, false*/);
+
+	}
 
 	if (vehicle2->GetKmh() > 0)
 		vehicle2->SetLinearVelocity(vec3(0.0f, 0.0f, 0.0f));
