@@ -28,18 +28,22 @@ private:
 	VehicleInfo SetDefaultCar();
 	void SetConstCarProperties(VehicleInfo* car, float connection_height, float wheel_radius, float wheel_width, float suspensionRestLength);
 
+	void RestartCar();
+
 public:
 
 	PhysVehicle3D* vehicle = nullptr;
 	float turn;
 	float acceleration;
 	float brake;
-	vec3 IposP1;
+	vec3 IposP1 = vec3(0.0f, 0.0f, 10.0f);
+	btVector3 IOrientation_vector;
 
 	PhysVehicle3D* vehicle2 = nullptr;
 	float turn2;
 	float acceleration2;
 	float brake2;
-	vec3 IposP2;
+	vec3 IposP2 = vec3(0.0f, 0.0f, 50.0f);
+	btVector3 IOrientation_vector2;
 
 };

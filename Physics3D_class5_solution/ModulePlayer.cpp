@@ -18,17 +18,20 @@ ModulePlayer::~ModulePlayer()
 bool ModulePlayer::Start()
 {
 	LOG("Loading player");
-	IposP1 = vec3(0.0f, 0.0f, 10.0f);
-	IposP2 = vec3(0.0f, 0.0f, 50.0f);
 
 	VehicleInfo car = SetDefaultCar(); //Default car
 	
 	vehicle = App->physics->AddVehicle(car);
-	vehicle->SetPos(IposP1.x, IposP1.y, IposP1.z);
-
 	vehicle2 = App->physics->AddVehicle(car);
+	
+	vehicle->SetPos(IposP1.x, IposP1.y, IposP1.z);
 	vehicle2->SetPos(IposP2.x, IposP2.y, IposP2.z);
 	vehicle2->SetRotation(0.0f, 1.0f, 0.0f, 180.0f);
+
+	IOrientation_vector = vehicle->vehicle->getForwardVector();
+	IOrientation_vector2 = vehicle2->vehicle->getForwardVector();
+
+	RestartCar();
 
 	return true;
 }
@@ -45,6 +48,14 @@ bool ModulePlayer::CleanUp()
 update_status ModulePlayer::Update(float dt)
 {
 	turn = acceleration = brake = turn2 = acceleration2 = brake2 = 0.0f;
+
+	if (App->input->GetKey(SDL_SCANCODE_Y) == KEY_DOWN) 
+		vehicle->SetPos(IposP1.x, IposP1.y, IposP1.z);
+		
+	if (App->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN) 
+		RestartCar();
+
+	
 
 	HandleInput_P1();
 	HandleInput_P2();
@@ -74,11 +85,6 @@ update_status ModulePlayer::Update(float dt)
 
 
 void ModulePlayer::HandleInput_P1() {
-
-	if (App->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN) {
-		vehicle->SetPos(IposP1.x, IposP1.y, IposP1.z);
-		
-	}
 
 	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 		acceleration = MAX_ACCELERATION;
@@ -219,5 +225,21 @@ void ModulePlayer::SetConstCarProperties(VehicleInfo* car, float connection_heig
 	car->wheels[3].drive = false;
 	car->wheels[3].brake = true;
 	car->wheels[3].steering = false;
+
+}
+
+
+void ModulePlayer::RestartCar() {
+
+	float fAngle = vehicle2->vehicle->getForwardVector().angle(IOrientation_vector2);
+
+	if (fAngle != 0)
+		vehicle2->SetRotation(0.0f, 1.0f, 0.0f, -fAngle, false);
+
+	if (vehicle2->GetKmh() > 0)
+		vehicle2->SetLinearVelocity(vec3(0.0f, 0.0f, 0.0f));
+
+
+	vehicle2->SetPos(IposP2.x, IposP2.y, IposP2.z);
 
 }

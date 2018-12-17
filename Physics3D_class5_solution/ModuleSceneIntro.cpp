@@ -20,6 +20,7 @@ bool ModuleSceneIntro::Start()
 	float height = 8.0f;
 	float width = 2.0f;
 	float longitude = 200.0f;
+	float limit_mass = 0.0f; //0 for Static bodies
 
 	limit1 = limit2 = Cube(width, height, longitude);
 	limit3 = limit4 = Cube(longitude + 2.0f, height, width);
@@ -33,16 +34,20 @@ bool ModuleSceneIntro::Start()
 	limit3.SetPos(0.0f, height/2.0f, -dFromAxis - 1.0f);
 	limit4.SetPos(0.0f, height/2.0f, dFromAxis + 1.0f);
 
-	float limit_mass = 0.0f; //0 for Static bodies
 	pb_limit1 = App->physics->AddBody(limit1, limit_mass);
 	pb_limit2 = App->physics->AddBody(limit2, limit_mass);
 	pb_limit3 = App->physics->AddBody(limit3, limit_mass);
 	pb_limit4 = App->physics->AddBody(limit4, limit_mass);
 
-	
+	//Slope 1
+	slope1 = Cube(10.0f, 2.0f, 15.0f);
+	slope1.axis = false;
+	slope1.SetPos(0.0f, 0.0f, 0.0f);
+	pb_slope1 = App->physics->AddBody(slope1, 0.0f);
+	pb_slope1->SetRotation(1.0f, 0.0f, 0.0f, 10);
+
 	App->audio->PlayMusic("audio/track_intro.ogg", 0, 0.0f);
 
-	
 	App->camera->Move(vec3(0.0f, 103.28f, 167.10f));
 	App->camera->LookAt(vec3(0, 0, 0));
 
@@ -81,6 +86,9 @@ update_status ModuleSceneIntro::Update(float dt)
 
 	pb_limit4->GetTransform(&limit4.transform);
 	limit4.Render();
+
+	pb_slope1->GetTransform(&slope1.transform);
+	slope1.Render();
 
 //	LOG("CAMERA POS: %.2f %.2f %.2f", App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
 	return UPDATE_CONTINUE;

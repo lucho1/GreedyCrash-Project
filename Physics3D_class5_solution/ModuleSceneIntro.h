@@ -20,6 +20,7 @@ public:
 	bool CleanUp();
 
 	void OnCollision(PhysBody3D* body1, PhysBody3D* body2);
+	void CreateSlope();
 
 public:
 
@@ -34,5 +35,8 @@ public:
 
 	PhysBody3D *pb_limit4 = nullptr;
 	Cube limit4;
+
+	PhysBody3D *pb_slope1 = nullptr;
+	Cube slope1;
 
 };

@@ -2,6 +2,7 @@
 #define __PhysBody3D_H__
 
 #include "p2List.h"
+#include "glmath.h"
 
 class btRigidBody;
 class Module;
@@ -10,7 +11,9 @@ class Module;
 struct PhysBody3D
 {
 	friend class ModulePhysics3D;
+
 public:
+
 	PhysBody3D(btRigidBody* body);
 	~PhysBody3D();
 
@@ -18,7 +21,8 @@ public:
 	void GetTransform(float* matrix) const;
 	void SetTransform(const float* matrix) const;
 	void SetPos(float x, float y, float z);
-	void SetRotation(float x, float y, float z, float angle);
+	void SetRotation(float x, float y, float z, float angle, bool converse = true);
+	void SetLinearVelocity(vec3 vel);
 
 private:
 	btRigidBody* body = nullptr;

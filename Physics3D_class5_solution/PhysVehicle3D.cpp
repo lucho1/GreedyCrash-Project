@@ -87,8 +87,10 @@ void PhysVehicle3D::Turn(float degrees)
 	}
 }
 
+
 // ----------------------------------------------------------------------------
 float PhysVehicle3D::GetKmh() const
 {
+	
 	return vehicle->getCurrentSpeedKmHour();
 }
