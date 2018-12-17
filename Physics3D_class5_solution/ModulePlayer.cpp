@@ -31,7 +31,7 @@ bool ModulePlayer::Start()
 	IOrientation_vector = vehicle->vehicle->getForwardVector();
 	IOrientation_vector2 = vehicle2->vehicle->getForwardVector();
 
-	RestartCar();
+	RestartCar(IOrientation_vector2, vehicle2, IposP2, true);
 
 	return true;
 }
@@ -50,10 +50,10 @@ update_status ModulePlayer::Update(float dt)
 	turn = acceleration = brake = turn2 = acceleration2 = brake2 = 0.0f;
 
 	if (App->input->GetKey(SDL_SCANCODE_Y) == KEY_DOWN) 
-		vehicle->SetPos(IposP1.x, IposP1.y, IposP1.z);
+		RestartCar(IOrientation_vector, vehicle, IposP1);
 		
 	if (App->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN) 
-		RestartCar();
+		RestartCar(IOrientation_vector2, vehicle2, IposP2, true);
 
 	
 
@@ -229,21 +229,22 @@ void ModulePlayer::SetConstCarProperties(VehicleInfo* car, float connection_heig
 }
 
 
-void ModulePlayer::RestartCar() {
+void ModulePlayer::RestartCar(btVector3 Iorientation, PhysVehicle3D* vehicle, vec3 Ipos, bool inverted) {
 
-	float fAngle = IOrientation_vector2.angle(vehicle2->vehicle->getForwardVector());
-	
+	float fAngle = Iorientation.angle(vehicle->vehicle->getForwardVector());
 
 	if (fAngle != 0) {
-		vehicle2->SetRotation(0.0f, 1.0f, 0.0f, -fAngle/*, false*/);
-		vehicle2->SetRotation(0.0f, 1.0f, 0.0f, 180.0f/*, false*/);
+		vehicle->SetRotation(0.0f, 1.0f, 0.0f, -fAngle/*, false*/);
+
+		if(inverted)
+			vehicle->SetRotation(0.0f, 1.0f, 0.0f, 180.0f/*, false*/);
 
 	}
 
-	if (vehicle2->GetKmh() > 0)
-		vehicle2->SetLinearVelocity(vec3(0.0f, 0.0f, 0.0f));
+	if (vehicle->GetKmh() > 0)
+		vehicle->SetLinearVelocity(vec3(0.0f, 0.0f, 0.0f));
 
 
-	vehicle2->SetPos(IposP2.x, IposP2.y, IposP2.z);
+	vehicle->SetPos(Ipos.x, Ipos.y, Ipos.z);
 
 }

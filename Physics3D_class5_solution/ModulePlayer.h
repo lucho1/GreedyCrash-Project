@@ -28,7 +28,7 @@ private:
 	VehicleInfo SetDefaultCar();
 	void SetConstCarProperties(VehicleInfo* car, float connection_height, float wheel_radius, float wheel_width, float suspensionRestLength);
 
-	void RestartCar();
+	void RestartCar(btVector3 Iorientation, PhysVehicle3D* vehicle, vec3 Ipos, bool inverted = false);
 
 public:
 
