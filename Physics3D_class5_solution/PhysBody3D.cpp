@@ -50,15 +50,35 @@ void PhysBody3D::SetPos(float x, float y, float z)
 }
 
 
-void PhysBody3D::SetRotation(float x, float y, float z, float angle, bool converse) {
+void PhysBody3D::SetRotation(vec3 axis, float angle, bool converse) {
+
+	btVector3 ax = btVector3(axis.x, axis.y, axis.z);
 
 	if(converse)
 		angle = angle * (M_PI / 180);
 
 	btTransform t = body->getWorldTransform();
-	t.setRotation(btQuaternion(btVector3(x, y, z), angle));
+	t.setRotation(btQuaternion(ax, angle));
 	body->setWorldTransform(t);
 
+}
+
+
+void PhysBody3D::AddRotation(vec3 axis, float angle, float converse) {
+
+	btVector3 ax = btVector3(axis.x, axis.y, axis.z);
+
+	if (converse)
+		angle = angle * (M_PI / 180);
+
+	btTransform t = body->getWorldTransform();
+
+//	btQuaternion current_rotation = t.getRotation();
+	btQuaternion rotationtoAdd = btQuaternion(ax, angle);
+	btQuaternion rot_addition = t.getRotation() * rotationtoAdd;
+	
+	t.setRotation(rot_addition);
+	body->setWorldTransform(t);
 }
 
 

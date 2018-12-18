@@ -20,8 +20,10 @@ public:
 	void Push(float x, float y, float z);
 	void GetTransform(float* matrix) const;
 	void SetTransform(const float* matrix) const;
+
 	void SetPos(float x, float y, float z);
-	void SetRotation(float x, float y, float z, float angle, bool converse = true);
+	void SetRotation(vec3 axis, float angle, bool converse = true);
+	void AddRotation(vec3 axis, float angle, float converse = true);
 	void SetLinearVelocity(vec3 vel);
 
 private:
@@ -29,6 +31,7 @@ private:
 
 public:
 	p2List<Module*> collision_listeners;
+
 };
 
 #endif // __PhysBody3D_H__

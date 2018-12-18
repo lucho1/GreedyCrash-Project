@@ -41,10 +41,23 @@ bool ModuleSceneIntro::Start()
 
 	//Slopes
 	vec3 slope_sizes = vec3(10.0f, 6.0f, 13.0f);
-	pb_slope1 = CreateSlope(slope1, vec3(slope_sizes), vec3(0.0f, -1.0f, 10.0f), 15.0f);
-	pb_slope2 = CreateSlope(slope2, vec3(slope_sizes), vec3(0.0f, -1.0f, -10.0f), -15.0f);
-	//pb_slope3 = CreateSlope(slope3, vec3(slope_sizes), vec3(10.0f, -1.0f, 0.0f));
-	//pb_slope4 = CreateSlope(slope4, vec3(slope_sizes), vec3(-10.0f, -1.0f, 10.0f));
+	float Xangle = 18.0f;
+	float Yangle = 45.0f;
+
+	//Center slopes
+	pb_slope1 = CreateSlope(slope1, slope_sizes, vec3(8.0f, -1.0f, 8.0f), Xangle, Yangle);
+	pb_slope2 = CreateSlope(slope2, slope_sizes, vec3(-8.0f, -1.0f, -8.0f), -Xangle, Yangle);
+	pb_slope3 = CreateSlope(slope3, slope_sizes, vec3(8.0f, -1.0f, -8.0f), -Xangle, -Yangle);
+	pb_slope4 = CreateSlope(slope4, slope_sizes, vec3(-8.0f, -1.0f, 8.0f), Xangle, -Yangle);
+
+	//Side Slopes
+	pb_slope5 = CreateSlope(slope5, slope_sizes, vec3(95.0f, -1.0f, 8.0f), Xangle, -30.0f);
+	pb_slope6 = CreateSlope(slope6, slope_sizes, vec3(95.0f, -1.0f, -8.0f), -Xangle, 30.0f);
+	pb_slope7 = CreateSlope(slope7, slope_sizes, vec3(-95.0f, -1.0f, 8.0f), Xangle, 30.0f);
+	pb_slope8 = CreateSlope(slope8, slope_sizes, vec3(-95.0f, -1.0f, -8.0f), -Xangle, -30.0f);
+
+	pb_slCube = CreateSlope(slCube, vec3(10.0f, 6.0f, 10.0f), vec3(102.0f, 0.8f, 0.0f), 0.0f, -45.0f);
+	pb_slCube2 = CreateSlope(slCube2, vec3(10.0f, 6.0f, 10.0f), vec3(-102.0f, 0.8f, 0.0f), 0.0f, 45.0f);
 
 
 	App->audio->PlayMusic("audio/track_intro.ogg", 0, 0.0f);
@@ -89,33 +102,58 @@ update_status ModuleSceneIntro::Update(float dt)
 	pb_limit4->GetTransform(&limit4.transform);
 	limit4.Render();
 
-	//Slopes
+	//Center Slopes
 	pb_slope1->GetTransform(&slope1.transform);
 	slope1.Render();
 
 	pb_slope2->GetTransform(&slope2.transform);
 	slope2.Render();
 
-	//pb_slope3->GetTransform(&slope3.transform);
-	//slope3.Render();
+	pb_slope3->GetTransform(&slope3.transform);
+	slope3.Render();
 
-	//pb_slope4->GetTransform(&slope4.transform);
-	//slope4.Render();
+	pb_slope4->GetTransform(&slope4.transform);
+	slope4.Render();
+
+	//Side Slopes
+	pb_slope5->GetTransform(&slope5.transform);
+	slope6.Render();
+
+	pb_slope6->GetTransform(&slope6.transform);
+	slope5.Render();
+
+	pb_slope7->GetTransform(&slope7.transform);
+	slope7.Render();
+
+	pb_slope8->GetTransform(&slope8.transform);
+	slope8.Render();
+
+	pb_slCube->GetTransform(&slCube.transform);
+	slCube.Render();
+
+	pb_slCube2->GetTransform(&slCube2.transform);
+	slCube2.Render();
 
 //	LOG("CAMERA POS: %.2f %.2f %.2f", App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
 	return UPDATE_CONTINUE;
 }
 
 
-PhysBody3D * ModuleSceneIntro::CreateSlope(Cube &slope, vec3 sizes, vec3 pos, float angle) {
+PhysBody3D * ModuleSceneIntro::CreateSlope(Cube &slope, vec3 sizes, vec3 pos, float Xangle, float Yangle, float Zangle) {
+
+	vec3 Yaxis = vec3(0.0f, 1.0f, 0.0f);
+	vec3 Xaxis = vec3(1.0f, 0.0f, 0.0f);
+	vec3 Zaxis = vec3(0.0f, 0.0f, 1.0f);
 
 	slope = Cube(sizes.x, sizes.y, sizes.z);
 	slope.SetPos(pos.x, pos.y, pos.z);
 
 	PhysBody3D*pb_slope = nullptr;
 	pb_slope = App->physics->AddBody(slope, 0.0f);
-	pb_slope->SetRotation(1.0f, 0.0f, 0.0f, angle);
-//	pb_slope->SetRotation(0.0f, 1.0f, 0.0f, 40.0f);
+	pb_slope->AddRotation(Yaxis, Yangle);
+	pb_slope->AddRotation(Xaxis, Xangle);
+	pb_slope->AddRotation(Zaxis, Zangle);
+	
 
 	slope.axis = false;
 	return pb_slope;
