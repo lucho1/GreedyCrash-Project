@@ -3,11 +3,12 @@
 #include "p2DynArray.h"
 #include "Globals.h"
 #include "Primitive.h"
-
+#include "Coins.h"
 #define MAX_SNAKE 2
 
 struct PhysBody3D;
 struct PhysMotor3D;
+
 
 class ModuleSceneIntro : public Module
 {
@@ -34,5 +35,9 @@ public:
 
 	PhysBody3D *pb_limit4 = nullptr;
 	Cube limit4;
+
+public:
+
+	Coin CoinControl;
 
 };

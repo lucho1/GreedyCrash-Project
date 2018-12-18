@@ -3,6 +3,9 @@
 #include "ModuleSceneIntro.h"
 #include "Primitive.h"
 #include "PhysBody3D.h"
+#include "Coins.h"
+
+class Coin;
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -14,6 +17,9 @@ ModuleSceneIntro::~ModuleSceneIntro()
 // Load assets
 bool ModuleSceneIntro::Start()
 {
+	CoinControl.Start();
+	
+
 	LOG("Loading Intro assets");
 	bool ret = true;
 
@@ -59,6 +65,11 @@ bool ModuleSceneIntro::CleanUp()
 // Update
 update_status ModuleSceneIntro::Update(float dt)
 {
+
+	/*coin control here*/
+
+	CoinControl.Update(dt);
+
 
 	if (Mix_PlayingMusic() == 0)
 		App->audio->PlayMusic("audio/track_loop.ogg", -1, 0.0f);

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef APLICATION_H_
+#define APLICATION_H_
 
 #include "p2List.h"
 #include "Globals.h"
@@ -12,6 +13,7 @@
 #include "ModuleCamera3D.h"
 #include "ModulePhysics3D.h"
 #include "ModulePlayer.h"
+#include "Coins.h"
 
 class Application
 {
@@ -24,6 +26,7 @@ public:
 	ModuleCamera3D* camera;
 	ModulePhysics3D* physics;
 	ModulePlayer* player;
+
 
 private:
 
@@ -46,3 +49,4 @@ private:
 	void PrepareUpdate();
 	void FinishUpdate();
 };
+#endif

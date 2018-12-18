@@ -1,5 +1,5 @@
 #include "Application.h"
-
+#include <time.h>
 Application::Application()
 {
 	window = new ModuleWindow(this);
@@ -10,6 +10,7 @@ Application::Application()
 	camera = new ModuleCamera3D(this);
 	physics = new ModulePhysics3D(this);
 	player = new ModulePlayer(this);
+	
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -28,6 +29,7 @@ Application::Application()
 
 	// Renderer last!
 	AddModule(renderer3D);
+	
 }
 
 Application::~Application()
@@ -44,6 +46,8 @@ Application::~Application()
 bool Application::Init()
 {
 	bool ret = true;
+	/* initialize random seed: */
+	srand(time(NULL));
 
 	// Call Init() in all modules
 	p2List_item<Module*>* item = list_modules.getFirst();
