@@ -22,7 +22,7 @@ public:
 
 	PhysBody3D *CreateSlope(Cube &slope, vec3 sizes, vec3 pos, float Xangle = 0.0f, float Yangle = 0.0f, float Zangle = 0.0f);
 
-public:
+private:
 
 	//Scenario Limits
 	PhysBody3D *pb_limit1 = nullptr;
@@ -68,5 +68,25 @@ public:
 
 	PhysBody3D *pb_slCube2 = nullptr;
 	Cube slCube2;
-	
+
+	//Traversal slopes
+	PhysBody3D *pb_slTraversal = nullptr;
+	Cube slTraversal;
+
+	PhysBody3D *pb_slTraversal2 = nullptr;
+	Cube slTraversal2;
+
+	PhysBody3D *pb_slTraversal3 = nullptr;
+	Cube slTraversal3;
+
+	PhysBody3D *pb_slTraversal4 = nullptr;
+	Cube slTraversal4;
+
+	//Spheres
+	PhysBody3D *pb_sunkenSphere = nullptr;
+	Sphere sunkenSphere;
+
+	PhysBody3D *pb_sunkenSphere2 = nullptr;
+	Sphere sunkenSphere2;
+
 };

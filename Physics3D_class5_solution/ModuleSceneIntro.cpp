@@ -59,11 +59,26 @@ bool ModuleSceneIntro::Start()
 	pb_slCube = CreateSlope(slCube, vec3(10.0f, 6.0f, 10.0f), vec3(102.0f, 0.8f, 0.0f), 0.0f, -45.0f);
 	pb_slCube2 = CreateSlope(slCube2, vec3(10.0f, 6.0f, 10.0f), vec3(-102.0f, 0.8f, 0.0f), 0.0f, 45.0f);
 
+	//Traversal slopes
+	pb_slTraversal = CreateSlope(slTraversal, vec3(74.0f, 6.0, 8.0f), vec3(52.0f, -1.8f, 2.9f), Xangle);
+	pb_slTraversal2 = CreateSlope(slTraversal2, vec3(74.0f, 6.0, 8.0f), vec3(52.0f, -1.8f, -2.9f), -Xangle);
+	pb_slTraversal3 = CreateSlope(slTraversal3, vec3(74.0f, 6.0, 8.0f), vec3(-52.0f, -1.8f, 2.9f), Xangle);
+	pb_slTraversal4 = CreateSlope(slTraversal4, vec3(74.0f, 6.0, 8.0f), vec3(-52.0f, -1.8f, -2.9f), -Xangle);
 
+	//Spheres
+	sunkenSphere = Sphere(15.0f);
+	sunkenSphere.SetPos(50.0f, -11.0f, 55.0f);
+	pb_sunkenSphere = App->physics->AddBody(sunkenSphere, 0.0f);
+
+	sunkenSphere2 = Sphere(15.0f);
+	sunkenSphere2.SetPos(-50.0f, -11.0f, -55.0f);
+	pb_sunkenSphere2 = App->physics->AddBody(sunkenSphere2, 0.0f);
+
+	//General Scenario Settings
 	App->audio->PlayMusic("audio/track_intro.ogg", 0, 0.0f);
 
-	//App->camera->Move(vec3(0.0f, 103.28f, 167.10f));
-	App->camera->Move(vec3(0.0f, 30.0f, 30.0f));
+	App->camera->Move(vec3(0.0f, 103.28f, 167.10f));
+	//App->camera->Move(vec3(0.0f, 30.0f, 30.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 
 	//To hear music, comment or delete the next line
@@ -133,6 +148,26 @@ update_status ModuleSceneIntro::Update(float dt)
 
 	pb_slCube2->GetTransform(&slCube2.transform);
 	slCube2.Render();
+
+	//Traversal Slopes
+	pb_slTraversal->GetTransform(&slTraversal.transform);
+	slTraversal.Render();
+
+	pb_slTraversal2->GetTransform(&slTraversal2.transform);
+	slTraversal2.Render();
+
+	pb_slTraversal3->GetTransform(&slTraversal3.transform);
+	slTraversal3.Render();
+
+	pb_slTraversal4->GetTransform(&slTraversal4.transform);
+	slTraversal4.Render();
+
+	//Shperes
+	pb_sunkenSphere->GetTransform(&sunkenSphere.transform);
+	sunkenSphere.Render();
+
+	pb_sunkenSphere2->GetTransform(&sunkenSphere2.transform);
+	sunkenSphere2.Render();
 
 //	LOG("CAMERA POS: %.2f %.2f %.2f", App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
 	return UPDATE_CONTINUE;
