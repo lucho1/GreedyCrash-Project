@@ -1,5 +1,8 @@
 #include "Coins.h"
-#include <time.h>
+#include <ctime>
+#include <cmath>
+#include <iostream>
+#include <random>
 #include "glmath.h"
 
 Coin::Coin(){}
@@ -13,48 +16,29 @@ bool Coin::Start(){
 
 	CoinItem = Coins.getFirst();*/
 
-	vec3 pos = (5,5,5);
-	int scale = 3;
-	for (int i = 0; i < 10; i++) {
-		CreateCoin(scale);
-	}
-
-
+	angle = 0;
 	return true;
 }
 void Coin::Update(float dt) {
-	p2List_item<Coin*>* CoinItem = Coins.getFirst();
+	
+	monedita.color.r = 155;
+	monedita.color.g = 155;
+	monedita.color.b = 0;
 
-	for (CoinItem = Coins.getFirst(); CoinItem->next != nullptr; CoinItem = CoinItem->next) {
-
-		Movement_variable++;
-		YMovement*=(sin(Movement_variable));
-
-			CoinItem->data->monedita.SetPos(RandPosMonedita.x, YMovement, RandPosMonedita.z);
-		CoinItem->data->monedita.Render();
+	angle += 6;
+	/*if (ypos < 2) {
+		ypos += 0.2f;
 	}
+	else if (ypos >= 2) {
+		ypos -= 0.2;
+	}*/
+	monedita.SetRotation(angle, vec3(0.0f, 1.0f, 0.0f));
+	//monedita.SetPos(0.0f, ypos, 0.0f);
+
+
+	monedita.Render();
+	
 }
 bool Coin::CleanUp() {
 	return true;
-}
-void Coin::CreateCoin( float scale) {
-	vec3 pos;
-	pos.x = rand() % 100 + -80;
-	pos.z = rand() % 100 + -80;	
-	pos.y = rand() % 10 + 1;
-
-	Coin* NewCoin = new Coin();
-	NewCoin->monedita.radius = 0.3 * scale;
-	NewCoin->monedita.height = 0.1 * scale;
-	NewCoin->monedita.SetPos(pos.x,pos.y,pos.z);
-	NewCoin->active = false;
-	NewCoin->monedita.wire = false;
-	NewCoin->monedita.color = Red;
-	Coins.add(NewCoin);
-	RandPosMonedita.x = pos.x;
-	RandPosMonedita.y = pos.y;
-	RandPosMonedita.z = pos.z;
-
-
-
 }

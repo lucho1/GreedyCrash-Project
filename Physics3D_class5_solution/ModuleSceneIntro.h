@@ -37,7 +37,7 @@ public:
 	Cube limit4;
 
 public:
-
-	Coin CoinControl;
-
+	void CreateCoin(float scale);
+	
+	p2List<Coin*> Coins;
 };

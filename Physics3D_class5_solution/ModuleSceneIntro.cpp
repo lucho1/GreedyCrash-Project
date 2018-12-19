@@ -17,8 +17,21 @@ ModuleSceneIntro::~ModuleSceneIntro()
 // Load assets
 bool ModuleSceneIntro::Start()
 {
-	CoinControl.Start();
+	for (int i = 0; i < 10; i++) {
+		CreateCoin(3);
+	}
+	p2List_item<Coin*>* Item = Coins.getFirst();
+
 	
+
+	while (Item != nullptr) {
+
+		Item->data->Start();
+
+		Item = Item->next;
+	}
+	
+
 
 	LOG("Loading Intro assets");
 	bool ret = true;
@@ -46,6 +59,7 @@ bool ModuleSceneIntro::Start()
 	pb_limit4 = App->physics->AddBody(limit4, limit_mass);
 
 	
+	
 	App->audio->PlayMusic("audio/track_intro.ogg", 0, 0.0f);
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
@@ -66,9 +80,16 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::Update(float dt)
 {
 
-	/*coin control here*/
+	p2List_item<Coin*>* Item = Coins.getFirst();
 
-	CoinControl.Update(dt);
+	while (Item != nullptr) {
+
+		Item->data->Update(dt);
+
+		Item = Item->next;
+	}
+
+	
 
 
 	if (Mix_PlayingMusic() == 0)
@@ -97,5 +118,29 @@ update_status ModuleSceneIntro::Update(float dt)
 
 void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 {
+}
+
+void ModuleSceneIntro::CreateCoin(float scale) {
+	vec3 pos;
+	pos.x = rand() % 200 + -100;
+	pos.z = rand() % 200 + -100;
+	pos.y = rand() % 1 + 1;
+
+	Coin* NewCoin = new Coin();
+	NewCoin->monedita.radius = 0.3 * scale;
+	goto safezone;
+	//DANGER ZONE BELLOW
+	int a;
+	a *= 3;
+	//DANGER ZONE UPPER
+	safezone:
+	NewCoin->monedita.height = 0.1 * scale;
+	NewCoin->monedita.SetPos(pos.x, pos.y, pos.z);
+	NewCoin->active = false;
+	NewCoin->monedita.wire = false;
+//	NewCoin->monedita.color = Red;
+	NewCoin->monedita.SetPos(pos.x, pos.y, pos.z);
+	Coins.add(NewCoin);
+	
 }
 

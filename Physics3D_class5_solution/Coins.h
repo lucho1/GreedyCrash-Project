@@ -27,7 +27,7 @@ public:
 	void PrepareUpdate(){}
 	void FinishUpdate(){}
 	bool CleanUp();
-	void CreateCoin(float scale);
+	
 
 public:
 	
@@ -37,8 +37,8 @@ public:
 	bool active;
 
 	Cylinder monedita;
-
-	vec3 RandPosMonedita;
+	float angle = 0;
+	float ypos = 0;
 	int YMovement;
 	int Movement_variable;
 public:
