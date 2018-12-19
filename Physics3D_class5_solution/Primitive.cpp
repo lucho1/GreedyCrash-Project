@@ -263,9 +263,7 @@ Plane::Plane(float x, float y, float z, float d) : Primitive(), normal(x, y, z),
 void Plane::InnerRender() const
 {
 	glLineWidth(1.0f);
-
 	glBegin(GL_LINES);
-
 	float d = 200.0f;
 
 	for(float i = -d; i <= d; i += 1.0f)

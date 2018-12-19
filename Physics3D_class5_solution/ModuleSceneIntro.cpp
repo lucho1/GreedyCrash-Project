@@ -120,10 +120,10 @@ update_status ModuleSceneIntro::Update(float dt)
 
 	if (Mix_PlayingMusic() == 0)
 		App->audio->PlayMusic("audio/track_loop.ogg", -1, 0.0f);
-
 	
 	Plane p(0, 1, 0, 0);
 	p.axis = false;
+	p.wire = false;
 	p.Render();
 	
 	pb_limit1->GetTransform(&limit1.transform);
@@ -206,9 +206,9 @@ update_status ModuleSceneIntro::Update(float dt)
 
 	/*float X = bBall.transform[3];
 	float Y = bBall.transform[7];
-	float Z = bBall.transform[11];
+	float Z = bBall.transform[11];*/
 
-	float *N;
+	/*float *N = nullptr;
 	pb_bBall->GetTransform(N);
 	float Xpb = N[3];
 	float Ypb = N[7];

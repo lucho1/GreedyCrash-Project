@@ -51,7 +51,7 @@ update_status ModulePlayer::Update(float dt)
 
 	//Debug
 	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
-		boost_quantity = boost_quantity2 = 10.0f;
+		boost_quantity = boost_quantity2 = 100.0f;
 
 	//Vehicle 1 move
 	vehicle->ApplyEngineForce(acceleration);
@@ -111,7 +111,7 @@ void ModulePlayer::HandleInput_P1() {
 
 		btVector3 vec = vehicle->vehicle->getForwardVector();
 		vehicle->Push(vec.getX() * 150.0f, 0.0f, vec.getZ() * 150.0f);
-		boost_quantity -= 0.2f;
+		boost_quantity -= 2.0f;
 	}
 }
 
@@ -147,8 +147,8 @@ void ModulePlayer::HandleInput_P2() {
 	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT && boost_quantity2 >= 0) {
 
 		btVector3 vec = vehicle2->vehicle->getForwardVector();
-		vehicle2->Push(vec.getX() * 150.0f, 0.0f, vec.getZ() * 150.0f);
-		boost_quantity2 -= 0.2f;
+		vehicle2->Push(vec.getX() * 80.0f, 0.0f, vec.getZ() * 80.0f);
+		boost_quantity2 -= 1.0f;
 	}
 }
 
@@ -254,6 +254,7 @@ void ModulePlayer::RestartCar(btVector3 Iorientation, PhysVehicle3D* vehicle, ve
 
 	if (vehicle->GetKmh() > 0)
 		vehicle->SetLinearVelocity(vec3(0.0f, 0.0f, 0.0f));
+
 
 	vehicle->SetPos(Ipos.x, Ipos.y, Ipos.z);
 

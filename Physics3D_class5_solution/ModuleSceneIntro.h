@@ -102,5 +102,5 @@ private:
 	PhysBody3D* pb_bBall4 = nullptr;
 	Sphere bBall4;
 
-	bool X = false;
+	
 };
