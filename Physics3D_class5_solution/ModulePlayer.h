@@ -38,6 +38,7 @@ public:
 	float brake;
 	vec3 IposP1 = vec3(0.0f, 0.0f, -92.0f);
 	btVector3 IOrientation_vector;
+	float boost_quantity = 10.0f;
 
 	PhysVehicle3D* vehicle2 = nullptr;
 	float turn2;
@@ -45,5 +46,6 @@ public:
 	float brake2;
 	vec3 IposP2 = vec3(0.0f, 0.0f, 92.0f);
 	btVector3 IOrientation_vector2;
+	float boost_quantity2 = 10.0f;
 
 };

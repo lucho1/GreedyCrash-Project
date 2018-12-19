@@ -73,7 +73,6 @@ void PhysBody3D::AddRotation(vec3 axis, float angle, float converse) {
 
 	btTransform t = body->getWorldTransform();
 
-//	btQuaternion current_rotation = t.getRotation();
 	btQuaternion rotationtoAdd = btQuaternion(ax, angle);
 	btQuaternion rot_addition = t.getRotation() * rotationtoAdd;
 	

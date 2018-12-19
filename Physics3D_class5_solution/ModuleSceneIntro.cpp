@@ -74,6 +74,27 @@ bool ModuleSceneIntro::Start()
 	sunkenSphere2.SetPos(-50.0f, -11.0f, -55.0f);
 	pb_sunkenSphere2 = App->physics->AddBody(sunkenSphere2, 0.0f);
 
+	sunkenSphere.color = sunkenSphere2.color = Black;
+
+	//Balls
+	bBall = Sphere(2.0f);
+	bBall.SetPos(-50.0f, 20.0f, 55.0f);
+	pb_bBall = App->physics->AddBody(bBall);
+
+	bBall2 = Sphere(2.0f);
+	bBall2.SetPos(-50.0f, 20.0f, -55.0f);
+	pb_bBall2 = App->physics->AddBody(bBall2);
+
+	bBall3 = Sphere(5.0f);
+	bBall3.SetPos(-30.0f, 20.0f, 60.0f);
+	pb_bBall3 = App->physics->AddBody(bBall3);
+
+	bBall4 = Sphere(5.0f);
+	bBall4.SetPos(-30.0f, 20.0f, -60.0f);
+	pb_bBall4 = App->physics->AddBody(bBall4);
+
+	bBall.color = bBall2.color = bBall3.color = bBall4.color = Color(155, 0, 155, 255);
+	
 	//General Scenario Settings
 	App->audio->PlayMusic("audio/track_intro.ogg", 0, 0.0f);
 
@@ -168,6 +189,30 @@ update_status ModuleSceneIntro::Update(float dt)
 
 	pb_sunkenSphere2->GetTransform(&sunkenSphere2.transform);
 	sunkenSphere2.Render();
+
+	
+	//Balls
+	pb_bBall->GetTransform(&bBall.transform);
+	bBall.Render();
+
+	pb_bBall2->GetTransform(&bBall2.transform);
+	bBall2.Render();
+
+	pb_bBall3->GetTransform(&bBall3.transform);
+	bBall3.Render();
+
+	pb_bBall4->GetTransform(&bBall4.transform);
+	bBall4.Render();
+
+	/*float X = bBall.transform[3];
+	float Y = bBall.transform[7];
+	float Z = bBall.transform[11];
+
+	float *N;
+	pb_bBall->GetTransform(N);
+	float Xpb = N[3];
+	float Ypb = N[7];
+	float Zpb = N[11];*/
 
 //	LOG("CAMERA POS: %.2f %.2f %.2f", App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
 	return UPDATE_CONTINUE;

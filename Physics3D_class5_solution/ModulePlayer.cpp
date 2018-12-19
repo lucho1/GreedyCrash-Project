@@ -49,6 +49,10 @@ update_status ModulePlayer::Update(float dt)
 	HandleInput_P1();
 	HandleInput_P2();
 
+	//Debug
+	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+		boost_quantity = boost_quantity2 = 10.0f;
+
 	//Vehicle 1 move
 	vehicle->ApplyEngineForce(acceleration);
 	vehicle->Turn(turn);
@@ -65,8 +69,10 @@ update_status ModulePlayer::Update(float dt)
 	vehicle2->info.color = Blue;
 	vehicle2->Render();
 
-	char title[80];
-	sprintf_s(title, "P1v: %.1f Km/h   P2v: %.1f Km/h", vehicle->GetKmh(), vehicle2->GetKmh());
+	char title[200];
+	sprintf_s(title, "PLAYER 1:     Speed %.1f Km/h     Boost %.2f     Coins %i                                                           PLAYER 2:     Speed %.1f Km/h     Boost %.2f     Coins %i",
+		vehicle->GetKmh(), boost_quantity, 2, vehicle2->GetKmh(), boost_quantity2, 2);
+
 	App->window->SetTitle(title);
 
 	return UPDATE_CONTINUE;
@@ -81,14 +87,12 @@ void ModulePlayer::HandleInput_P1() {
 	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 		acceleration = MAX_ACCELERATION;
 
-
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT) {
 
 		if (vehicle->GetKmh() >= 0)
 			brake = BRAKE_POWER;
 		else
 			acceleration = -MAX_ACCELERATION;
-
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
@@ -102,6 +106,13 @@ void ModulePlayer::HandleInput_P1() {
 		if (turn > -TURN_DEGREES)
 			turn -= TURN_DEGREES;
 	}
+
+	if (App->input->GetKey(SDL_SCANCODE_RCTRL) == KEY_REPEAT && boost_quantity >= 0) {
+
+		btVector3 vec = vehicle->vehicle->getForwardVector();
+		vehicle->Push(vec.getX() * 150.0f, 0.0f, vec.getZ() * 150.0f);
+		boost_quantity -= 0.2f;
+	}
 }
 
 
@@ -112,7 +123,6 @@ void ModulePlayer::HandleInput_P2() {
 
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 		acceleration2 = MAX_ACCELERATION;
-
 
 	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
 
@@ -132,6 +142,13 @@ void ModulePlayer::HandleInput_P2() {
 	{
 		if (turn2 > -TURN_DEGREES)
 			turn2 -= TURN_DEGREES;
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT && boost_quantity2 >= 0) {
+
+		btVector3 vec = vehicle2->vehicle->getForwardVector();
+		vehicle2->Push(vec.getX() * 150.0f, 0.0f, vec.getZ() * 150.0f);
+		boost_quantity2 -= 0.2f;
 	}
 }
 

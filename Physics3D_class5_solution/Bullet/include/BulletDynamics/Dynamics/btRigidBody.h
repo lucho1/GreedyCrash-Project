@@ -62,7 +62,7 @@ enum	btRigidBodyFlags
 class btRigidBody  : public btCollisionObject
 {
 
-	btMatrix3x3	m_invInertiaTensorWorld;
+	btMatrix3x3		m_invInertiaTensorWorld;
 	btVector3		m_linearVelocity;
 	btVector3		m_angularVelocity;
 	btScalar		m_inverseMass;

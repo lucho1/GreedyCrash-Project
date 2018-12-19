@@ -89,4 +89,18 @@ private:
 	PhysBody3D *pb_sunkenSphere2 = nullptr;
 	Sphere sunkenSphere2;
 
+	//Balls
+	PhysBody3D* pb_bBall = nullptr;
+	Sphere bBall;
+
+	PhysBody3D* pb_bBall2 = nullptr;
+	Sphere bBall2;
+
+	PhysBody3D* pb_bBall3 = nullptr;
+	Sphere bBall3;
+
+	PhysBody3D* pb_bBall4 = nullptr;
+	Sphere bBall4;
+
+	bool X = false;
 };
