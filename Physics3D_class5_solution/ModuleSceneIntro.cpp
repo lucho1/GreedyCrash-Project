@@ -207,10 +207,12 @@ update_status ModuleSceneIntro::Update(float dt)
 	bBall4.Render();
 
 	//Balls 1 & 2 bounce
-	if (MustBounce(bBall) || BounceWithSphere(bBall, sunkenSphere) || BounceWithSphere(bBall, sunkenSphere2))
+	if (MustBounce(bBall) || BounceWithSphere(bBall, sunkenSphere) || BounceWithSphere(bBall, sunkenSphere2) ||
+		BounceWithCube(bBall, App->player->vehicle->chassis) || BounceWithCube(bBall, App->player->vehicle2->chassis))
 		pb_bBall->Push(0.0f, 40.0f, 0.0f);
 
-	if (MustBounce(bBall2) || BounceWithSphere(bBall2, sunkenSphere) || BounceWithSphere(bBall2, sunkenSphere2) /*|| BounceWithCar(bBall2, App->player->vehicle->chassis) || BounceWithCar(bBall2, App->player->vehicle2->chassis)*/)
+	if (MustBounce(bBall2) || BounceWithSphere(bBall2, sunkenSphere) || BounceWithSphere(bBall2, sunkenSphere2) ||
+		BounceWithCube(bBall2, App->player->vehicle2->chassis) || BounceWithCube(bBall2, App->player->vehicle->chassis))
 		pb_bBall2->Push(0.0f, 40.0f, 0.0f);
 
 
@@ -277,11 +279,17 @@ bool ModuleSceneIntro::BounceWithSphere(Sphere sphere1, Sphere sphere2) {
 
 bool ModuleSceneIntro::BounceWithCube(Sphere sphere, Cube cube) {
 
-	//float sphY = sphere1.transform[13];
-	//float carY = car_chassis.transform[13];
+	float sphY = sphere.transform[13];
+	float cubeY = cube.transform[13];
 
-	//if (sphY - sphere1.radius <= carY + car_chassis.size.y)
-	//	return true;
+	float sphX = sphere.transform[12];
+	float cubeX = cube.transform[12];
+
+	float sphZ = sphere.transform[14];
+	float cubeZ = cube.transform[14];
+
+	if (sphX <= cubeX + cube.size.x / 2 && sphX >= cubeX - cube.size.x / 2 && sphZ <= cubeZ + cube.size.z && sphZ >= cubeZ - cube.size.z)
+		return(sphY - sphere.radius <= cubeY + cube.size.y);
 
 	return false;
 }

@@ -245,9 +245,10 @@ void ModulePlayer::RestartCar(btVector3 Iorientation, PhysVehicle3D* vehicle, ve
 
 	float fAngle = Iorientation.angle(vehicle->vehicle->getForwardVector());
 	vec3 Yaxis = vec3(0.0f, 1.0f, 0.0f);
+	vec3 XYZaxis = vec3(1.0f, 1.0f, 1.0f);
 
 	if (fAngle != 0)
-		vehicle->SetRotation(Yaxis, -fAngle);
+		vehicle->SetRotation(XYZaxis, -fAngle);
 
 	if (inverted == true)
 		vehicle->SetRotation(Yaxis, 180.0f);
@@ -256,6 +257,7 @@ void ModulePlayer::RestartCar(btVector3 Iorientation, PhysVehicle3D* vehicle, ve
 		vehicle->SetLinearVelocity(vec3(0.0f, 0.0f, 0.0f));
 
 
-	vehicle->SetPos(Ipos.x, Ipos.y, Ipos.z);
+	vehicle->SetPos(Ipos.x, 0.0f, Ipos.z);
+	vehicle->Brake(BRAKE_POWER);
 
 }
