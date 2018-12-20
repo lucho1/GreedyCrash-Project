@@ -3,6 +3,8 @@
 #include "ModuleSceneIntro.h"
 #include "Primitive.h"
 #include "PhysBody3D.h"
+#include "ModulePlayer.h"
+#include "PhysVehicle3D.h"
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -204,9 +206,13 @@ update_status ModuleSceneIntro::Update(float dt)
 	pb_bBall4->GetTransform(&bBall4.transform);
 	bBall4.Render();
 
-	/*float X = bBall.transform[3];
-	float Y = bBall.transform[7];
-	float Z = bBall.transform[11];*/
+	//Balls 1 & 2 bounce
+	if (MustBounce(bBall) || BounceWithSphere(bBall, sunkenSphere) || BounceWithSphere(bBall, sunkenSphere2))
+		pb_bBall->Push(0.0f, 40.0f, 0.0f);
+
+	if (MustBounce(bBall2) || BounceWithSphere(bBall2, sunkenSphere) || BounceWithSphere(bBall2, sunkenSphere2) /*|| BounceWithCar(bBall2, App->player->vehicle->chassis) || BounceWithCar(bBall2, App->player->vehicle2->chassis)*/)
+		pb_bBall2->Push(0.0f, 40.0f, 0.0f);
+
 
 	/*float *N = nullptr;
 	pb_bBall->GetTransform(N);
@@ -223,6 +229,7 @@ PhysBody3D * ModuleSceneIntro::CreateSlope(Cube &slope, vec3 sizes, vec3 pos, fl
 
 	vec3 Yaxis = vec3(0.0f, 1.0f, 0.0f);
 	vec3 Xaxis = vec3(1.0f, 0.0f, 0.0f);
+
 	vec3 Zaxis = vec3(0.0f, 0.0f, 1.0f);
 
 	slope = Cube(sizes.x, sizes.y, sizes.z);
@@ -237,4 +244,44 @@ PhysBody3D * ModuleSceneIntro::CreateSlope(Cube &slope, vec3 sizes, vec3 pos, fl
 
 	slope.axis = false;
 	return pb_slope;
+}
+
+
+bool ModuleSceneIntro::MustBounce(Sphere sphere) {
+
+	float sphY = sphere.transform[13];
+	return(sphY - sphere.radius <= 0.0f);
+}
+
+
+bool ModuleSceneIntro::BounceWithSphere(Sphere sphere1, Sphere sphere2) {
+
+	float sph1Y = sphere1.transform[13];
+	float sph2Y = sphere2.transform[13];
+
+	float sph1X = sphere1.transform[12];
+	float sph2X = sphere2.transform[12];
+
+	float sph1Z = sphere1.transform[14];
+	float sph2Z = sphere2.transform[14];
+
+	float r1 = sphere1.radius;
+	float r2 = sphere2.radius;
+
+	if (sph1X <= sph2X + r2 && sph1X >= sph2X - r2 && sph1Z <= sph2Z + r2 && sph1Z >= sph2Z - r2)
+		return(sph1Y - r1 <= sph2Y + r2);
+
+	return false;
+}
+
+
+bool ModuleSceneIntro::BounceWithCube(Sphere sphere, Cube cube) {
+
+	//float sphY = sphere1.transform[13];
+	//float carY = car_chassis.transform[13];
+
+	//if (sphY - sphere1.radius <= carY + car_chassis.size.y)
+	//	return true;
+
+	return false;
 }

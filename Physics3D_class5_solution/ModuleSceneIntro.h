@@ -22,6 +22,10 @@ public:
 
 	PhysBody3D *CreateSlope(Cube &slope, vec3 sizes, vec3 pos, float Xangle = 0.0f, float Yangle = 0.0f, float Zangle = 0.0f);
 
+	bool MustBounce(Sphere sphere);
+	bool BounceWithSphere(Sphere sphere1, Sphere sphere2);
+	bool BounceWithCube(Sphere sphere, Cube cube);
+
 private:
 
 	//Scenario Limits
