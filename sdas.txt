@@ -1,0 +1,153 @@
+mkdir: cannot change permissions of '/dev/shm': Permission denied
+mkdir: cannot change permissions of '/dev/mqueue': Permission denied
+'C:\Windows\system32\drivers\etc\hosts' -> '/etc/hosts'
+'C:\Windows\system32\drivers\etc\protocol' -> '/etc/protocols'
+'C:\Windows\system32\drivers\etc\services' -> '/etc/services'
+'C:\Windows\system32\drivers\etc\networks' -> '/etc/networks'
+
+lucianosl@TTC-104-15 MINGW64 ~
+$ la
+bash: la: command not found
+
+lucianosl@TTC-104-15 MINGW64 ~
+$ la
+bash: la: command not found
+
+lucianosl@TTC-104-15 MINGW64 ~
+$ ls
+'3D Objects'/
+ AppData/
+'Configuración local'@
+ Contacts/
+ Cookies@
+'Datos de programa'@
+ Desktop/
+ Documents/
+ Downloads/
+'Entorno de red'@
+ Favorites/
+ Impresoras@
+ IntelGraphicsProfiles/
+ Links/
+'Menú Inicio'@
+ MicrosoftEdgeBackups/
+'Mis documentos'@
+ Music/
+ NTUSER.DAT
+ ntuser.dat.LOG1
+ ntuser.dat.LOG2
+ NTUSER.DAT{e2a1d535-85fe-11e8-aee6-005056c00008}.TM.blf
+ NTUSER.DAT{e2a1d535-85fe-11e8-aee6-005056c00008}.TMContainer00000000000000000001.regtrans-ms
+ NTUSER.DAT{e2a1d535-85fe-11e8-aee6-005056c00008}.TMContainer00000000000000000002.regtrans-ms
+ ntuser.ini
+ ntuser.pol
+ OneDrive/
+ Pictures/
+ Plantillas@
+ Reciente@
+'Saved Games'/
+ Searches/
+ SendTo@
+ source/
+ Videos/
+
+lucianosl@TTC-104-15 MINGW64 ~
+$ cd Documents/
+
+lucianosl@TTC-104-15 MINGW64 ~/Documents
+$ ls
+ desktop.ini  'Mi música'@     'Mis vídeos'@
+ GitHub/      'Mis imágenes'@  'Visual Studio 2017'/
+
+lucianosl@TTC-104-15 MINGW64 ~/Documents
+$ cd GitHub/
+
+lucianosl@TTC-104-15 MINGW64 ~/Documents/GitHub
+$ ls
+Physics3D_Game/  Pinball/
+
+lucianosl@TTC-104-15 MINGW64 ~/Documents/GitHub
+$ cd Physics3D_Game/
+
+lucianosl@TTC-104-15 MINGW64 ~/Documents/GitHub/Physics3D_Game (Branch_for_UI_from_SCENARIOBRANCH)
+$ git push
+Username for 'https://github.com': lucho1
+Enumerating objects: 29, done.
+Counting objects: 100% (29/29), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (25/25), done.
+Writing objects: 100% (25/25), 4.94 MiB | 2.43 MiB/s, done.
+Total 25 (delta 7), reused 0 (delta 0)
+remote: Resolving deltas: 100% (7/7), completed with 3 local objects.
+To https://github.com/lucho1/Physics3D_Game
+   8f85502..c41dec4  Branch_for_UI_from_SCENARIOBRANCH -> Branch_for_UI_from_SCENARIOBRANCH
+
+lucianosl@TTC-104-15 MINGW64 ~/Documents/GitHub/Physics3D_Game (Branch_for_UI_from_SCENARIOBRANCH)
+$ git status
+On branch Branch_for_UI_from_SCENARIOBRANCH
+Your branch is up to date with 'origin/Branch_for_UI_from_SCENARIOBRANCH'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+        modified:   Physics3D_class5_solution/3D Physics.vcxproj
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        Physics3D_class5_solution/SDL/libx86/
+        Physics3D_class5_solution/SDL_mixer/libx86/
+        Physics3D_class5_solution/glut/glut32.lib
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+lucianosl@TTC-104-15 MINGW64 ~/Documents/GitHub/Physics3D_Game (Branch_for_UI_from_SCENARIOBRANCH)
+$ cd Documents/
+bash: cd: Documents/: No such file or directory
+
+lucianosl@TTC-104-15 MINGW64 ~/Documents/GitHub/Physics3D_Game (Scenario_Limits&Player2_hd5)
+$ ^C
+
+lucianosl@TTC-104-15 MINGW64 ~/Documents/GitHub/Physics3D_Game (Scenario_Limits&Player2_hd5)
+$ cd Physics3D_Game
+bash: cd: Physics3D_Game: No such file or directory
+
+lucianosl@TTC-104-15 MINGW64 ~/Documents/GitHub/Physics3D_Game (Scenario_Limits&Player2_hd5)
+$ cd Documents/
+bash: cd: Documents/: No such file or directory
+
+lucianosl@TTC-104-15 MINGW64 ~/Documents/GitHub/Physics3D_Game (Scenario_Limits&Player2_hd5)
+$ ls
+LICENSE  Physics3D_class5_solution/
+
+lucianosl@TTC-104-15 MINGW64 ~/Documents/GitHub/Physics3D_Game (Scenario_Limits&Player2_hd5)
+$ cd Physics3d_Game
+bash: cd: Physics3d_Game: No such file or directory
+
+lucianosl@TTC-104-15 MINGW64 ~/Documents/GitHub/Physics3D_Game (Scenario_Limits&Player2_hd5)
+$ ls
+LICENSE  Physics3D_class5_solution/
+
+lucianosl@TTC-104-15 MINGW64 ~/Documents/GitHub/Physics3D_Game (Scenario_Limits&Player2_hd5)
+$ Physics3D_Game/
+bash: Physics3D_Game/: No such file or directory
+
+lucianosl@TTC-104-15 MINGW64 ~/Documents/GitHub/Physics3D_Game (Scenario_Limits&Player2_hd5)
+$ git push
+Username for 'https://github.com': lucho1
+Enumerating objects: 40, done.
+Counting objects: 100% (40/40), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (31/31), done.
+Writing objects: 100% (32/32), 4.97 MiB | 2.59 MiB/s, done.
+Total 32 (delta 8), reused 0 (delta 0)
+remote: Resolving deltas: 100% (8/8), completed with 6 local objects.
+To https://github.com/lucho1/Physics3D_Game
+   1eccab3..bb70325  Scenario_Limits&Player2_hd5 -> Scenario_Limits&Player2_hd5
+
+lucianosl@TTC-104-15 MINGW64 ~/Documents/GitHub/Physics3D_Game (Scenario_Limits&Player2_hd5)
+$ ^C
+
+lucianosl@TTC-104-15 MINGW64 ~/Documents/GitHub/Physics3D_Game (Scenario_Limits&Player2_hd5)
+$
