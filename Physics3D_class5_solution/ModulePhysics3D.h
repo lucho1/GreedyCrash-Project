@@ -7,7 +7,7 @@
 #include "Bullet/include/btBulletDynamicsCommon.h"
 
 // Recommended scale is 1.0f == 1 meter, no less than 0.2 objects
-#define GRAVITY btVector3(0.0f, -10.0f, 0.0f) 
+#define GRAVITY btVector3(0.0f, -10.0f, 0.0f)
 
 class DebugDrawer;
 struct PhysBody3D;
@@ -25,10 +25,6 @@ public:
 	update_status PreUpdate(float dt);
 	update_status Update(float dt);
 	update_status PostUpdate(float dt);
-<<<<<<< HEAD
-=======
-
->>>>>>> SECCOPYBranch
 	bool CleanUp();
 
 	PhysBody3D* AddBody(const Sphere& sphere, float mass = 1.0f);

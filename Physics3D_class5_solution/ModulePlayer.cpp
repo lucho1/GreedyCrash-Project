@@ -5,10 +5,7 @@
 #include "PhysVehicle3D.h"
 #include "PhysBody3D.h"
 #include "ModuleAudio.h"
-<<<<<<< HEAD
 #include "Coins.h"
-=======
->>>>>>> SECCOPYBranch
 
 ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, start_enabled), vehicle(NULL), vehicle2(NULL)
 {
@@ -24,15 +21,7 @@ bool ModulePlayer::Start()
 	LOG("Loading player");
 
 	VehicleInfo car = SetDefaultCar(); //Default car
-	
-<<<<<<< HEAD
 
-	vehicle = App->physics->AddVehicle(car);
-	vehicle->SetPos(0, 12, 10);
-
-	vehicle2 = App->physics->AddVehicle(car);
-	vehicle2->SetPos(0, 0, 50);
-=======
 	vehicle = App->physics->AddVehicle(car);
 	vehicle2 = App->physics->AddVehicle(car);
 
@@ -48,7 +37,6 @@ bool ModulePlayer::Start()
 
 	RestartCar(IOrientation_vector, vehicle,IposP1);
 	RestartCar(IOrientation_vector2, vehicle2, IposP2, true);
->>>>>>> SECCOPYBranch
 
 	return true;
 }
@@ -69,24 +57,17 @@ update_status ModulePlayer::Update(float dt)
 	HandleInput_P1();
 	HandleInput_P2();
 
-<<<<<<< HEAD
-=======
 	//Debug
 	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
 		boost_quantity = boost_quantity2 = 100.0f;
 
->>>>>>> SECCOPYBranch
 	//Vehicle 1 move
 	vehicle->ApplyEngineForce(acceleration);
 	vehicle->Turn(turn);
 	vehicle->Brake(brake);
 
-<<<<<<< HEAD
-	vehicle->info.color = Red;
-=======
 	vehicle->info.color = Color(1.0f, 0.65f, 0.13f);
 
->>>>>>> SECCOPYBranch
 	vehicle->Render();
 
 	//Vehicle 2 move
@@ -97,15 +78,10 @@ update_status ModulePlayer::Update(float dt)
 	vehicle2->info.color = Blue;
 	vehicle2->Render();
 
-<<<<<<< HEAD
-	char title[80];
-	sprintf_s(title, "P1v: %.1f Km/h   P2v: %.1f Km/h", vehicle->GetKmh(), vehicle2->GetKmh());
-=======
 	char title[200];
 	sprintf_s(title, "PLAYER 1:     Speed %.1f Km/h     Boost %.2f     Coins %i                                                           PLAYER 2:     Speed %.1f Km/h     Boost %.2f     Coins %i",
 		vehicle->GetKmh(), boost_quantity, 2, vehicle2->GetKmh(), boost_quantity2, 2);
 
->>>>>>> SECCOPYBranch
 	App->window->SetTitle(title);
 
 	return UPDATE_CONTINUE;
@@ -114,41 +90,18 @@ update_status ModulePlayer::Update(float dt)
 
 void ModulePlayer::HandleInput_P1() {
 
-<<<<<<< HEAD
-	bool going_forward;
-
-	if (acceleration > 0)
-		going_forward = true;
-	else
-		going_forward = false;
-
-
-
-=======
 	if (App->input->GetKey(SDL_SCANCODE_Y) == KEY_DOWN)
 		RestartCar(IOrientation_vector, vehicle, IposP1);
->>>>>>> SECCOPYBranch
 
 	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 		acceleration = MAX_ACCELERATION;
 
-<<<<<<< HEAD
-
-	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT) {
-
-		if (going_forward)
-			brake = BRAKE_POWER;
-		else
-			acceleration = -MAX_ACCELERATION;
-
-=======
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT) {
 
 		if (vehicle->GetKmh() >= 0)
 			brake = BRAKE_POWER;
 		else
 			acceleration = -MAX_ACCELERATION;
->>>>>>> SECCOPYBranch
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
@@ -162,22 +115,6 @@ void ModulePlayer::HandleInput_P1() {
 		if (turn > -TURN_DEGREES)
 			turn -= TURN_DEGREES;
 	}
-<<<<<<< HEAD
-}
-
-
-void ModulePlayer::HandleInput_P2() {
-
-	bool going_forward;
-
-	if (acceleration > 0)
-		going_forward = true;
-	else
-		going_forward = false;
-
-
-
-=======
 
 	if (App->input->GetKey(SDL_SCANCODE_RCTRL) == KEY_REPEAT && boost_quantity >= 0) {
 
@@ -192,21 +129,13 @@ void ModulePlayer::HandleInput_P2() {
 
 	if (App->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN)
 		RestartCar(IOrientation_vector2, vehicle2, IposP2, true);
->>>>>>> SECCOPYBranch
 
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 		acceleration2 = MAX_ACCELERATION;
 
-<<<<<<< HEAD
-
-	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
-
-		if(going_forward)
-=======
 	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
 
 		if (vehicle2->GetKmh() >= 0)
->>>>>>> SECCOPYBranch
 			brake2 = BRAKE_POWER;
 		else
 			acceleration2 = -MAX_ACCELERATION;
@@ -223,8 +152,6 @@ void ModulePlayer::HandleInput_P2() {
 		if (turn2 > -TURN_DEGREES)
 			turn2 -= TURN_DEGREES;
 	}
-<<<<<<< HEAD
-=======
 
 	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT && boost_quantity2 >= 0) {
 
@@ -232,7 +159,6 @@ void ModulePlayer::HandleInput_P2() {
 		vehicle2->Push(vec.getX() * 80.0f, 0.0f, vec.getZ() * 80.0f);
 		boost_quantity2 -= 1.0f;
 	}
->>>>>>> SECCOPYBranch
 }
 
 VehicleInfo ModulePlayer::SetDefaultCar() {
@@ -240,15 +166,9 @@ VehicleInfo ModulePlayer::SetDefaultCar() {
 	VehicleInfo car;
 
 	// Car properties ----------------------------------------
-<<<<<<< HEAD
-	car.chassis_size.Set(2, 1, 4);
-	car.chassis_offset.Set(0, 1.5, 0);
-	car.mass = 300.0f;
-=======
 	car.chassis_size.Set(4, 2, 8);
 	car.chassis_offset.Set(0, 1.5, 0);
 	car.mass = 100.0f;
->>>>>>> SECCOPYBranch
 	car.suspensionStiffness = 40.0f;
 	car.suspensionCompression = 2.4f;
 	car.suspensionDamping = 2.3f;
@@ -257,17 +177,10 @@ VehicleInfo ModulePlayer::SetDefaultCar() {
 	car.maxSuspensionForce = 6000.0f;
 
 	// Wheel properties ---------------------------------------
-<<<<<<< HEAD
-	float connection_height = 1.2f;
-	float wheel_radius = 0.3f;
-	float wheel_width = 0.5f;
-	float suspensionRestLength = 0.1f;
-=======
 	float connection_height = 1.0f;
 	float wheel_radius = 0.6f;
 	float wheel_width = 1.0f;
 	float suspensionRestLength = 0.2f;
->>>>>>> SECCOPYBranch
 
 	SetConstCarProperties(&car, connection_height, wheel_radius, wheel_width, suspensionRestLength);
 	return car;
@@ -334,8 +247,6 @@ void ModulePlayer::SetConstCarProperties(VehicleInfo* car, float connection_heig
 	car->wheels[3].brake = true;
 	car->wheels[3].steering = false;
 
-<<<<<<< HEAD
-=======
 }
 
 
@@ -361,7 +272,7 @@ void ModulePlayer::RestartCar(btVector3 Iorientation, PhysVehicle3D* vehicle, ve
 	else
 		vehicle->SetPos(Ipos.x, Ipos.y, Ipos.z);
 
-	
+
 	vehicle->Brake(BRAKE_POWER);
 
 }
@@ -392,5 +303,4 @@ void ModulePlayer::OnCollision(PhysBody3D* bA, PhysBody3D* bB) {
 		if (bB->type == PhysBodyType::BOUNCE_XZ)
 			vehicle2->Push(0.0f, 0.0f, -bounceZ);
 	}
->>>>>>> SECCOPYBranch
 }

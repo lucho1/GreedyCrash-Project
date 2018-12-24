@@ -3,14 +3,12 @@
 #include "ModuleSceneIntro.h"
 #include "Primitive.h"
 #include "PhysBody3D.h"
-<<<<<<< HEAD
-#include "Coins.h"
-#include "ModulePhysics3D.h"
-class Coin;
-=======
 #include "ModulePlayer.h"
 #include "PhysVehicle3D.h"
->>>>>>> SECCOPYBranch
+#include "Coins.h"
+#include "ModulePhysics3D.h"
+
+class Coin;
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -22,13 +20,12 @@ ModuleSceneIntro::~ModuleSceneIntro()
 // Load assets
 bool ModuleSceneIntro::Start()
 {
-<<<<<<< HEAD
 	for (int i = 0; i < 10; i++) {
 		CreateCoin(3);
 	}
 	p2List_item<Coin*>* Item = Coins.getFirst();
 
-	
+
 
 	while (Item != nullptr) {
 
@@ -38,16 +35,7 @@ bool ModuleSceneIntro::Start()
 		}
 		Item = Item->next;
 	}
-	
 
-
-	LOG("Loading Intro assets");
-	bool ret = true;
-
-	float height = 8.0f;
-	float width = 2.0f;
-	float longitude = 200.0f;
-=======
 	LOG("Loading Intro assets");
 	bool ret = true;
 
@@ -55,41 +43,23 @@ bool ModuleSceneIntro::Start()
 	float width = 2.0f;
 	float longitude = 200.0f;
 	float limit_mass = 0.0f; //0 for Static bodies
->>>>>>> SECCOPYBranch
 
 	limit1 = limit2 = Cube(width, height, longitude);
 	limit3 = limit4 = Cube(longitude + 2.0f, height, width);
 
 	limit1.axis = limit2.axis = limit3.axis = limit4.axis = false;
 
-<<<<<<< HEAD
-
-	float dFromAxis = 100.0f;
-	limit1.SetPos(-dFromAxis, 0.0f, 0.0f);
-	limit2.SetPos(dFromAxis, 0.0f, 0.0f);
-	limit3.SetPos(0.0f, 0.0f, -dFromAxis - 1.0f);
-	limit4.SetPos(0.0f, 0.0f, dFromAxis + 1.0f);
-
-	float limit_mass = 50000.0f;
-=======
 	float dFromAxis = 100.0f;
 	limit1.SetPos(-dFromAxis, height/2.0f, 0.0f);
 	limit2.SetPos(dFromAxis, height/2.0f, 0.0f);
 	limit3.SetPos(0.0f, height/2.0f, -dFromAxis - 1.0f);
 	limit4.SetPos(0.0f, height/2.0f, dFromAxis + 1.0f);
 
->>>>>>> SECCOPYBranch
 	pb_limit1 = App->physics->AddBody(limit1, limit_mass);
 	pb_limit2 = App->physics->AddBody(limit2, limit_mass);
 	pb_limit3 = App->physics->AddBody(limit3, limit_mass);
 	pb_limit4 = App->physics->AddBody(limit4, limit_mass);
 
-<<<<<<< HEAD
-	
-	
-	App->audio->PlayMusic("audio/track_intro.ogg", 0, 0.0f);
-	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
-=======
 	pb_limit1->type = pb_limit2->type = pb_limit3->type = pb_limit4->type = PhysBodyType::LIMIT;
 
 	//Slopes
@@ -184,13 +154,12 @@ bool ModuleSceneIntro::Start()
 	bCubeCenter.color = bCube.color = bCube2.color = bCube3.color = bCube4.color = bCube5.color = bCube6.color = Red;
 	pb_bCubeCenter->type = pb_bCube3->type = pb_bCube4->type = pb_bCube5->type = pb_bCube6->type = PhysBodyType::BOUNCE_Y;
 	pb_bCube->type = pb_bCube2->type = PhysBodyType::BOUNCE_XZ;
-	
+
 	//General Scenario Settings
 	App->audio->PlayMusic("audio/track_intro.ogg", 0, 0.0f);
 
 	App->camera->Move(vec3(0.0f, 103.28f, 167.10f));
 	//App->camera->Move(vec3(0.0f, 30.0f, 30.0f));
->>>>>>> SECCOPYBranch
 	App->camera->LookAt(vec3(0, 0, 0));
 
 	//To hear music, comment or delete the next line
@@ -209,7 +178,6 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::Update(float dt)
 {
 
-<<<<<<< HEAD
 	p2List_item<Coin*>* Item = Coins.getFirst();
 
 	while (Item != nullptr) {
@@ -231,16 +199,6 @@ update_status ModuleSceneIntro::Update(float dt)
 	p.axis = true;
 	p.Render();
 
-=======
-	if (Mix_PlayingMusic() == 0)
-		App->audio->PlayMusic("audio/track_loop.ogg", -1, 0.0f);
-	
-	Plane p(0, 1, 0, 0);
-	p.axis = false;
-	p.wire = false;
-	p.Render();
-	
->>>>>>> SECCOPYBranch
 	pb_limit1->GetTransform(&limit1.transform);
 	limit1.Render();
 
@@ -253,46 +211,6 @@ update_status ModuleSceneIntro::Update(float dt)
 	pb_limit4->GetTransform(&limit4.transform);
 	limit4.Render();
 
-<<<<<<< HEAD
-	LOG("CAMERA POS: %.2f %.2f %.2f", App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
-	return UPDATE_CONTINUE;
-}
-
-void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
-{
-}
-
-void ModuleSceneIntro::CreateCoin(float scale) {
-	vec3 pos;
-	pos.x = rand() % 200 + -100;
-	pos.z = rand() % 200 + -100;
-	pos.y = rand() % 1 + 1;
-
-	Coin* NewCoin = new Coin();
-	NewCoin->monedita.radius = 0.3 * scale;
-	goto safezone;
-	//DANGER ZONE BELLOW
-	int a;
-	a *= 3;
-	//DANGER ZONE UPPER
-	safezone:
-	NewCoin->monedita.height = 0.1 * scale;
-	NewCoin->monedita.SetPos(pos.x, pos.y, pos.z);
-	NewCoin->pos.x = pos.x;
-	NewCoin->pos.y = pos.y;
-	NewCoin->pos.z = pos.z;
-	NewCoin->active = false;
-	NewCoin->monedita.wire = false;
-	//physmonedita
-	NewCoin->PhysMonedita = App->physics->AddBody(NewCoin->monedita, 0.0f);
-	
-	//NewCoin->monedita.color = Red;
-	NewCoin->monedita.SetPos(pos.x, pos.y, pos.z);
-	Coins.add(NewCoin);
-	
-}
-
-=======
 	//Center Slopes
 	pb_slope1->GetTransform(&slope1.transform);
 	slope1.Render();
@@ -345,7 +263,7 @@ void ModuleSceneIntro::CreateCoin(float scale) {
 	pb_sunkenSphere2->GetTransform(&sunkenSphere2.transform);
 	sunkenSphere2.Render();
 
-	
+
 	//Balls
 	pb_bBall->GetTransform(&bBall.transform);
 	bBall.Render();
@@ -424,7 +342,7 @@ PhysBody3D * ModuleSceneIntro::CreateSlope(Cube &slope, vec3 sizes, vec3 pos, fl
 	pb_slope->AddRotation(Yaxis, Yangle);
 	pb_slope->AddRotation(Xaxis, Xangle);
 	pb_slope->AddRotation(Zaxis, Zangle);
-	
+
 	pb_slope->type = PhysBodyType::OBJECT;
 	slope.axis = false;
 	return pb_slope;
@@ -449,4 +367,27 @@ void ModuleSceneIntro::OnCollision(PhysBody3D *bodyA, PhysBody3D *bodyB) {
 			pb_bBall2->Push(0.0f, 10.5f, 0.0f);
 	}
 }
->>>>>>> SECCOPYBranch
+
+
+void ModuleSceneIntro::CreateCoin(float scale) {
+	vec3 pos;
+	pos.x = rand() % 200 + -100;
+	pos.z = rand() % 200 + -100;
+	pos.y = rand() % 1 + 1;
+
+	Coin* NewCoin = new Coin();
+	NewCoin->monedita.radius = 0.3 * scale;
+	NewCoin->monedita.height = 0.1 * scale;
+	NewCoin->monedita.SetPos(pos.x, pos.y, pos.z);
+	NewCoin->pos.x = pos.x;
+	NewCoin->pos.y = pos.y;
+	NewCoin->pos.z = pos.z;
+	NewCoin->active = false;
+	NewCoin->monedita.wire = false;
+	//physmonedita
+	NewCoin->PhysMonedita = App->physics->AddBody(NewCoin->monedita, 0.0f);
+
+	//NewCoin->monedita.color = Red;
+	NewCoin->monedita.SetPos(pos.x, pos.y, pos.z);
+	Coins.add(NewCoin);
+}

@@ -3,27 +3,17 @@
 #include "p2DynArray.h"
 #include "Globals.h"
 #include "Primitive.h"
-<<<<<<< HEAD
 #include "Coins.h"
-=======
 
->>>>>>> SECCOPYBranch
 #define MAX_SNAKE 2
 
 struct PhysBody3D;
 struct PhysMotor3D;
 
-<<<<<<< HEAD
-
-class ModuleSceneIntro : public Module
-{
-public:
-=======
 class ModuleSceneIntro : public Module
 {
 public:
 
->>>>>>> SECCOPYBranch
 	ModuleSceneIntro(Application* app, bool start_enabled = true);
 	~ModuleSceneIntro();
 
@@ -31,12 +21,6 @@ public:
 	update_status Update(float dt);
 	bool CleanUp();
 
-<<<<<<< HEAD
-	void OnCollision(PhysBody3D* body1, PhysBody3D* body2);
-
-public:
-
-=======
 	PhysBody3D *CreateSlope(Cube &slope, vec3 sizes, vec3 pos, float Xangle = 0.0f, float Yangle = 0.0f, float Zangle = 0.0f);
 	void OnCollision(PhysBody3D *bodyA, PhysBody3D *bodyB);
 
@@ -47,7 +31,6 @@ public:
 private:
 
 	//Scenario Limits
->>>>>>> SECCOPYBranch
 	PhysBody3D *pb_limit1 = nullptr;
 	Cube limit1;
 
@@ -60,12 +43,11 @@ private:
 	PhysBody3D *pb_limit4 = nullptr;
 	Cube limit4;
 
-<<<<<<< HEAD
 public:
+
 	void CreateCoin(float scale);
-	
 	p2List<Coin*> Coins;
-=======
+
 	//Center Slopes
 	PhysBody3D *pb_slope1 = nullptr;
 	Cube slope1;
@@ -148,6 +130,5 @@ public:
 	Cube bCube6;
 	PhysBody3D* pb_bCubeCenter = nullptr;
 	Cube bCubeCenter;
-	
->>>>>>> SECCOPYBranch
+
 };

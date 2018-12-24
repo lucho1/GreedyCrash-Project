@@ -32,20 +32,14 @@ void Primitive::Render() const
 
 		glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
 
-<<<<<<< HEAD
-=======
 		//X Axis line ("X" is two lines xD)
->>>>>>> SECCOPYBranch
 		glVertex3f(0.0f, 0.0f, 0.0f); glVertex3f(1.0f, 0.0f, 0.0f);
 		glVertex3f(1.0f, 0.1f, 0.0f); glVertex3f(1.1f, -0.1f, 0.0f);
 		glVertex3f(1.1f, 0.1f, 0.0f); glVertex3f(1.0f, -0.1f, 0.0f);
 
 		glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
 
-<<<<<<< HEAD
-=======
 		//Y Axis line
->>>>>>> SECCOPYBranch
 		glVertex3f(0.0f, 0.0f, 0.0f); glVertex3f(0.0f, 1.0f, 0.0f);
 		glVertex3f(-0.05f, 1.25f, 0.0f); glVertex3f(0.0f, 1.15f, 0.0f);
 		glVertex3f(0.05f, 1.25f, 0.0f); glVertex3f(0.0f, 1.15f, 0.0f);
@@ -53,10 +47,7 @@ void Primitive::Render() const
 
 		glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
 
-<<<<<<< HEAD
-=======
 		//Z Axis line
->>>>>>> SECCOPYBranch
 		glVertex3f(0.0f, 0.0f, 0.0f); glVertex3f(0.0f, 0.0f, 1.0f);
 		glVertex3f(-0.05f, 0.1f, 1.05f); glVertex3f(0.05f, 0.1f, 1.05f);
 		glVertex3f(0.05f, 0.1f, 1.05f); glVertex3f(-0.05f, -0.1f, 1.05f);
@@ -123,7 +114,7 @@ Cube::Cube(float sizeX, float sizeY, float sizeZ) : Primitive(), size(sizeX, siz
 }
 
 void Cube::InnerRender() const
-{	
+{
 	float sx = size.x * 0.5f;
 	float sy = size.y * 0.5f;
 	float sz = size.z * 0.5f;
@@ -203,7 +194,7 @@ void Cylinder::InnerRender() const
 
 	// Cylinder Bottom
 	glBegin(GL_POLYGON);
-	
+
 	for(int i = 360; i >= 0; i -= (360 / n))
 	{
 		float a = i * M_PI / 180; // degrees to radians
@@ -272,13 +263,7 @@ Plane::Plane(float x, float y, float z, float d) : Primitive(), normal(x, y, z),
 void Plane::InnerRender() const
 {
 	glLineWidth(1.0f);
-<<<<<<< HEAD
-
 	glBegin(GL_LINES);
-
-=======
-	glBegin(GL_LINES);
->>>>>>> SECCOPYBranch
 	float d = 200.0f;
 
 	for(float i = -d; i <= d; i += 1.0f)

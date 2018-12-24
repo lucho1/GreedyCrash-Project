@@ -1,9 +1,5 @@
-<<<<<<< HEAD
 #ifndef APLICATION_H_
 #define APLICATION_H_
-=======
-#pragma once
->>>>>>> SECCOPYBranch
 
 #include "p2List.h"
 #include "Globals.h"
@@ -17,10 +13,6 @@
 #include "ModuleCamera3D.h"
 #include "ModulePhysics3D.h"
 #include "ModulePlayer.h"
-<<<<<<< HEAD
-#include "Coins.h"
-=======
->>>>>>> SECCOPYBranch
 
 class Application
 {
@@ -34,10 +26,6 @@ public:
 	ModulePhysics3D* physics;
 	ModulePlayer* player;
 
-<<<<<<< HEAD
-
-=======
->>>>>>> SECCOPYBranch
 private:
 
 	Timer	ms_timer;
@@ -58,9 +46,5 @@ private:
 	void AddModule(Module* mod);
 	void PrepareUpdate();
 	void FinishUpdate();
-<<<<<<< HEAD
 };
 #endif
-=======
-};
->>>>>>> SECCOPYBranch

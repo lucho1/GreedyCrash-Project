@@ -1,21 +1,13 @@
 #include "PhysBody3D.h"
-<<<<<<< HEAD
-#include "glmath.h"
-=======
->>>>>>> SECCOPYBranch
 #include "Bullet/include/btBulletDynamicsCommon.h"
 
 // =================================================
 PhysBody3D::PhysBody3D(btRigidBody* body) : body(body)
-<<<<<<< HEAD
-{}
-=======
 {
 	body->setUserPointer(this);
 	type = PhysBodyType::DEFAULT;
 }
 
->>>>>>> SECCOPYBranch
 
 // ---------------------------------------------------------
 PhysBody3D::~PhysBody3D()
@@ -29,10 +21,7 @@ void PhysBody3D::Push(float x, float y, float z)
 	body->applyCentralImpulse(btVector3(x, y, z));
 }
 
-<<<<<<< HEAD
-=======
 
->>>>>>> SECCOPYBranch
 // ---------------------------------------------------------
 void PhysBody3D::GetTransform(float* matrix) const
 {
@@ -42,10 +31,7 @@ void PhysBody3D::GetTransform(float* matrix) const
 	}
 }
 
-<<<<<<< HEAD
-=======
 
->>>>>>> SECCOPYBranch
 // ---------------------------------------------------------
 void PhysBody3D::SetTransform(const float* matrix) const
 {
@@ -57,10 +43,7 @@ void PhysBody3D::SetTransform(const float* matrix) const
 	}
 }
 
-<<<<<<< HEAD
-=======
 
->>>>>>> SECCOPYBranch
 // ---------------------------------------------------------
 void PhysBody3D::SetPos(float x, float y, float z)
 {
@@ -68,24 +51,6 @@ void PhysBody3D::SetPos(float x, float y, float z)
 	t.setOrigin(btVector3(x, y, z));
 	body->setWorldTransform(t);
 }
-<<<<<<< HEAD
-void PhysBody3D::SetAsSensor(bool is_sensor)
-{
-	if (this->is_sensor != is_sensor)
-	{
-		this->is_sensor = is_sensor;
-		if (is_sensor == true)
-			body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
-		else
-			body->setCollisionFlags(body->getCollisionFlags() &~btCollisionObject::CF_NO_CONTACT_RESPONSE);
-	}
-}
-bool PhysBody3D::IsSensor() const
-{
-	return is_sensor;
-}
-
-=======
 
 
 void PhysBody3D::SetRotation(vec3 axis, float angle, bool converse) {
@@ -113,7 +78,7 @@ void PhysBody3D::AddRotation(vec3 axis, float angle, float converse) {
 
 	btQuaternion rotationtoAdd = btQuaternion(ax, angle);
 	btQuaternion rot_addition = t.getRotation() * rotationtoAdd;
-	
+
 	t.setRotation(rot_addition);
 	body->setWorldTransform(t);
 }
@@ -126,6 +91,7 @@ void PhysBody3D::SetLinearVelocity(vec3 vel) {
 
 }
 
+
 const vec3 PhysBody3D::GetLinearVelocity() const {
 
 	btVector3 btVel = body->getLinearVelocity();
@@ -133,4 +99,22 @@ const vec3 PhysBody3D::GetLinearVelocity() const {
 
 	return vec3(btVel.getX(), btVel.getY(), btVel.getZ());
 }
->>>>>>> SECCOPYBranch
+
+
+void PhysBody3D::SetAsSensor(bool is_sensor)
+{
+	if (this->is_sensor != is_sensor)
+	{
+		this->is_sensor = is_sensor;
+		if (is_sensor == true)
+			body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
+		else
+			body->setCollisionFlags(body->getCollisionFlags() &~btCollisionObject::CF_NO_CONTACT_RESPONSE);
+	}
+}
+
+
+bool PhysBody3D::IsSensor() const
+{
+	return is_sensor;
+}
