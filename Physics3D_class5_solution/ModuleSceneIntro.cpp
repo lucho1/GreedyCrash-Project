@@ -4,7 +4,7 @@
 #include "Primitive.h"
 #include "PhysBody3D.h"
 #include "Coins.h"
-
+#include "ModulePhysics3D.h"
 class Coin;
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -27,7 +27,9 @@ bool ModuleSceneIntro::Start()
 	while (Item != nullptr) {
 
 		Item->data->Start();
-
+			if ((Item->data->PhysMonedita->IsSensor()) == false) {
+			Item->data->PhysMonedita->SetAsSensor(true);
+		}
 		Item = Item->next;
 	}
 	
@@ -84,13 +86,14 @@ update_status ModuleSceneIntro::Update(float dt)
 
 	while (Item != nullptr) {
 
-		Item->data->Update(dt);
-
+		if (Item->data->ToDelete) {
+			Coins.del(Item);
+		}
+		else if (Item->data->ToDelete == false) {
+			Item->data->Update(dt);
+		}
 		Item = Item->next;
 	}
-
-	
-
 
 	if (Mix_PlayingMusic() == 0)
 		App->audio->PlayMusic("audio/track_loop.ogg", -1, 0.0f);
@@ -136,9 +139,15 @@ void ModuleSceneIntro::CreateCoin(float scale) {
 	safezone:
 	NewCoin->monedita.height = 0.1 * scale;
 	NewCoin->monedita.SetPos(pos.x, pos.y, pos.z);
+	NewCoin->pos.x = pos.x;
+	NewCoin->pos.y = pos.y;
+	NewCoin->pos.z = pos.z;
 	NewCoin->active = false;
 	NewCoin->monedita.wire = false;
-//	NewCoin->monedita.color = Red;
+	//physmonedita
+	NewCoin->PhysMonedita = App->physics->AddBody(NewCoin->monedita, 0.0f);
+	
+	//NewCoin->monedita.color = Red;
 	NewCoin->monedita.SetPos(pos.x, pos.y, pos.z);
 	Coins.add(NewCoin);
 	
