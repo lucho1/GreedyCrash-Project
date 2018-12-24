@@ -40,6 +40,7 @@ bool ModuleSceneIntro::Start()
 	pb_limit3 = App->physics->AddBody(limit3, limit_mass);
 	pb_limit4 = App->physics->AddBody(limit4, limit_mass);
 
+	pb_limit1->type = pb_limit2->type = pb_limit3->type = pb_limit4->type = PhysBodyType::LIMIT;
 
 	//Slopes
 	vec3 slope_sizes = vec3(10.0f, 6.0f, 13.0f);
@@ -77,6 +78,7 @@ bool ModuleSceneIntro::Start()
 	pb_sunkenSphere2 = App->physics->AddBody(sunkenSphere2, 0.0f);
 
 	sunkenSphere.color = sunkenSphere2.color = Black;
+	pb_sunkenSphere->type = pb_sunkenSphere2->type = PhysBodyType::OBJECT;
 
 	//Balls
 	bBall = Sphere(2.0f);
@@ -95,7 +97,43 @@ bool ModuleSceneIntro::Start()
 	bBall4.SetPos(-30.0f, 20.0f, -60.0f);
 	pb_bBall4 = App->physics->AddBody(bBall4);
 
-	bBall.color = bBall2.color = bBall3.color = bBall4.color = Color(155, 0, 155, 255);
+	bBall.color = bBall2.color = bBall3.color = bBall4.color = Color(0.6f, 0, 0.6f);
+
+	pb_bBall->collision_listeners.add(this);
+	pb_bBall2->collision_listeners.add(this);
+
+	//Bouncing Cubes at center
+	bCubeCenter = Cube(2.0f, 2.0f, 2.0f);
+	bCubeCenter.SetPos(0.0f, 0.0f, 0.0f);
+	pb_bCubeCenter = App->physics->AddBody(bCubeCenter, 0.0f);
+
+	bCube = Cube(2.0f, 2.0f, 2.0f);
+	bCube.SetPos(0.0f, 0.0f, 12.0f);
+	pb_bCube = App->physics->AddBody(bCube, 0.0f);
+
+	bCube2 = Cube(2.0f, 2.0f, 2.0f);
+	bCube2.SetPos(0.0f, 0.0f, -12.0f);
+	pb_bCube2 = App->physics->AddBody(bCube2, 0.0f);
+
+	bCube3 = Cube(2.0f, 2.0f, 2.0f);
+	bCube3.SetPos(12.0f, 0.0f, 0.0f);
+	pb_bCube3 = App->physics->AddBody(bCube3, 0.0f);
+
+	bCube4 = Cube(2.0f, 2.0f, 2.0f);
+	bCube4.SetPos(-12.0f, 0.0f, 0.0f);
+	pb_bCube4 = App->physics->AddBody(bCube4, 0.0f);
+
+	bCube5 = Cube(2.0f, 2.0f, 2.0f);
+	bCube5.SetPos(91.0f, 0.0f, 0.0f);
+	pb_bCube5 = App->physics->AddBody(bCube5, 0.0f);
+
+	bCube6 = Cube(2.0f, 2.0f, 2.0f);
+	bCube6.SetPos(-91.0f, 0.0f, 0.0f);
+	pb_bCube6 = App->physics->AddBody(bCube6, 0.0f);
+
+	bCubeCenter.color = bCube.color = bCube2.color = bCube3.color = bCube4.color = bCube5.color = bCube6.color = Red;
+	pb_bCubeCenter->type = pb_bCube3->type = pb_bCube4->type = pb_bCube5->type = pb_bCube6->type = PhysBodyType::BOUNCE_Y;
+	pb_bCube->type = pb_bCube2->type = PhysBodyType::BOUNCE_XZ;
 	
 	//General Scenario Settings
 	App->audio->PlayMusic("audio/track_intro.ogg", 0, 0.0f);
@@ -207,20 +245,49 @@ update_status ModuleSceneIntro::Update(float dt)
 	bBall4.Render();
 
 	//Balls 1 & 2 bounce
-	if (MustBounce(bBall) || BounceWithSphere(bBall, sunkenSphere) || BounceWithSphere(bBall, sunkenSphere2) ||
-		BounceWithCube(bBall, App->player->vehicle->chassis) || BounceWithCube(bBall, App->player->vehicle2->chassis))
-		pb_bBall->Push(0.0f, 40.0f, 0.0f);
+	if (MustBounce(bBall)) {
 
-	if (MustBounce(bBall2) || BounceWithSphere(bBall2, sunkenSphere) || BounceWithSphere(bBall2, sunkenSphere2) ||
-		BounceWithCube(bBall2, App->player->vehicle2->chassis) || BounceWithCube(bBall2, App->player->vehicle->chassis))
-		pb_bBall2->Push(0.0f, 40.0f, 0.0f);
+		vec3 v = pb_bBall->GetLinearVelocity();
+		pb_bBall->SetLinearVelocity(vec3(0.0f, 0.0f, 0.0f));
+		pb_bBall->Push(v.x, 20.0f, v.z);
 
+	}
 
-	/*float *N = nullptr;
-	pb_bBall->GetTransform(N);
-	float Xpb = N[3];
-	float Ypb = N[7];
-	float Zpb = N[11];*/
+	if (MustBounce(bBall2)) {
+
+		vec3 v = pb_bBall2->GetLinearVelocity();
+		pb_bBall2->SetLinearVelocity(vec3(0.0f, 0.0f, 0.0f));
+		pb_bBall2->Push(v.x, 20.0f, v.z);
+
+	}
+	//Bouncing Cubes
+	pb_bCubeCenter->AddRotation(vec3(0.0f, 1.0f, 0.0f), 10.0f);
+	pb_bCubeCenter->GetTransform(&bCubeCenter.transform);
+	bCubeCenter.Render();
+
+	pb_bCube->AddRotation(vec3(0.0f, 1.0f, 0.0f), 10.0f);
+	pb_bCube->GetTransform(&bCube.transform);
+	bCube.Render();
+
+	pb_bCube2->AddRotation(vec3(0.0f, 1.0f, 0.0f), 10.0f);
+	pb_bCube2->GetTransform(&bCube2.transform);
+	bCube2.Render();
+
+	pb_bCube3->AddRotation(vec3(0.0f, 1.0f, 0.0f), 10.0f);
+	pb_bCube3->GetTransform(&bCube3.transform);
+	bCube3.Render();
+
+	pb_bCube4->AddRotation(vec3(0.0f, 1.0f, 0.0f), 10.0f);
+	pb_bCube4->GetTransform(&bCube4.transform);
+	bCube4.Render();
+
+	pb_bCube5->AddRotation(vec3(0.0f, 1.0f, 0.0f), 10.0f);
+	pb_bCube5->GetTransform(&bCube5.transform);
+	bCube5.Render();
+
+	pb_bCube6->AddRotation(vec3(0.0f, 1.0f, 0.0f), 10.0f);
+	pb_bCube6->GetTransform(&bCube6.transform);
+	bCube6.Render();
 
 //	LOG("CAMERA POS: %.2f %.2f %.2f", App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
 	return UPDATE_CONTINUE;
@@ -243,7 +310,7 @@ PhysBody3D * ModuleSceneIntro::CreateSlope(Cube &slope, vec3 sizes, vec3 pos, fl
 	pb_slope->AddRotation(Xaxis, Xangle);
 	pb_slope->AddRotation(Zaxis, Zangle);
 	
-
+	pb_slope->type = PhysBodyType::OBJECT;
 	slope.axis = false;
 	return pb_slope;
 }
@@ -256,40 +323,14 @@ bool ModuleSceneIntro::MustBounce(Sphere sphere) {
 }
 
 
-bool ModuleSceneIntro::BounceWithSphere(Sphere sphere1, Sphere sphere2) {
+void ModuleSceneIntro::OnCollision(PhysBody3D *bodyA, PhysBody3D *bodyB) {
 
-	float sph1Y = sphere1.transform[13];
-	float sph2Y = sphere2.transform[13];
+	if (bodyB->type == PhysBodyType::BOUNCE_Y || bodyB->type == PhysBodyType::OBJECT) {
 
-	float sph1X = sphere1.transform[12];
-	float sph2X = sphere2.transform[12];
+		if (bodyA == pb_bBall)
+			pb_bBall->Push(0.0f, 10.5f, 0.0f);
 
-	float sph1Z = sphere1.transform[14];
-	float sph2Z = sphere2.transform[14];
-
-	float r1 = sphere1.radius;
-	float r2 = sphere2.radius;
-
-	if (sph1X <= sph2X + r2 && sph1X >= sph2X - r2 && sph1Z <= sph2Z + r2 && sph1Z >= sph2Z - r2)
-		return(sph1Y - r1 <= sph2Y + r2);
-
-	return false;
-}
-
-
-bool ModuleSceneIntro::BounceWithCube(Sphere sphere, Cube cube) {
-
-	float sphY = sphere.transform[13];
-	float cubeY = cube.transform[13];
-
-	float sphX = sphere.transform[12];
-	float cubeX = cube.transform[12];
-
-	float sphZ = sphere.transform[14];
-	float cubeZ = cube.transform[14];
-
-	if (sphX <= cubeX + cube.size.x / 2 && sphX >= cubeX - cube.size.x / 2 && sphZ <= cubeZ + cube.size.z && sphZ >= cubeZ - cube.size.z)
-		return(sphY - sphere.radius <= cubeY + cube.size.y);
-
-	return false;
+		if (bodyA == pb_bBall2)
+			pb_bBall2->Push(0.0f, 10.5f, 0.0f);
+	}
 }

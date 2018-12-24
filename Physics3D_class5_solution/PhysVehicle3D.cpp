@@ -23,7 +23,7 @@ PhysVehicle3D::~PhysVehicle3D()
 void PhysVehicle3D::Render()
 {
 	Cylinder wheel;
-	wheel.color = Blue;
+	wheel.color = Green;
 
 	for(int i = 0; i < vehicle->getNumWheels(); ++i)
 	{

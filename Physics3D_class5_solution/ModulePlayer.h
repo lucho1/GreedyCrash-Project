@@ -29,8 +29,11 @@ private:
 	void SetConstCarProperties(VehicleInfo* car, float connection_height, float wheel_radius, float wheel_width, float suspensionRestLength);
 
 	void RestartCar(btVector3 Iorientation, PhysVehicle3D* vehicle, vec3 Ipos, bool inverted = false);
+	void OnCollision(PhysBody3D* bA, PhysBody3D* bB);
 
 public:
+
+	bool starting = false;
 
 	PhysVehicle3D* vehicle = nullptr;
 	float turn;

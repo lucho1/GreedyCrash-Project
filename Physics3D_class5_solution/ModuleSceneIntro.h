@@ -21,10 +21,11 @@ public:
 	bool CleanUp();
 
 	PhysBody3D *CreateSlope(Cube &slope, vec3 sizes, vec3 pos, float Xangle = 0.0f, float Yangle = 0.0f, float Zangle = 0.0f);
+	void OnCollision(PhysBody3D *bodyA, PhysBody3D *bodyB);
 
 	bool MustBounce(Sphere sphere);
-	bool BounceWithSphere(Sphere sphere1, Sphere sphere2);
-	bool BounceWithCube(Sphere sphere, Cube cube);
+	//bool BounceWithSphere(Sphere sphere1, Sphere sphere2);
+	//bool BounceWithCube(Sphere sphere, Cube cube);
 
 private:
 
@@ -106,5 +107,22 @@ private:
 	PhysBody3D* pb_bBall4 = nullptr;
 	Sphere bBall4;
 
+public:
+
+	//Bouncing Cubes
+	PhysBody3D* pb_bCube = nullptr;
+	Cube bCube;
+	PhysBody3D* pb_bCube2 = nullptr;
+	Cube bCube2;
+	PhysBody3D* pb_bCube3 = nullptr;
+	Cube bCube3;
+	PhysBody3D* pb_bCube4 = nullptr;
+	Cube bCube4;
+	PhysBody3D* pb_bCube5 = nullptr;
+	Cube bCube5;
+	PhysBody3D* pb_bCube6 = nullptr;
+	Cube bCube6;
+	PhysBody3D* pb_bCubeCenter = nullptr;
+	Cube bCubeCenter;
 	
 };

@@ -24,8 +24,15 @@ bool ModulePlayer::Start()
 	vehicle = App->physics->AddVehicle(car);
 	vehicle2 = App->physics->AddVehicle(car);
 
+	vehicle->type = vehicle2->type = PhysBodyType::OBJECT;
+
+	vehicle->collision_listeners.add(this);
+	vehicle2->collision_listeners.add(this);
+
 	IOrientation_vector = vehicle->vehicle->getForwardVector();
 	IOrientation_vector2 = vehicle2->vehicle->getForwardVector();
+
+	starting = true;
 
 	RestartCar(IOrientation_vector, vehicle,IposP1);
 	RestartCar(IOrientation_vector2, vehicle2, IposP2, true);
@@ -58,7 +65,8 @@ update_status ModulePlayer::Update(float dt)
 	vehicle->Turn(turn);
 	vehicle->Brake(brake);
 
-	vehicle->info.color = Red;
+	vehicle->info.color = Color(1.0f, 0.65f, 0.13f);
+
 	vehicle->Render();
 
 	//Vehicle 2 move
@@ -256,8 +264,42 @@ void ModulePlayer::RestartCar(btVector3 Iorientation, PhysVehicle3D* vehicle, ve
 	if (vehicle->GetKmh() > 0)
 		vehicle->SetLinearVelocity(vec3(0.0f, 0.0f, 0.0f));
 
+	if (starting == true) {
+		vehicle->SetPos(Ipos.x, 15.0f, Ipos.z);
+		starting = false;
+	}
+	else
+		vehicle->SetPos(Ipos.x, Ipos.y, Ipos.z);
 
-	vehicle->SetPos(Ipos.x, 0.0f, Ipos.z);
+	
 	vehicle->Brake(BRAKE_POWER);
 
+}
+
+
+void ModulePlayer::OnCollision(PhysBody3D* bA, PhysBody3D* bB) {
+
+	float bounceY = 1500.0f;
+	float bounceZ = 0.0f;
+
+	if (bA == vehicle) {
+
+		bounceZ = vehicle->vehicle->getForwardVector().getZ() * 1000.0f;
+
+		if (bB->type == PhysBodyType::BOUNCE_Y)
+			vehicle->Push(0.0f, bounceY, 0.0f);
+
+		if (bB->type == PhysBodyType::BOUNCE_XZ)
+			vehicle->Push(0.0f, 0.0f, -bounceZ);
+	}
+	if (bA == vehicle2) {
+
+		bounceZ = vehicle2->vehicle->getForwardVector().getZ() * 1000.0f;
+
+		if (bB->type == PhysBodyType::BOUNCE_Y)
+			vehicle2->Push(0.0f, bounceY, 0.0f);
+
+		if (bB->type == PhysBodyType::BOUNCE_XZ)
+			vehicle2->Push(0.0f, 0.0f, -bounceZ);
+	}
 }

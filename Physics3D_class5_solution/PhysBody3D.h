@@ -7,6 +7,16 @@
 class btRigidBody;
 class Module;
 
+enum class PhysBodyType {
+
+	BOUNCE_Y,
+	BOUNCE_XZ,
+	OBJECT,
+	LIMIT,
+	DEFAULT
+	
+};
+
 // =================================================
 struct PhysBody3D
 {
@@ -25,12 +35,15 @@ public:
 	void SetRotation(vec3 axis, float angle, bool converse = true);
 	void AddRotation(vec3 axis, float angle, float converse = true);
 	void SetLinearVelocity(vec3 vel);
+	const vec3 GetLinearVelocity() const;
+	
 
 private:
 	btRigidBody* body = nullptr;
 
 public:
 	p2List<Module*> collision_listeners;
+	PhysBodyType type;
 
 };
 

@@ -3,7 +3,10 @@
 
 // =================================================
 PhysBody3D::PhysBody3D(btRigidBody* body) : body(body)
-{}
+{
+	body->setUserPointer(this);
+	type = PhysBodyType::DEFAULT;
+}
 
 
 // ---------------------------------------------------------
@@ -86,4 +89,12 @@ void PhysBody3D::SetLinearVelocity(vec3 vel) {
 	const btVector3 velocity = btVector3(vel.x, vel.y, vel.z);
 	body->setLinearVelocity(velocity);
 
+}
+
+const vec3 PhysBody3D::GetLinearVelocity() const {
+
+	btVector3 btVel = body->getLinearVelocity();
+
+
+	return vec3(btVel.getX(), btVel.getY(), btVel.getZ());
 }
