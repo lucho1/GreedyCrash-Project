@@ -25,6 +25,10 @@ public:
 	update_status PreUpdate(float dt);
 	update_status Update(float dt);
 	update_status PostUpdate(float dt);
+<<<<<<< HEAD
+=======
+
+>>>>>>> SECCOPYBranch
 	bool CleanUp();
 
 	PhysBody3D* AddBody(const Sphere& sphere, float mass = 1.0f);

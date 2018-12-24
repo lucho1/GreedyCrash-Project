@@ -1,5 +1,9 @@
 #include "Application.h"
+<<<<<<< HEAD
 #include <time.h>
+=======
+
+>>>>>>> SECCOPYBranch
 Application::Application()
 {
 	window = new ModuleWindow(this);
@@ -10,7 +14,10 @@ Application::Application()
 	camera = new ModuleCamera3D(this);
 	physics = new ModulePhysics3D(this);
 	player = new ModulePlayer(this);
+<<<<<<< HEAD
 	
+=======
+>>>>>>> SECCOPYBranch
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -29,7 +36,10 @@ Application::Application()
 
 	// Renderer last!
 	AddModule(renderer3D);
+<<<<<<< HEAD
 	
+=======
+>>>>>>> SECCOPYBranch
 }
 
 Application::~Application()
@@ -46,8 +56,11 @@ Application::~Application()
 bool Application::Init()
 {
 	bool ret = true;
+<<<<<<< HEAD
 	/* initialize random seed: */
 	srand(time(NULL));
+=======
+>>>>>>> SECCOPYBranch
 
 	// Call Init() in all modules
 	p2List_item<Module*>* item = list_modules.getFirst();

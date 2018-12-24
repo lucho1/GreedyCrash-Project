@@ -3,6 +3,10 @@
 #include "PhysBody3D.h"
 #include "glmath.h"
 #include "Color.h"
+<<<<<<< HEAD
+=======
+#include "Primitive.h"
+>>>>>>> SECCOPYBranch
 
 class btRaycastVehicle;
 struct PhysBody3D;
@@ -58,4 +62,8 @@ public:
 
 	VehicleInfo info;
 	btRaycastVehicle* vehicle;
+<<<<<<< HEAD
+=======
+	Cube chassis;
+>>>>>>> SECCOPYBranch
 };

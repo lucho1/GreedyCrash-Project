@@ -75,7 +75,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
+<<<<<<< HEAD
     <ClInclude Include="Coins.h" />
+=======
+>>>>>>> SECCOPYBranch
     <ClInclude Include="Color.h" />
     <ClInclude Include="glmath.h" />
     <ClInclude Include="Globals.h" />
@@ -99,7 +102,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="Coins.cpp" />
+=======
+>>>>>>> SECCOPYBranch
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="glmath.cpp" />
     <ClCompile Include="Light.cpp" />
