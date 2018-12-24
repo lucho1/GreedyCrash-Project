@@ -24,9 +24,6 @@ bool ModuleSceneIntro::Start()
 		CreateCoin(3);
 	}
 	p2List_item<Coin*>* Item = Coins.getFirst();
-
-
-
 	while (Item != nullptr) {
 
 		Item->data->Start();
@@ -385,7 +382,7 @@ void ModuleSceneIntro::CreateCoin(float scale) {
 	NewCoin->active = false;
 	NewCoin->monedita.wire = false;
 	//physmonedita
-	NewCoin->PhysMonedita = App->physics->AddBody(NewCoin->monedita, 0.0f);
+	NewCoin->PhysMonedita = App->physics->AddBody(NewCoin->monedita, 0.2f);
 
 	//NewCoin->monedita.color = Red;
 	NewCoin->monedita.SetPos(pos.x, pos.y, pos.z);
