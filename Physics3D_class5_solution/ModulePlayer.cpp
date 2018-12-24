@@ -291,6 +291,9 @@ void ModulePlayer::OnCollision(PhysBody3D* bA, PhysBody3D* bB) {
 
 		if (bB->type == PhysBodyType::BOUNCE_XZ)
 			vehicle->Push(0.0f, 0.0f, -bounceZ);
+
+		if (bB->type == PhysBodyType::COIN)
+			bB->ToDelete = true;
 	}
 	if (bA == vehicle2) {
 

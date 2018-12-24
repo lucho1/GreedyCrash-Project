@@ -13,6 +13,7 @@ enum class PhysBodyType {
 	BOUNCE_XZ,
 	OBJECT,
 	LIMIT,
+	COIN,
 	DEFAULT
 
 };
@@ -48,6 +49,7 @@ public:
 public:
 	///COLLISIONS
 	bool is_sensor;
+	bool ToDelete = false;
 	PhysBodyType type;
 
 };
