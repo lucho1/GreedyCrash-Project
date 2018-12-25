@@ -32,12 +32,16 @@ bool ModulePlayer::Start()
 	IOrientation_vector = vehicle->vehicle->getForwardVector();
 	IOrientation_vector2 = vehicle2->vehicle->getForwardVector();
 
-	starting = true;
+	gameOver = true;
 
 	RestartCar(IOrientation_vector, vehicle,IposP1);
 	RestartCar(IOrientation_vector2, vehicle2, IposP2, true);
 
-	starting = false;
+	gameOver = false;
+	coin_fx = App->audio->LoadFx("audio/fx/PickCoinSound.wav");
+	gameOver_fx1 = App->audio->LoadFx("audio/fx/GameOver.wav");
+	gameOver_fx2 = App->audio->LoadFx("audio/fx/LoseSound.wav");
+	gameOver_fx3 = App->audio->LoadFx("audio/fx/IwinSound.wav");
 
 	return true;
 }
@@ -52,37 +56,98 @@ bool ModulePlayer::CleanUp()
 // Update: draw background
 update_status ModulePlayer::Update(float dt)
 {
-	turn = acceleration = brake = turn2 = acceleration2 = brake2 = 0.0f;
 
-	HandleInput_P1();
-	HandleInput_P2();
+	if (gameOver == true) {
 
-	//Debug
-	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
-		boost_quantity = boost_quantity2 = 100.0f;
+		if (fx_timer.Read() >= 1500 && play2){
 
-	//Vehicle 1 move
-	vehicle->ApplyEngineForce(acceleration);
-	vehicle->Turn(turn);
-	vehicle->Brake(brake);
+			App->audio->PlayFx(gameOver_fx2);
+			play2 = false;
+			play3 = true;
+		}
 
-	vehicle->info.color = Color(1.0f, 0.65f, 0.13f);
 
-	vehicle->Render();
+		if (fx_timer.Read() >= 4500 && play3) {
 
-	//Vehicle 2 move
-	vehicle2->ApplyEngineForce(acceleration2);
-	vehicle2->Turn(turn2);
-	vehicle2->Brake(brake2);
+			App->audio->PlayFx(gameOver_fx3);
+			play3 = false;
+		}
 
-	vehicle2->info.color = Blue;
-	vehicle2->Render();
+		vehicle->SetPos(0.0f, 0.0f, -20.0f);
+		vehicle2->SetPos(0.0f, 0.0f, 20.0f);
+		App->physics->debug = true;
 
-	char title[200];
-	sprintf_s(title, "PLAYER 1:     Speed %.1f Km/h     Boost %.2f     Coins %i                                                           PLAYER 2:     Speed %.1f Km/h     Boost %.2f     Coins %i",
-		vehicle->GetKmh(), boost_quantity, 2, vehicle2->GetKmh(), boost_quantity2, 2);
+		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 
-	App->window->SetTitle(title);
+			P1Coins = 6;
+			P2Coins = 6;
+			boost_quantity = 100.0f;
+			boost_quantity2 = 100.0f;
+			boost_recover1 = 0;
+			boost_recover2 = 0;
+			RestartCar(IOrientation_vector, vehicle, IposP1);
+			RestartCar(IOrientation_vector2, vehicle2, IposP2, true);
+			gameOver = false;
+			App->physics->debug = false;
+		}
+
+		char title[250];
+		//FOR SOME REASON, /t doesn't work here :(
+		if (P1Coins <= 0)
+			sprintf_s(title, "--------------------------PLAYER 2 WINS--------------------------             press space");
+		else if (P2Coins <= 0)
+			sprintf_s(title, "--------------------------PLAYER 1 WINS--------------------------             press space");
+
+		App->window->SetTitle(title);
+	}
+	else {
+
+		//Debug
+		if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+			boost_quantity = boost_quantity2 = 100.0f;
+		if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
+			P1Coins = P2Coins += 1;
+
+		if (P1Coins <= 0 || P2Coins <= 0) {
+
+			Mix_HaltMusic();
+			fx_timer.Start();
+
+			App->audio->PlayFx(gameOver_fx1);
+			play2 = true;
+			gameOver = true;
+
+		}
+
+
+		turn = acceleration = brake = turn2 = acceleration2 = brake2 = 0.0f;
+
+		HandleInput_P1();
+		HandleInput_P2();
+
+		//Vehicle 1 move
+		vehicle->ApplyEngineForce(acceleration);
+		vehicle->Turn(turn);
+		vehicle->Brake(brake);
+
+		vehicle->info.color = Color(1.0f, 0.65f, 0.13f);
+
+		vehicle->Render();
+
+		//Vehicle 2 move
+		vehicle2->ApplyEngineForce(acceleration2);
+		vehicle2->Turn(turn2);
+		vehicle2->Brake(brake2);
+
+		vehicle2->info.color = Blue;
+		vehicle2->Render();
+
+		char title[250];
+		sprintf_s(title, "PLAYER 1:     Speed %.1f Km/h     Boost %.2f     BoostRecover: %i/3     Coins %i                                                           PLAYER 2:     Speed %.1f Km/h     Boost %.2f     BoostRecover: %i/3     Coins %i",
+			vehicle->GetKmh(), boost_quantity, boost_recover1, P1Coins, vehicle2->GetKmh(), boost_quantity2, boost_recover2, P2Coins);
+
+		App->window->SetTitle(title);
+	}
 
 	return UPDATE_CONTINUE;
 }
@@ -90,8 +155,23 @@ update_status ModulePlayer::Update(float dt)
 
 void ModulePlayer::HandleInput_P1() {
 
-	if (App->input->GetKey(SDL_SCANCODE_Y) == KEY_DOWN)
+	if (boost_recover1 >= 3) {
+
+		boost_quantity = 100.0f;
+		boost_recover1 = 0;
+	}
+
+	if (P1Coins == 12)
+		maxCreached1 = true;
+	if (P1Coins <= 9)
+		maxCreached1 = false;
+
+
+	if (App->input->GetKey(SDL_SCANCODE_Y) == KEY_DOWN && P1Coins > 0) {
+
 		RestartCar(IOrientation_vector, vehicle, IposP1);
+		P1Coins--;
+	}
 
 	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 		acceleration = MAX_ACCELERATION;
@@ -127,8 +207,22 @@ void ModulePlayer::HandleInput_P1() {
 
 void ModulePlayer::HandleInput_P2() {
 
-	if (App->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN)
+	if (boost_recover2 >= 3) {
+
+		boost_quantity2 = 100.0f;
+		boost_recover2 = 0;
+	}
+
+	if(P2Coins == 12)
+		maxCreached2 = true;
+	if (P2Coins <= 9)
+		maxCreached2 = false;
+
+	if (App->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN && P2Coins > 0) {
+
 		RestartCar(IOrientation_vector2, vehicle2, IposP2, true);
+		P2Coins--;
+	}
 
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 		acceleration2 = MAX_ACCELERATION;
@@ -261,20 +355,18 @@ void ModulePlayer::RestartCar(btVector3 Iorientation, PhysVehicle3D* vehicle, ve
 
 	if (inverted == true)
 		vehicle->SetRotation(Yaxis, 180.0f);
-
-	if (vehicle->GetKmh() > 0)
-		vehicle->SetLinearVelocity(vec3(0.0f, 0.0f, 0.0f));
-
-	if (starting == true)
-		vehicle->SetPos(Ipos.x, 15.0f, Ipos.z);
 		
-	
-	else
-		vehicle->SetPos(Ipos.x, Ipos.y, Ipos.z);
 
+	if (gameOver == true) 
+		vehicle->SetPos(Ipos.x, 15.0f, Ipos.z);
+	else {
+
+		vehicle->SetLinearVelocity(vec3(0.0f, 0.0f, 0.0f));
+		vehicle->SetAngularVelocity(vec3(0.0f, 0.0f, 0.0f));
+		vehicle->SetPos(Ipos.x, Ipos.y, Ipos.z);
+	}
 
 	vehicle->Brake(BRAKE_POWER);
-
 }
 
 
@@ -293,8 +385,17 @@ void ModulePlayer::OnCollision(PhysBody3D* bA, PhysBody3D* bB) {
 		if (bB->type == PhysBodyType::BOUNCE_XZ)
 			vehicle->Push(0.0f, 0.0f, -bounceZ);
 
-		if (bB->type == PhysBodyType::COIN)
+		if (bB->type == PhysBodyType::COIN) {
+
+			App->audio->PlayFx(coin_fx);
 			bB->to_delete = true;
+			if (P1Coins < 12) {
+
+				P1Coins++;
+				if (!maxCreached1)
+					boost_recover1++;
+			}
+		}
 	}
 	if (bA == vehicle2) {
 
@@ -306,7 +407,16 @@ void ModulePlayer::OnCollision(PhysBody3D* bA, PhysBody3D* bB) {
 		if (bB->type == PhysBodyType::BOUNCE_XZ)
 			vehicle2->Push(0.0f, 0.0f, -bounceZ);
 
-		if (bB->type == PhysBodyType::COIN)
+		if (bB->type == PhysBodyType::COIN) {
+
+			App->audio->PlayFx(coin_fx);
 			bB->to_delete = true;
+			if (P2Coins < 12) {
+
+				P2Coins++;
+				if(!maxCreached2)
+					boost_recover2++;
+			}	
+		}
 	}
 }

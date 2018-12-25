@@ -8,6 +8,7 @@ struct Coin {
 
 	Cylinder Coin_c;
 	PhysBody3D *pb_Coin;
+	vec3 iPos;
 };
 
 struct PhysBody3D;

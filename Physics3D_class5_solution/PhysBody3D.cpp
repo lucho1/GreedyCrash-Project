@@ -88,7 +88,13 @@ void PhysBody3D::SetLinearVelocity(vec3 vel) {
 
 	const btVector3 velocity = btVector3(vel.x, vel.y, vel.z);
 	body->setLinearVelocity(velocity);
+}
 
+
+void PhysBody3D::SetAngularVelocity(vec3 an_vel) {
+
+	const btVector3 velocity = btVector3(an_vel.x, an_vel.y, an_vel.z);
+	body->setAngularVelocity(velocity);
 }
 
 

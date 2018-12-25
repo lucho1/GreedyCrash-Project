@@ -162,150 +162,154 @@ bool ModuleSceneIntro::CleanUp()
 // Update
 update_status ModuleSceneIntro::Update(float dt)
 {
+	if (App->player->gameOver == false) {
 
-	p2List_item<Coin>*item = c_list.getFirst();
-	while (item != nullptr) {
+		p2List_item<Coin>*item = c_list.getFirst();
+		while (item != nullptr) {
 
-		//if (item->data.pb_Coin != nullptr) {
+			//if (item->data.pb_Coin != nullptr) {
 
 			item->data.pb_Coin->AddRotation(vec3(0.0f, 1.0f, 0.0f), 10.0f);
 			item->data.pb_Coin->GetTransform(&item->data.Coin_c.transform);
 			item->data.Coin_c.Render();
-		//}
+			item->data.Coin_c.SetPos(item->data.iPos.x, item->data.iPos.y, item->data.iPos.z);
+			//}
 
-		item = item->next;
+			item = item->next;
+		}
+
+		if (Mix_PlayingMusic() == 0)
+			App->audio->PlayMusic("audio/track_loop.ogg", -1, 0.0f);
+
+
+		Plane p(0, 1, 0, 0);
+		p.axis = false;
+		p.Render();
+
+		pb_limit1->GetTransform(&limit1.transform);
+		limit1.Render();
+
+		pb_limit2->GetTransform(&limit2.transform);
+		limit2.Render();
+
+		pb_limit3->GetTransform(&limit3.transform);
+		limit3.Render();
+
+		pb_limit4->GetTransform(&limit4.transform);
+		limit4.Render();
+
+		//Center Slopes
+		pb_slope1->GetTransform(&slope1.transform);
+		slope1.Render();
+
+		pb_slope2->GetTransform(&slope2.transform);
+		slope2.Render();
+
+		pb_slope3->GetTransform(&slope3.transform);
+		slope3.Render();
+
+		pb_slope4->GetTransform(&slope4.transform);
+		slope4.Render();
+
+		//Side Slopes
+		pb_slope5->GetTransform(&slope5.transform);
+		slope6.Render();
+
+		pb_slope6->GetTransform(&slope6.transform);
+		slope5.Render();
+
+		pb_slope7->GetTransform(&slope7.transform);
+		slope7.Render();
+
+		pb_slope8->GetTransform(&slope8.transform);
+		slope8.Render();
+
+		pb_slCube->GetTransform(&slCube.transform);
+		slCube.Render();
+
+		pb_slCube2->GetTransform(&slCube2.transform);
+		slCube2.Render();
+
+		//Traversal Slopes
+		pb_slTraversal->GetTransform(&slTraversal.transform);
+		slTraversal.Render();
+
+		pb_slTraversal2->GetTransform(&slTraversal2.transform);
+		slTraversal2.Render();
+
+		pb_slTraversal3->GetTransform(&slTraversal3.transform);
+		slTraversal3.Render();
+
+		pb_slTraversal4->GetTransform(&slTraversal4.transform);
+		slTraversal4.Render();
+
+		//Shperes
+		pb_sunkenSphere->GetTransform(&sunkenSphere.transform);
+		sunkenSphere.Render();
+
+		pb_sunkenSphere2->GetTransform(&sunkenSphere2.transform);
+		sunkenSphere2.Render();
+
+
+		//Balls
+		pb_bBall->GetTransform(&bBall.transform);
+		bBall.Render();
+
+		pb_bBall2->GetTransform(&bBall2.transform);
+		bBall2.Render();
+
+		pb_bBall3->GetTransform(&bBall3.transform);
+		bBall3.Render();
+
+		pb_bBall4->GetTransform(&bBall4.transform);
+		bBall4.Render();
+
+		//Balls 1 & 2 bounce
+		if (MustBounce(bBall)) {
+
+			vec3 v = pb_bBall->GetLinearVelocity();
+			pb_bBall->SetLinearVelocity(vec3(0.0f, 0.0f, 0.0f));
+			pb_bBall->Push(v.x, 20.0f, v.z);
+
+		}
+
+		if (MustBounce(bBall2)) {
+
+			vec3 v = pb_bBall2->GetLinearVelocity();
+			pb_bBall2->SetLinearVelocity(vec3(0.0f, 0.0f, 0.0f));
+			pb_bBall2->Push(v.x, 20.0f, v.z);
+
+		}
+		//Bouncing Cubes
+		pb_bCubeCenter->AddRotation(vec3(0.0f, 1.0f, 0.0f), 10.0f);
+		pb_bCubeCenter->GetTransform(&bCubeCenter.transform);
+		bCubeCenter.Render();
+
+		pb_bCube->AddRotation(vec3(0.0f, 1.0f, 0.0f), 10.0f);
+		pb_bCube->GetTransform(&bCube.transform);
+		bCube.Render();
+
+		pb_bCube2->AddRotation(vec3(0.0f, 1.0f, 0.0f), 10.0f);
+		pb_bCube2->GetTransform(&bCube2.transform);
+		bCube2.Render();
+
+		pb_bCube3->AddRotation(vec3(0.0f, 1.0f, 0.0f), 10.0f);
+		pb_bCube3->GetTransform(&bCube3.transform);
+		bCube3.Render();
+
+		pb_bCube4->AddRotation(vec3(0.0f, 1.0f, 0.0f), 10.0f);
+		pb_bCube4->GetTransform(&bCube4.transform);
+		bCube4.Render();
+
+		pb_bCube5->AddRotation(vec3(0.0f, 1.0f, 0.0f), 10.0f);
+		pb_bCube5->GetTransform(&bCube5.transform);
+		bCube5.Render();
+
+		pb_bCube6->AddRotation(vec3(0.0f, 1.0f, 0.0f), 10.0f);
+		pb_bCube6->GetTransform(&bCube6.transform);
+		bCube6.Render();
+
 	}
-
-	if (Mix_PlayingMusic() == 0)
-		App->audio->PlayMusic("audio/track_loop.ogg", -1, 0.0f);
-
-
-	Plane p(0, 1, 0, 0);
-	p.axis = false;
-	p.Render();
-
-	pb_limit1->GetTransform(&limit1.transform);
-	limit1.Render();
-
-	pb_limit2->GetTransform(&limit2.transform);
-	limit2.Render();
-
-	pb_limit3->GetTransform(&limit3.transform);
-	limit3.Render();
-
-	pb_limit4->GetTransform(&limit4.transform);
-	limit4.Render();
-
-	//Center Slopes
-	pb_slope1->GetTransform(&slope1.transform);
-	slope1.Render();
-
-	pb_slope2->GetTransform(&slope2.transform);
-	slope2.Render();
-
-	pb_slope3->GetTransform(&slope3.transform);
-	slope3.Render();
-
-	pb_slope4->GetTransform(&slope4.transform);
-	slope4.Render();
-
-	//Side Slopes
-	pb_slope5->GetTransform(&slope5.transform);
-	slope6.Render();
-
-	pb_slope6->GetTransform(&slope6.transform);
-	slope5.Render();
-
-	pb_slope7->GetTransform(&slope7.transform);
-	slope7.Render();
-
-	pb_slope8->GetTransform(&slope8.transform);
-	slope8.Render();
-
-	pb_slCube->GetTransform(&slCube.transform);
-	slCube.Render();
-
-	pb_slCube2->GetTransform(&slCube2.transform);
-	slCube2.Render();
-
-	//Traversal Slopes
-	pb_slTraversal->GetTransform(&slTraversal.transform);
-	slTraversal.Render();
-
-	pb_slTraversal2->GetTransform(&slTraversal2.transform);
-	slTraversal2.Render();
-
-	pb_slTraversal3->GetTransform(&slTraversal3.transform);
-	slTraversal3.Render();
-
-	pb_slTraversal4->GetTransform(&slTraversal4.transform);
-	slTraversal4.Render();
-
-	//Shperes
-	pb_sunkenSphere->GetTransform(&sunkenSphere.transform);
-	sunkenSphere.Render();
-
-	pb_sunkenSphere2->GetTransform(&sunkenSphere2.transform);
-	sunkenSphere2.Render();
-
-
-	//Balls
-	pb_bBall->GetTransform(&bBall.transform);
-	bBall.Render();
-
-	pb_bBall2->GetTransform(&bBall2.transform);
-	bBall2.Render();
-
-	pb_bBall3->GetTransform(&bBall3.transform);
-	bBall3.Render();
-
-	pb_bBall4->GetTransform(&bBall4.transform);
-	bBall4.Render();
-
-	//Balls 1 & 2 bounce
-	if (MustBounce(bBall)) {
-
-		vec3 v = pb_bBall->GetLinearVelocity();
-		pb_bBall->SetLinearVelocity(vec3(0.0f, 0.0f, 0.0f));
-		pb_bBall->Push(v.x, 20.0f, v.z);
-
-	}
-
-	if (MustBounce(bBall2)) {
-
-		vec3 v = pb_bBall2->GetLinearVelocity();
-		pb_bBall2->SetLinearVelocity(vec3(0.0f, 0.0f, 0.0f));
-		pb_bBall2->Push(v.x, 20.0f, v.z);
-
-	}
-	//Bouncing Cubes
-	pb_bCubeCenter->AddRotation(vec3(0.0f, 1.0f, 0.0f), 10.0f);
-	pb_bCubeCenter->GetTransform(&bCubeCenter.transform);
-	bCubeCenter.Render();
-
-	pb_bCube->AddRotation(vec3(0.0f, 1.0f, 0.0f), 10.0f);
-	pb_bCube->GetTransform(&bCube.transform);
-	bCube.Render();
-
-	pb_bCube2->AddRotation(vec3(0.0f, 1.0f, 0.0f), 10.0f);
-	pb_bCube2->GetTransform(&bCube2.transform);
-	bCube2.Render();
-
-	pb_bCube3->AddRotation(vec3(0.0f, 1.0f, 0.0f), 10.0f);
-	pb_bCube3->GetTransform(&bCube3.transform);
-	bCube3.Render();
-
-	pb_bCube4->AddRotation(vec3(0.0f, 1.0f, 0.0f), 10.0f);
-	pb_bCube4->GetTransform(&bCube4.transform);
-	bCube4.Render();
-
-	pb_bCube5->AddRotation(vec3(0.0f, 1.0f, 0.0f), 10.0f);
-	pb_bCube5->GetTransform(&bCube5.transform);
-	bCube5.Render();
-
-	pb_bCube6->AddRotation(vec3(0.0f, 1.0f, 0.0f), 10.0f);
-	pb_bCube6->GetTransform(&bCube6.transform);
-	bCube6.Render();
 
 //	LOG("CAMERA POS: %.2f %.2f %.2f", App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
 	return UPDATE_CONTINUE;
@@ -356,19 +360,18 @@ void ModuleSceneIntro::OnCollision(PhysBody3D *bodyA, PhysBody3D *bodyB) {
 
 void ModuleSceneIntro::CreateCoin() {
 
-	vec3 pos;
-	pos.x = rand() % 200 + -100;
-	pos.z = rand() % 200 + -100;
-	pos.y = rand() % 1 + 1;
+	Coin coin;
+	coin.iPos.x = rand() % 200 + -100;
+	coin.iPos.z = rand() % 200 + -100;
+	coin.iPos.y = rand() % 1 + 1;
 
 	Cylinder Coin_Cyl = Cylinder(1.0f, 0.3f);
-	Coin_Cyl.SetPos(pos.x, pos.y, pos.z);
+	Coin_Cyl.SetPos(coin.iPos.x, coin.iPos.y, coin.iPos.z);
 	Coin_Cyl.color = Color(1.0f, 1.0f, 0.0f);
 
 	PhysBody3D* pb_Coin = App->physics->AddBody(Coin_Cyl, 0.2f);
 	pb_Coin->type = PhysBodyType::COIN;
 
-	Coin coin;
 	coin.Coin_c = Coin_Cyl;
 	coin.pb_Coin = pb_Coin;
 	

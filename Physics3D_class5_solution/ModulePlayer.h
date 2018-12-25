@@ -33,7 +33,14 @@ private:
 
 public:
 
-	bool starting = false;
+	bool gameOver = false;
+	uint coin_fx;
+	uint gameOver_fx1;
+	uint gameOver_fx2;
+	uint gameOver_fx3;
+	Timer fx_timer;
+	bool play2 = true;
+	bool play3 = false;
 
 	PhysVehicle3D* vehicle = nullptr;
 	float turn;
@@ -42,6 +49,9 @@ public:
 	vec3 IposP1 = vec3(0.0f, 0.0f, -92.0f);
 	btVector3 IOrientation_vector;
 	float boost_quantity = 100.0f;
+	uint P1Coins = 6;
+	uint boost_recover1 = 0;
+	bool maxCreached1 = false;
 
 	PhysVehicle3D* vehicle2 = nullptr;
 	float turn2;
@@ -50,5 +60,8 @@ public:
 	vec3 IposP2 = vec3(0.0f, 0.0f, 92.0f);
 	btVector3 IOrientation_vector2;
 	float boost_quantity2 = 100.0f;
+	uint P2Coins = 6;
+	uint boost_recover2 = 0;
+	bool maxCreached2 = false;
 
 };

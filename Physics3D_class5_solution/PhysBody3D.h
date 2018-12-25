@@ -35,6 +35,8 @@ public:
 	void SetPos(float x, float y, float z);
 	void SetRotation(vec3 axis, float angle, bool converse = true);
 	void AddRotation(vec3 axis, float angle, float converse = true);
+
+	void SetAngularVelocity(vec3 an_vel);
 	void SetLinearVelocity(vec3 vel);
 	const vec3 GetLinearVelocity() const;
 
