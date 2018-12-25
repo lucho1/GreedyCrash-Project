@@ -5,7 +5,6 @@
 #include "PhysVehicle3D.h"
 #include "PhysBody3D.h"
 #include "ModuleAudio.h"
-#include "Coins.h"
 
 ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, start_enabled), vehicle(NULL), vehicle2(NULL)
 {
@@ -37,6 +36,8 @@ bool ModulePlayer::Start()
 
 	RestartCar(IOrientation_vector, vehicle,IposP1);
 	RestartCar(IOrientation_vector2, vehicle2, IposP2, true);
+
+	starting = false;
 
 	return true;
 }
@@ -264,10 +265,10 @@ void ModulePlayer::RestartCar(btVector3 Iorientation, PhysVehicle3D* vehicle, ve
 	if (vehicle->GetKmh() > 0)
 		vehicle->SetLinearVelocity(vec3(0.0f, 0.0f, 0.0f));
 
-	if (starting == true) {
+	if (starting == true)
 		vehicle->SetPos(Ipos.x, 15.0f, Ipos.z);
-		starting = false;
-	}
+		
+	
 	else
 		vehicle->SetPos(Ipos.x, Ipos.y, Ipos.z);
 
@@ -293,7 +294,7 @@ void ModulePlayer::OnCollision(PhysBody3D* bA, PhysBody3D* bB) {
 			vehicle->Push(0.0f, 0.0f, -bounceZ);
 
 		if (bB->type == PhysBodyType::COIN)
-			bB->ToDelete = true;
+			bB->to_delete = true;
 	}
 	if (bA == vehicle2) {
 
@@ -304,5 +305,8 @@ void ModulePlayer::OnCollision(PhysBody3D* bA, PhysBody3D* bB) {
 
 		if (bB->type == PhysBodyType::BOUNCE_XZ)
 			vehicle2->Push(0.0f, 0.0f, -bounceZ);
+
+		if (bB->type == PhysBodyType::COIN)
+			bB->to_delete = true;
 	}
 }

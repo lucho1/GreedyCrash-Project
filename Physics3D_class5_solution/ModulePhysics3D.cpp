@@ -74,30 +74,47 @@ update_status ModulePhysics3D::PreUpdate(float dt)
 {
 	world->stepSimulation(dt, 15);
 
+	p2List_item<Coin>*item = App->scene_intro->c_list.getFirst();
+
+	for (; item; item = item->next)
+		if (item->data.pb_Coin != nullptr && item->data.pb_Coin->to_delete == true)
+			App->physics->pb_CleanUp(&item->data.pb_Coin, item->data.pb_Coin->getRigidBody());
+			
+	item = App->scene_intro->c_list.getFirst();
+	for(; item; item = item->next)
+		if (item->data.pb_Coin == nullptr) {
+
+			App->scene_intro->c_list.del(item);
+			break;
+		}
+
+
 	int numManifolds = world->getDispatcher()->getNumManifolds();
-	for(int i = 0; i<numManifolds; i++)
+	for (int i = 0; i < numManifolds; i++)
 	{
 		btPersistentManifold* contactManifold = world->getDispatcher()->getManifoldByIndexInternal(i);
 		btCollisionObject* obA = (btCollisionObject*)(contactManifold->getBody0());
 		btCollisionObject* obB = (btCollisionObject*)(contactManifold->getBody1());
 
 		int numContacts = contactManifold->getNumContacts();
-		if(numContacts > 0)
+		if (numContacts > 0)
 		{
 			PhysBody3D* pbodyA = (PhysBody3D*)obA->getUserPointer();
 			PhysBody3D* pbodyB = (PhysBody3D*)obB->getUserPointer();
 
-			if(pbodyA && pbodyB)
+			if (pbodyA != nullptr && pbodyB != nullptr)
 			{
 				p2List_item<Module*>* item = pbodyA->collision_listeners.getFirst();
-				while(item)
+				while (item)
 				{
 					item->data->OnCollision(pbodyA, pbodyB);
 					item = item->next;
 				}
+			}
+			if (pbodyA != nullptr && pbodyB != nullptr) {
 
-				item = pbodyB->collision_listeners.getFirst();
-				while(item)
+				p2List_item<Module*>*item = pbodyB->collision_listeners.getFirst();
+				while (item != nullptr)
 				{
 					item->data->OnCollision(pbodyB, pbodyA);
 					item = item->next;
@@ -144,6 +161,32 @@ update_status ModulePhysics3D::PostUpdate(float dt)
 {
 	return UPDATE_CONTINUE;
 }
+
+
+bool ModulePhysics3D::pb_CleanUp(PhysBody3D **pb, btRigidBody* rBody) {	 //Pass the PhysBody by reference and use the getRigidBody of the PhysBody for this btRigidBody*
+
+	btTransform t = rBody->getWorldTransform();
+
+	if (motions.find(&btDefaultMotionState(t)) != -1)
+		motions.del(motions.findNode(&btDefaultMotionState(t)));
+
+	if (shapes.find(rBody->getCollisionShape()) != -1)
+		shapes.del(shapes.findNode(rBody->getCollisionShape()));
+
+	if (bodies.find(*pb) != -1)
+		bodies.del(bodies.findNode(*pb));
+
+	world->removeRigidBody(rBody);
+	rBody->setUserPointer(nullptr);
+	delete *pb;
+
+	if (*pb != nullptr)
+		*pb = nullptr;
+
+	return true;
+
+}
+
 
 // Called before quitting
 bool ModulePhysics3D::CleanUp()
