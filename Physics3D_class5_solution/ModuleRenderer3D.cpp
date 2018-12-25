@@ -115,7 +115,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	lights[0].SetPos(App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
 
 	for(uint i = 0; i < MAX_LIGHTS; ++i)
-		lights[i].Render();
+			lights[i].Render();
 
 	return UPDATE_CONTINUE;
 }

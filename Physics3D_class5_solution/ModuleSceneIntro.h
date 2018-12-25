@@ -3,9 +3,12 @@
 #include "p2DynArray.h"
 #include "Globals.h"
 #include "Primitive.h"
-#include "Coins.h"
 
-#define MAX_SNAKE 2
+struct Coin {
+
+	Cylinder Coin_c;
+	PhysBody3D *pb_Coin;
+};
 
 struct PhysBody3D;
 struct PhysMotor3D;
@@ -25,8 +28,6 @@ public:
 	void OnCollision(PhysBody3D *bodyA, PhysBody3D *bodyB);
 
 	bool MustBounce(Sphere sphere);
-	//bool BounceWithSphere(Sphere sphere1, Sphere sphere2);
-	//bool BounceWithCube(Sphere sphere, Cube cube);
 
 private:
 
@@ -45,8 +46,8 @@ private:
 
 public:
 
-	void CreateCoin(float scale);
-	p2List<Coin*> Coins;
+	void CreateCoin();
+	p2List<Coin>c_list;
 
 	//Center Slopes
 	PhysBody3D *pb_slope1 = nullptr;

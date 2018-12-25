@@ -37,8 +37,11 @@ public:
 	void AddRotation(vec3 axis, float angle, float converse = true);
 	void SetLinearVelocity(vec3 vel);
 	const vec3 GetLinearVelocity() const;
+
 	void SetAsSensor(bool is_sensor);
 	bool IsSensor()const;
+
+	btRigidBody* getRigidBody();
 
 private:
 	btRigidBody* body = nullptr;
@@ -48,8 +51,8 @@ public:
 
 public:
 	///COLLISIONS
-	bool is_sensor;
-	bool ToDelete = false;
+	bool is_sensor = false;
+	bool to_delete = false;
 	PhysBodyType type;
 
 };

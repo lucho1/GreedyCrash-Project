@@ -5,10 +5,7 @@
 #include "PhysBody3D.h"
 #include "ModulePlayer.h"
 #include "PhysVehicle3D.h"
-#include "Coins.h"
 #include "ModulePhysics3D.h"
-
-class Coin;
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -20,18 +17,8 @@ ModuleSceneIntro::~ModuleSceneIntro()
 // Load assets
 bool ModuleSceneIntro::Start()
 {
-	for (int i = 0; i < 10; i++) {
-		CreateCoin(3);
-	}
-	p2List_item<Coin*>* Item = Coins.getFirst();
-	while (Item != nullptr) {
-
-		Item->data->Start();
-			if ((Item->data->PhysMonedita->IsSensor()) == false) {
-			Item->data->PhysMonedita->SetAsSensor(true);
-		}
-		Item = Item->next;
-	}
+	for (int i = 0; i < 10; i++) 
+		CreateCoin();
 
 	LOG("Loading Intro assets");
 	bool ret = true;
@@ -152,6 +139,7 @@ bool ModuleSceneIntro::Start()
 	pb_bCubeCenter->type = pb_bCube3->type = pb_bCube4->type = pb_bCube5->type = pb_bCube6->type = PhysBodyType::BOUNCE_Y;
 	pb_bCube->type = pb_bCube2->type = PhysBodyType::BOUNCE_XZ;
 
+
 	//General Scenario Settings
 	App->audio->PlayMusic("audio/track_intro.ogg", 0, 0.0f);
 
@@ -175,17 +163,17 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::Update(float dt)
 {
 
-	p2List_item<Coin*>* Item = Coins.getFirst();
+	p2List_item<Coin>*item = c_list.getFirst();
+	while (item != nullptr) {
 
-	while (Item != nullptr) {
+		//if (item->data.pb_Coin != nullptr) {
 
-		if (Item->data->ToDelete) {
-			Coins.del(Item);
-		}
-		else if (Item->data->ToDelete == false) {
-			Item->data->Update(dt);
-		}
-		Item = Item->next;
+			item->data.pb_Coin->AddRotation(vec3(0.0f, 1.0f, 0.0f), 10.0f);
+			item->data.pb_Coin->GetTransform(&item->data.Coin_c.transform);
+			item->data.Coin_c.Render();
+		//}
+
+		item = item->next;
 	}
 
 	if (Mix_PlayingMusic() == 0)
@@ -193,7 +181,7 @@ update_status ModuleSceneIntro::Update(float dt)
 
 
 	Plane p(0, 1, 0, 0);
-	p.axis = true;
+	p.axis = false;
 	p.Render();
 
 	pb_limit1->GetTransform(&limit1.transform);
@@ -366,25 +354,23 @@ void ModuleSceneIntro::OnCollision(PhysBody3D *bodyA, PhysBody3D *bodyB) {
 }
 
 
-void ModuleSceneIntro::CreateCoin(float scale) {
+void ModuleSceneIntro::CreateCoin() {
+
 	vec3 pos;
 	pos.x = rand() % 200 + -100;
 	pos.z = rand() % 200 + -100;
 	pos.y = rand() % 1 + 1;
 
-	Coin* NewCoin = new Coin();
-	NewCoin->monedita.radius = 0.3 * scale;
-	NewCoin->monedita.height = 0.1 * scale;
-	NewCoin->monedita.SetPos(pos.x, pos.y, pos.z);
-	NewCoin->pos.x = pos.x;
-	NewCoin->pos.y = pos.y;
-	NewCoin->pos.z = pos.z;
-	NewCoin->active = false;
-	NewCoin->monedita.wire = false;
-	//physmonedita
-	NewCoin->PhysMonedita = App->physics->AddBody(NewCoin->monedita, 0.2f);
+	Cylinder Coin_Cyl = Cylinder(1.0f, 0.3f);
+	Coin_Cyl.SetPos(pos.x, pos.y, pos.z);
+	Coin_Cyl.color = Color(1.0f, 1.0f, 0.0f);
 
-	//NewCoin->monedita.color = Red;
-	NewCoin->monedita.SetPos(pos.x, pos.y, pos.z);
-	Coins.add(NewCoin);
+	PhysBody3D* pb_Coin = App->physics->AddBody(Coin_Cyl, 0.2f);
+	pb_Coin->type = PhysBodyType::COIN;
+
+	Coin coin;
+	coin.Coin_c = Coin_Cyl;
+	coin.pb_Coin = pb_Coin;
+	
+	c_list.add(coin);
 }
