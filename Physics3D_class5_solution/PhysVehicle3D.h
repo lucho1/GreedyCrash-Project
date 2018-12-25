@@ -60,4 +60,14 @@ public:
 	VehicleInfo info;
 	btRaycastVehicle* vehicle;
 	Cube chassis;
+	Cube cabina;
+
+	Cube light1; // luces delanteras
+	Cube light2;
+	bool forward = false;
+
+	Cube light3; // luces traseras
+	Cube light4;
+
+	
 };

@@ -57,9 +57,25 @@ update_status ModulePlayer::Update(float dt)
 	HandleInput_P1();
 	HandleInput_P2();
 
+	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
+		vehicle2->forward = true;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN) {
+		vehicle2->forward = false;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN) {
+		vehicle->forward = true;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN) {
+		vehicle->forward = false;
+	}
+
 	//Debug
 	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
 		boost_quantity = boost_quantity2 = 100.0f;
+
+	//BOTH VEHICLES
+	//vehicle->cabina.SetRotation(10, vec3(1, 0, 0));
 
 	//Vehicle 1 move
 	vehicle->ApplyEngineForce(acceleration);
@@ -166,20 +182,20 @@ VehicleInfo ModulePlayer::SetDefaultCar() {
 	VehicleInfo car;
 
 	// Car properties ----------------------------------------
-	car.chassis_size.Set(4, 2, 8);
-	car.chassis_offset.Set(0, 1.5, 0);
-	car.mass = 100.0f;
-	car.suspensionStiffness = 40.0f;
-	car.suspensionCompression = 2.4f;
-	car.suspensionDamping = 2.3f;
-	car.maxSuspensionTravelCm = 20.0f;
+	car.chassis_size.Set(4, 1.5, 8);
+	car.chassis_offset.Set(0,2, 0);
+	car.mass = 50.0f;
+	car.suspensionStiffness = 60.0f;
+	car.suspensionCompression = 4.0f;
+	car.suspensionDamping = 0.15f;
+	car.maxSuspensionTravelCm = 60.0f;
 	car.frictionSlip = 2.0f;
 	car.maxSuspensionForce = 6000.0f;
 
 	// Wheel properties ---------------------------------------
 	float connection_height = 1.0f;
-	float wheel_radius = 0.6f;
-	float wheel_width = 1.0f;
+	float wheel_radius =0.6f;
+	float wheel_width = 0.5f;
 	float suspensionRestLength = 0.2f;
 
 	SetConstCarProperties(&car, connection_height, wheel_radius, wheel_width, suspensionRestLength);
@@ -224,7 +240,7 @@ void ModulePlayer::SetConstCarProperties(VehicleInfo* car, float connection_heig
 	car->wheels[1].steering = true;
 
 	// REAR-LEFT ------------------------
-	car->wheels[2].connection.Set(half_width - 0.3f * wheel_width, connection_height, -half_length + wheel_radius);
+	car->wheels[2].connection.Set(half_width - 0.3f * (wheel_width), connection_height, -half_length + wheel_radius);
 	car->wheels[2].direction = direction;
 	car->wheels[2].axis = axis;
 	car->wheels[2].suspensionRestLength = suspensionRestLength;
@@ -236,7 +252,7 @@ void ModulePlayer::SetConstCarProperties(VehicleInfo* car, float connection_heig
 	car->wheels[2].steering = false;
 
 	// REAR-RIGHT ------------------------
-	car->wheels[3].connection.Set(-half_width + 0.3f * wheel_width, connection_height, -half_length + wheel_radius);
+	car->wheels[3].connection.Set(-half_width + 0.3f * (wheel_width ), connection_height, -half_length + wheel_radius);
 	car->wheels[3].direction = direction;
 	car->wheels[3].axis = axis;
 	car->wheels[3].suspensionRestLength = suspensionRestLength;

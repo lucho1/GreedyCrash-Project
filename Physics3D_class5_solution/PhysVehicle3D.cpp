@@ -1,7 +1,8 @@
 #include "PhysVehicle3D.h"
 #include "Primitive.h"
 #include "Bullet/include/btBulletDynamicsCommon.h"
-
+#include "ModuleInput.h"
+#include "Application.h"
 // ----------------------------------------------------------------------------
 VehicleInfo::~VehicleInfo()
 {
@@ -48,6 +49,88 @@ void PhysVehicle3D::Render()
 	chassis.transform.M[14] += offset.getZ();
 
 	chassis.color = info.color;
+
+	cabina = Cube(3, 1, 5);
+
+	vehicle->getChassisWorldTransform().getOpenGLMatrix(&cabina.transform);
+	btVector3 cabina_offset(0, 3, 0);
+	
+	/*btQuaternion q2 = q;
+	q2.setRotation(btVector3(1, 0, 0), 45);*/
+	cabina_offset = cabina_offset.rotate(q.getAxis(), q.getAngle());
+
+	cabina.transform.M[12] += cabina_offset.getX();
+	cabina.transform.M[13] += cabina_offset.getY();
+	cabina.transform.M[14] += cabina_offset.getZ();
+	
+	//cabina.SetRotation(10, vec3(1, 0, 0));
+	cabina.color.Set(0, 1, 1);
+
+
+	light1 = Cube(0.8, 0.5, 0.5);
+	vehicle->getChassisWorldTransform().getOpenGLMatrix(&light1.transform);
+	btVector3 light1_offset(1.5, 2.4, 4.1);
+	light1_offset = light1_offset.rotate(q.getAxis(), q.getAngle());
+
+	light1.transform.M[12] += light1_offset.getX();
+	light1.transform.M[13] += light1_offset.getY();
+	light1.transform.M[14] += light1_offset.getZ();
+	
+
+	light2 = Cube(0.8, 0.5, 0.5);
+	vehicle->getChassisWorldTransform().getOpenGLMatrix(&light2.transform);
+	btVector3 light2_offset(-1.5, 2.4, 4.1);
+	light2_offset = light2_offset.rotate(q.getAxis(), q.getAngle());
+
+	light2.transform.M[12] += light2_offset.getX();
+	light2.transform.M[13] += light2_offset.getY();
+	light2.transform.M[14] += light2_offset.getZ();
+
+
+	light3 = Cube(0.8, 0.5, 0.5);
+	vehicle->getChassisWorldTransform().getOpenGLMatrix(&light3.transform);
+	btVector3 light3_offset(-1.5, 2.4, -4.1);
+	light3_offset = light3_offset.rotate(q.getAxis(), q.getAngle());
+
+	light3.transform.M[12] += light3_offset.getX();
+	light3.transform.M[13] += light3_offset.getY();
+	light3.transform.M[14] += light3_offset.getZ();
+
+	
+		
+
+	light4 = Cube(0.8, 0.5, 0.5);
+	vehicle->getChassisWorldTransform().getOpenGLMatrix(&light4.transform);
+	btVector3 light4_offset(1.5, 2.4, -4.1);
+	light4_offset = light4_offset.rotate(q.getAxis(), q.getAngle());
+
+	light4.transform.M[12] += light4_offset.getX();
+	light4.transform.M[13] += light4_offset.getY();
+	light4.transform.M[14] += light4_offset.getZ();
+	
+	
+
+	if (!forward){
+		light1.color.Set(0.5, 0.5, 0);
+		light2.color.Set(0.5, 0.5, 0);
+		light3.color.Set(1, 0, 0);
+		light4.color.Set(1, 0, 0);
+	}
+	if (forward) {
+		light1.color.Set(1, 1, 0);
+		light2.color.Set(1, 1, 0);
+		light3.color.Set(0.3, 0, 0);
+		light4.color.Set(0.3, 0, 0);
+	}
+		
+
+
+
+	light3.Render();
+	light4.Render();
+	light2.Render();
+	light1.Render();
+	cabina.Render();
 	chassis.Render();
 }
 
