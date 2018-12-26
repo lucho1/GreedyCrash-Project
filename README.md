@@ -49,7 +49,7 @@ The objective is to get the opponent to lose all its coins, but be careful, rest
 -Project Github: https://github.com/lucho1/GreedyCrash-Project
 
 ## Credits
-Music by Loquillo and Desgraciaus and modified by Lucho Suaya. Done with SDL, OpenGL, Bullet Library and Visual Studio. Game licensed under a MIT License (see full license at game folder or github repository). By Lucho Suaya and Jaume Avinyó.
+Music by Loquillo and Desgraciaus and modified by Lucho Suaya with Audacity. Done with SDL, OpenGL, Bullet Library and Visual Studio. Game licensed under a MIT License (see full license at game folder or github repository). By Lucho Suaya and Jaume Avinyó.
 
 
 
