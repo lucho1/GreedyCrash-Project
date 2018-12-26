@@ -63,7 +63,6 @@ void PhysBody3D::SetRotation(vec3 axis, float angle, bool converse) {
 	btTransform t = body->getWorldTransform();
 	t.setRotation(btQuaternion(ax, angle));
 	body->setWorldTransform(t);
-
 }
 
 

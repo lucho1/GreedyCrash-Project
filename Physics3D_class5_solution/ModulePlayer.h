@@ -9,6 +9,26 @@ struct PhysVehicle3D;
 #define TURN_DEGREES 15.0f * DEGTORAD
 #define BRAKE_POWER 1000.0f
 
+
+struct defCar {
+
+	PhysVehicle3D* vehicle = nullptr;
+
+	float turn;
+	float acceleration;
+	float brake;
+
+	vec3 Ipos = vec3(0.0f, 0.0f, 0.0f);
+	btVector3 IOrientation_vector;
+
+	float boost_quantity = 100.0f;
+	uint Coins = 6;
+	uint boost_recover = 0;
+	bool maxCreached = false;
+	bool boosting = false;
+};
+
+
 class ModulePlayer : public Module
 {
 public:
@@ -30,6 +50,8 @@ private:
 
 	void RestartCar(btVector3 Iorientation, PhysVehicle3D* vehicle, vec3 Ipos, bool inverted = false);
 	void OnCollision(PhysBody3D* bA, PhysBody3D* bB);
+	void RunGameOver();
+	void Restart();
 
 public:
 
@@ -42,26 +64,7 @@ public:
 	bool play2 = true;
 	bool play3 = false;
 
-	PhysVehicle3D* vehicle = nullptr;
-	float turn;
-	float acceleration;
-	float brake;
-	vec3 IposP1 = vec3(0.0f, 0.0f, -92.0f);
-	btVector3 IOrientation_vector;
-	float boost_quantity = 100.0f;
-	uint P1Coins = 6;
-	uint boost_recover1 = 0;
-	bool maxCreached1 = false;
-
-	PhysVehicle3D* vehicle2 = nullptr;
-	float turn2;
-	float acceleration2;
-	float brake2;
-	vec3 IposP2 = vec3(0.0f, 0.0f, 92.0f);
-	btVector3 IOrientation_vector2;
-	float boost_quantity2 = 100.0f;
-	uint P2Coins = 6;
-	uint boost_recover2 = 0;
-	bool maxCreached2 = false;
+	defCar veh1;
+	defCar veh2;
 
 };
