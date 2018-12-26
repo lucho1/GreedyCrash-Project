@@ -84,14 +84,17 @@ bool ModuleSceneIntro::Start()
 
 
 	//General Scenario Settings
-	App->audio->PlayMusic("audio/track_intro.ogg", 0, 0.0f);
+	gameOver_fx1 = App->audio->LoadFx("audio/fx/GameOver.wav");
+	gameOver_fx2 = App->audio->LoadFx("audio/fx/LoseSound.wav");
+	gameOver_fx3 = App->audio->LoadFx("audio/fx/IwinSound.wav");
+
+	App->audio->PlayMusic("audio/gameOver_mus_intro.ogg", 0, 0.0f);
 
 	App->camera->Move(vec3(0.0f, 103.28f, 167.10f));
-	//App->camera->Move(vec3(0.0f, 30.0f, 30.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 
 	//To hear music, comment or delete the next line
-	Mix_VolumeMusic(0);
+	//Mix_VolumeMusic(0);
 	return ret;
 }
 
@@ -106,14 +109,41 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::Update(float dt)
 {
 
-	if (Mix_PlayingMusic() == 0)
-		App->audio->PlayMusic("audio/track_loop.ogg", -1, 0.0f);
-
 	Plane p(0, 1, 0, 0);
 	p.axis = false;
 	p.Render();
 
-	if (App->player->gameOver == false) {
+	if (gameOver == true) {
+
+		if (Mix_PlayingMusic() == 0 && !playMus)
+				App->audio->PlayMusic("audio/gameOver_mus_loop.ogg", -1, 0.0f);
+
+
+		if (fx_timer.Read() >= 1500 && play2) {
+
+			App->audio->PlayFx(gameOver_fx2);
+			play2 = false;
+			play3 = true;
+		}
+
+
+		if (fx_timer.Read() >= 4500 && play3) {
+
+			App->audio->PlayFx(gameOver_fx3);
+			play3 = false;
+		}
+
+		if (fx_timer.Read() >= 6500 && playMus) {
+
+			App->audio->PlayMusic("audio/gameOver_mus_intro.ogg", 0, 0.0f);
+			playMus = false;
+
+		}
+
+
+		App->physics->debug = true;
+	}
+	else {
 
 		p2List_item<Coin>*item = c_list.getFirst();
 		while (item != nullptr) {
@@ -156,6 +186,18 @@ update_status ModuleSceneIntro::Update(float dt)
 
 //	LOG("CAMERA POS: %.2f %.2f %.2f", App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
 	return UPDATE_CONTINUE;
+}
+
+
+void ModuleSceneIntro::RunGameOver() {
+
+	Mix_HaltMusic();
+	fx_timer.Start();
+
+	App->audio->PlayFx(gameOver_fx1);
+	play2 = true;
+	gameOver = true;
+	playMus = true;
 }
 
 

@@ -50,19 +50,15 @@ private:
 
 	void RestartCar(btVector3 Iorientation, PhysVehicle3D* vehicle, vec3 Ipos, bool inverted = false);
 	void OnCollision(PhysBody3D* bA, PhysBody3D* bB);
-	void RunGameOver();
 	void Restart();
+	bool LimitsReached(defCar vehicle);
 
 public:
 
-	bool gameOver = false;
+	
 	uint coin_fx;
-	uint gameOver_fx1;
-	uint gameOver_fx2;
-	uint gameOver_fx3;
-	Timer fx_timer;
-	bool play2 = true;
-	bool play3 = false;
+	uint loseCoin_fx;
+	uint shout_fx;
 
 	defCar veh1;
 	defCar veh2;

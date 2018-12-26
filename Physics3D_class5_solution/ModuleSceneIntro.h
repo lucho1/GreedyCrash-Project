@@ -47,7 +47,10 @@ public:
 	update_status Update(float dt);
 	bool CleanUp();
 
-	//void CreateSlope(vec3 sizes, vec3 pos, float Xangle = 0.0f, float Yangle = 0.0f, float Zangle = 0.0f);
+	void RunGameOver();
+
+private:
+
 	void CreateSceneCube(vec3 sizes, vec3 pos, float Xangle = 0.0f, float Yangle = 0.0f, float Zangle = 0.0f, PhysBodyType ptype = PhysBodyType::DEFAULT, Sob_state state = Sob_state::NON, Color col = White);
 	void CreateSceneSphere(float radius, vec3 pos, float mass = 0.0f, PhysBodyType ptype = PhysBodyType::DEFAULT, Sob_state state = Sob_state::NON, Color col = White, bool listen = false);
 
@@ -63,5 +66,16 @@ public:
 
 	void CreateCoin();
 	p2List<Coin>c_list;
+
+	bool gameOver = true;
+	bool play2 = false;
+	bool play3 = false;
+	bool playMus = false;
+
+	uint gameOver_fx1;
+	uint gameOver_fx2;
+	uint gameOver_fx3;
+
+	Timer fx_timer;
 
 };

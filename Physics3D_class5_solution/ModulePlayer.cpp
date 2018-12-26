@@ -35,16 +35,15 @@ bool ModulePlayer::Start()
 	veh1.IOrientation_vector = veh1.vehicle->vehicle->getForwardVector();
 	veh2.IOrientation_vector = veh2.vehicle->vehicle->getForwardVector();
 
-	gameOver = true;
-
 	RestartCar(veh1.IOrientation_vector, veh1.vehicle, veh1.Ipos);
 	RestartCar(veh2.IOrientation_vector, veh2.vehicle, veh2.Ipos, true);
 
-	gameOver = false;
+	veh1.vehicle->info.color = Color(1.0f, 0.65f, 0.13f);
+	veh2.vehicle->info.color = Blue;
+
 	coin_fx = App->audio->LoadFx("audio/fx/PickCoinSound.wav");
-	gameOver_fx1 = App->audio->LoadFx("audio/fx/GameOver.wav");
-	gameOver_fx2 = App->audio->LoadFx("audio/fx/LoseSound.wav");
-	gameOver_fx3 = App->audio->LoadFx("audio/fx/IwinSound.wav");
+	loseCoin_fx = App->audio->LoadFx("audio/fx/loseCoin_fx.wav");
+	shout_fx = App->audio->LoadFx("audio/fx/WilScream.wav");
 
 	return true;
 }
@@ -60,25 +59,10 @@ bool ModulePlayer::CleanUp()
 update_status ModulePlayer::Update(float dt)
 {
 
-	if (gameOver == true) {
-
-		if (fx_timer.Read() >= 1500 && play2){
-
-			App->audio->PlayFx(gameOver_fx2);
-			play2 = false;
-			play3 = true;
-		}
-
-
-		if (fx_timer.Read() >= 4500 && play3) {
-
-			App->audio->PlayFx(gameOver_fx3);
-			play3 = false;
-		}
+	if (App->scene_intro->gameOver == true) {
 
 		veh1.vehicle->SetPos(0.0f, 0.0f, -20.0f);
 		veh2.vehicle->SetPos(0.0f, 0.0f, 20.0f);
-		App->physics->debug = true;
 
 		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 			Restart();
@@ -89,10 +73,15 @@ update_status ModulePlayer::Update(float dt)
 			sprintf_s(title, "--------------------------PLAYER 2 WINS--------------------------             press space");
 		else if (veh2.Coins <= 0)
 			sprintf_s(title, "--------------------------PLAYER 1 WINS--------------------------             press space");
+		else
+			sprintf_s(title, "PRESS SPACE");
 
 		App->window->SetTitle(title);
 	}
 	else {
+
+		if (Mix_PlayingMusic() == 0)
+			App->audio->PlayMusic("audio/track_loop.ogg", -1, 0.0f);
 
 		//Debug
 		if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
@@ -101,7 +90,7 @@ update_status ModulePlayer::Update(float dt)
 			veh1.Coins = veh2.Coins += 1;
 
 		if (veh1.Coins <= 0 || veh2.Coins <= 0)
-			RunGameOver();
+			App->scene_intro->RunGameOver();
 
 		veh1.turn = veh1.acceleration = veh1.brake = veh2.turn = veh2.acceleration = veh2.brake = 0.0f;
 
@@ -114,7 +103,6 @@ update_status ModulePlayer::Update(float dt)
 		veh1.vehicle->Brake(veh1.brake);
 
 		veh1.vehicle->Render();
-		veh1.vehicle->info.color = Color(1.0f, 0.65f, 0.13f);
 
 		//Vehicle 2 move
 		veh2.vehicle->ApplyEngineForce(veh2.acceleration);
@@ -122,10 +110,9 @@ update_status ModulePlayer::Update(float dt)
 		veh2.vehicle->Brake(veh2.brake);
 
 		veh2.vehicle->Render();
-		veh2.vehicle->info.color = Blue;
 
-		char title[250];
-		sprintf_s(title, "PLAYER 1:     Speed %.1f Km/h     Boost %.2f     BoostRecover: %i/3     Coins %i                                                           PLAYER 2:     Speed %.1f Km/h     Boost %.2f     BoostRecover: %i/3     Coins %i",
+		char title[350];
+		sprintf_s(title, "PLAYER 1:     Speed %.1f Km/h     Boost %.2f     BoostRecover: %i/3     Coins %i                                                     PLAYER 2:     Speed %.1f Km/h     Boost %.2f     BoostRecover: %i/3     Coins %i",
 			veh1.vehicle->GetKmh(), veh1.boost_quantity, veh1.boost_recover, veh1.Coins, veh2.vehicle->GetKmh(), veh2.boost_quantity, veh2.boost_recover, veh2.Coins);
 
 		App->window->SetTitle(title);
@@ -147,19 +134,20 @@ void ModulePlayer::Restart() {
 	RestartCar(veh1.IOrientation_vector, veh1.vehicle, veh1.Ipos);
 	RestartCar(veh2.IOrientation_vector, veh2.vehicle, veh2.Ipos, true);
 
-	gameOver = false;
+	App->scene_intro->gameOver = false;
 	App->physics->debug = false;
+	App->audio->PlayMusic("audio/track_intro.ogg", 0, 0.0f);
 }
 
 
-void ModulePlayer::RunGameOver() {
+bool ModulePlayer::LimitsReached(defCar vehicle) {
 
-	Mix_HaltMusic();
-	fx_timer.Start();
+	btVector3 curr_pos = vehicle.vehicle->GetPos();
 
-	App->audio->PlayFx(gameOver_fx1);
-	play2 = true;
-	gameOver = true;
+	if (curr_pos.getX() > 200 || curr_pos.getX() < -200 || curr_pos.getZ() > 200 || curr_pos.getZ() < -200 || curr_pos.getY() > 30)
+		return true;
+
+	return false;
 }
 
 
@@ -176,11 +164,21 @@ void ModulePlayer::HandleInput_P1() {
 	if (veh1.Coins <= 9)
 		veh1.maxCreached = false;
 
+	if (LimitsReached(veh1)) {
+
+		App->audio->PlayFx(shout_fx);
+		RestartCar(veh1.IOrientation_vector, veh1.vehicle, veh1.Ipos);
+		veh1.Coins--;
+		App->audio->PlayFx(loseCoin_fx);
+
+	}
+
 
 	if (App->input->GetKey(SDL_SCANCODE_Y) == KEY_DOWN && veh1.Coins > 0) {
 
 		RestartCar(veh1.IOrientation_vector, veh1.vehicle, veh1.Ipos);
 		veh1.Coins--;
+		App->audio->PlayFx(loseCoin_fx);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
@@ -232,10 +230,20 @@ void ModulePlayer::HandleInput_P2() {
 	if (veh2.Coins <= 9)
 		veh2.maxCreached = false;
 
+	if (LimitsReached(veh2)) {
+
+		App->audio->PlayFx(shout_fx);
+		RestartCar(veh2.IOrientation_vector, veh2.vehicle, veh2.Ipos, true);
+		veh2.Coins--;
+		App->audio->PlayFx(loseCoin_fx);
+
+	}
+
 	if (App->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN && veh2.Coins > 0) {
 
 		RestartCar(veh2.IOrientation_vector, veh2.vehicle, veh2.Ipos, true);
 		veh2.Coins--;
+		App->audio->PlayFx(loseCoin_fx);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
@@ -377,7 +385,7 @@ void ModulePlayer::RestartCar(btVector3 Iorientation, PhysVehicle3D* vehicle, ve
 		vehicle->SetRotation(Yaxis, 180.0f);
 		
 
-	if (gameOver == true) 
+	if (App->scene_intro->gameOver == true) 
 		vehicle->SetPos(Ipos.x, 15.0f, Ipos.z);
 	else
 		vehicle->SetPos(Ipos.x, Ipos.y, Ipos.z);
@@ -422,6 +430,7 @@ void ModulePlayer::OnCollision(PhysBody3D* bA, PhysBody3D* bB) {
 			veh1.boosting = false;
 			veh2.vehicle->info.color = Color(1.0f, 0.0f, 0.0f, 1.0f);
 			veh2.Coins--;
+			App->audio->PlayFx(loseCoin_fx);
 		}
 	}
 	if (bA == veh2.vehicle) {
@@ -450,9 +459,9 @@ void ModulePlayer::OnCollision(PhysBody3D* bA, PhysBody3D* bB) {
 		if (bB == veh1.vehicle && veh2.boosting) {
 
 			veh2.boosting = false;
-			//veh1.vehicle->info.color = Color(1.0f, 0.65f, 0.13f, 0.5f);
 			veh1.vehicle->info.color = Color(0.0f, 1.0f, 0.0f, 1.0f);
 			veh1.Coins--;
+			App->audio->PlayFx(loseCoin_fx);
 
 		}
 
