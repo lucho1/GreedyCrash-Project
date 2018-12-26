@@ -2,17 +2,13 @@
 #include "Application.h"
 #include "ModuleSceneIntro.h"
 #include "Primitive.h"
-#include "PhysBody3D.h"
 #include "ModulePlayer.h"
 #include "PhysVehicle3D.h"
 #include "ModulePhysics3D.h"
 
-ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
-{
-}
+ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled) {}
 
-ModuleSceneIntro::~ModuleSceneIntro()
-{}
+ModuleSceneIntro::~ModuleSceneIntro() {}
 
 // Load assets
 bool ModuleSceneIntro::Start()
@@ -23,132 +19,82 @@ bool ModuleSceneIntro::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 
+	//Scene Limits
 	float height = 20.0f;
 	float width = 2.0f;
 	float longitude = 200.0f;
 	float limit_mass = 0.0f; //0 for Static bodies
 
-	limit1 = limit2 = Cube(width, height, longitude);
-	limit3 = limit4 = Cube(longitude + 2.0f, height, width);
-
-	limit1.axis = limit2.axis = limit3.axis = limit4.axis = false;
-
 	float dFromAxis = 100.0f;
-	limit1.SetPos(-dFromAxis, height/2.0f, 0.0f);
-	limit2.SetPos(dFromAxis, height/2.0f, 0.0f);
-	limit3.SetPos(0.0f, height/2.0f, -dFromAxis - 1.0f);
-	limit4.SetPos(0.0f, height/2.0f, dFromAxis + 1.0f);
+	vec3 limit_size = vec3(width, height, longitude);
+	CreateSceneCube(limit_size, vec3(-dFromAxis, height / 2.0f, 0.0f), 0.0f, 0.0f, 0.0f, PhysBodyType::LIMIT);
+	CreateSceneCube(limit_size, vec3(dFromAxis, height / 2.0f, 0.0f), 0.0f, 0.0f, 0.0f, PhysBodyType::LIMIT);
 
-	pb_limit1 = App->physics->AddBody(limit1, limit_mass);
-	pb_limit2 = App->physics->AddBody(limit2, limit_mass);
-	pb_limit3 = App->physics->AddBody(limit3, limit_mass);
-	pb_limit4 = App->physics->AddBody(limit4, limit_mass);
-
-	pb_limit1->type = pb_limit2->type = pb_limit3->type = pb_limit4->type = PhysBodyType::LIMIT;
+	limit_size = vec3(longitude + 2.0f, height, width);
+	CreateSceneCube(limit_size, vec3(0.0f, height / 2.0f, -dFromAxis - 1.0f), 0.0f, 0.0f, 0.0f, PhysBodyType::LIMIT);
+	CreateSceneCube(limit_size, vec3(0.0f, height / 2.0f, dFromAxis + 1.0f), 0.0f, 0.0f, 0.0f, PhysBodyType::LIMIT);
 
 	//Slopes
 	vec3 slope_sizes = vec3(10.0f, 6.0f, 13.0f);
 	float Xangle = 18.0f;
 	float Yangle = 45.0f;
 
-	//Center slopes
-	pb_slope1 = CreateSlope(slope1, slope_sizes, vec3(8.0f, -1.0f, 8.0f), Xangle, Yangle);
-	pb_slope2 = CreateSlope(slope2, slope_sizes, vec3(-8.0f, -1.0f, -8.0f), -Xangle, Yangle);
-	pb_slope3 = CreateSlope(slope3, slope_sizes, vec3(8.0f, -1.0f, -8.0f), -Xangle, -Yangle);
-	pb_slope4 = CreateSlope(slope4, slope_sizes, vec3(-8.0f, -1.0f, 8.0f), Xangle, -Yangle);
+	///Center slopes
+	CreateSceneCube(slope_sizes, vec3(8.0f, -1.0f, 8.0f), Xangle, Yangle);
+	CreateSceneCube(slope_sizes, vec3(-8.0f, -1.0f, -8.0f),-Xangle, Yangle);
+	CreateSceneCube(slope_sizes, vec3(8.0f, -1.0f, -8.0f), -Xangle, -Yangle);
+	CreateSceneCube(slope_sizes, vec3(-8.0f, -1.0f, 8.0f), Xangle, -Yangle);
 
-	//Side Slopes
-	pb_slope5 = CreateSlope(slope5, slope_sizes, vec3(95.0f, -1.0f, 8.0f), Xangle, -30.0f);
-	pb_slope6 = CreateSlope(slope6, slope_sizes, vec3(95.0f, -1.0f, -8.0f), -Xangle, 30.0f);
-	pb_slope7 = CreateSlope(slope7, slope_sizes, vec3(-95.0f, -1.0f, 8.0f), Xangle, 30.0f);
-	pb_slope8 = CreateSlope(slope8, slope_sizes, vec3(-95.0f, -1.0f, -8.0f), -Xangle, -30.0f);
+	///Side Slopes
+	CreateSceneCube(slope_sizes, vec3(95.0f, -1.0f, 8.0f), Xangle, -30.0f);
+	CreateSceneCube(slope_sizes, vec3(95.0f, -1.0f, -8.0f), -Xangle, 30.0f);
+	CreateSceneCube(slope_sizes, vec3(-95.0f, -1.0f, 8.0f), Xangle, 30.0f);
+	CreateSceneCube(slope_sizes, vec3(-95.0f, -1.0f, -8.0f), -Xangle, -30.0f);
 
-	pb_slCube = CreateSlope(slCube, vec3(10.0f, 6.0f, 10.0f), vec3(102.0f, 0.8f, 0.0f), 0.0f, -45.0f);
-	pb_slCube2 = CreateSlope(slCube2, vec3(10.0f, 6.0f, 10.0f), vec3(-102.0f, 0.8f, 0.0f), 0.0f, 45.0f);
+	CreateSceneCube(vec3(10.0f, 6.0f, 10.0f), vec3(102.0f, 0.8f, 0.0f), 0.0f, -45.0f);
+	CreateSceneCube(vec3(10.0f, 6.0f, 10.0f), vec3(-102.0f, 0.8f, 0.0f), 0.0f, 45.0f);
 
-	//Traversal slopes
-	pb_slTraversal = CreateSlope(slTraversal, vec3(74.0f, 6.0, 8.0f), vec3(52.0f, -1.8f, 2.9f), Xangle);
-	pb_slTraversal2 = CreateSlope(slTraversal2, vec3(74.0f, 6.0, 8.0f), vec3(52.0f, -1.8f, -2.9f), -Xangle);
-	pb_slTraversal3 = CreateSlope(slTraversal3, vec3(74.0f, 6.0, 8.0f), vec3(-52.0f, -1.8f, 2.9f), Xangle);
-	pb_slTraversal4 = CreateSlope(slTraversal4, vec3(74.0f, 6.0, 8.0f), vec3(-52.0f, -1.8f, -2.9f), -Xangle);
-
-	//Spheres
-	sunkenSphere = Sphere(15.0f);
-	sunkenSphere.SetPos(50.0f, -11.0f, 55.0f);
-	pb_sunkenSphere = App->physics->AddBody(sunkenSphere, 0.0f);
-
-	sunkenSphere2 = Sphere(15.0f);
-	sunkenSphere2.SetPos(-50.0f, -11.0f, -55.0f);
-	pb_sunkenSphere2 = App->physics->AddBody(sunkenSphere2, 0.0f);
-
-	sunkenSphere.color = sunkenSphere2.color = Black;
-	pb_sunkenSphere->type = pb_sunkenSphere2->type = PhysBodyType::OBJECT;
-
-	//Balls
-	bBall = Sphere(2.0f);
-	bBall.SetPos(-50.0f, 20.0f, 55.0f);
-	pb_bBall = App->physics->AddBody(bBall);
-
-	bBall2 = Sphere(2.0f);
-	bBall2.SetPos(-50.0f, 20.0f, -55.0f);
-	pb_bBall2 = App->physics->AddBody(bBall2);
-
-	bBall3 = Sphere(5.0f);
-	bBall3.SetPos(-30.0f, 20.0f, 60.0f);
-	pb_bBall3 = App->physics->AddBody(bBall3);
-
-	bBall4 = Sphere(5.0f);
-	bBall4.SetPos(-30.0f, 20.0f, -60.0f);
-	pb_bBall4 = App->physics->AddBody(bBall4);
-
-	bBall.color = bBall2.color = bBall3.color = bBall4.color = Color(0.6f, 0, 0.6f);
-
-	pb_bBall->collision_listeners.add(this);
-	pb_bBall2->collision_listeners.add(this);
+	///Traversal slopes
+	vec3 traversal_size = vec3(74.0f, 6.0f, 8.0f);
+	CreateSceneCube(traversal_size, vec3(52.0f, -1.8f, 2.9f), Xangle);
+	CreateSceneCube(traversal_size, vec3(52.0f, -1.8f, -2.9f), -Xangle);
+	CreateSceneCube(traversal_size, vec3(-52.0f, -1.8f, 2.9f), Xangle);
+	CreateSceneCube(traversal_size, vec3(-52.0f, -1.8f, -2.9f), -Xangle);
 
 	//Bouncing Cubes at center
-	bCubeCenter = Cube(2.0f, 2.0f, 2.0f);
-	bCubeCenter.SetPos(0.0f, 0.0f, 0.0f);
-	pb_bCubeCenter = App->physics->AddBody(bCubeCenter, 0.0f);
+	float pos_correction = 12.0f;
+	vec3 bCubes_size = vec3(2.0f, 2.0f, 2.0f);
+	CreateSceneCube(bCubes_size, vec3(0.0f, 0.0f, 0.0f), 0.0f, 0.0f, 0.0f, PhysBodyType::BOUNCE_Y, Sob_state::ROTATE, Red); //Center
+	CreateSceneCube(bCubes_size, vec3(0.0f, 0.0f, pos_correction), 0.0f, 0.0f, 0.0f, PhysBodyType::BOUNCE_XZ, Sob_state::ROTATE, Red); //Center Right
+	CreateSceneCube(bCubes_size, vec3(0.0f, 0.0f, -pos_correction), 0.0f, 0.0f, 0.0f, PhysBodyType::BOUNCE_XZ, Sob_state::ROTATE, Red); //Center Left
+	CreateSceneCube(bCubes_size, vec3(pos_correction, 0.0f, 0.0f), 0.0f, 0.0f, 0.0f, PhysBodyType::BOUNCE_Y, Sob_state::ROTATE, Red); //Center Up
+	CreateSceneCube(bCubes_size, vec3(-pos_correction, 0.0f, 0.0f), 0.0f, 0.0f, 0.0f, PhysBodyType::BOUNCE_Y, Sob_state::ROTATE, Red); //Center Down
+	CreateSceneCube(bCubes_size, vec3(91.0f, 0.0f, 0.0f), 0.0f, 0.0f, 0.0f, PhysBodyType::BOUNCE_Y, Sob_state::ROTATE, Red);
+	CreateSceneCube(bCubes_size, vec3(-91.0f, 0.0f, 0.0f), 0.0f, 0.0f, 0.0f, PhysBodyType::BOUNCE_Y, Sob_state::ROTATE, Red);
 
-	bCube = Cube(2.0f, 2.0f, 2.0f);
-	bCube.SetPos(0.0f, 0.0f, 12.0f);
-	pb_bCube = App->physics->AddBody(bCube, 0.0f);
+	//Sunken Spheres
+	CreateSceneSphere(15.0f, vec3(50.0f, -11.0f, 55.0f), 0.0f, PhysBodyType::OBJECT, Sob_state::NON, Black);
+	CreateSceneSphere(15.0f, vec3(-50.0f, -11.0f, -55.0f), 0.0f, PhysBodyType::OBJECT, Sob_state::NON, Black);
 
-	bCube2 = Cube(2.0f, 2.0f, 2.0f);
-	bCube2.SetPos(0.0f, 0.0f, -12.0f);
-	pb_bCube2 = App->physics->AddBody(bCube2, 0.0f);
-
-	bCube3 = Cube(2.0f, 2.0f, 2.0f);
-	bCube3.SetPos(12.0f, 0.0f, 0.0f);
-	pb_bCube3 = App->physics->AddBody(bCube3, 0.0f);
-
-	bCube4 = Cube(2.0f, 2.0f, 2.0f);
-	bCube4.SetPos(-12.0f, 0.0f, 0.0f);
-	pb_bCube4 = App->physics->AddBody(bCube4, 0.0f);
-
-	bCube5 = Cube(2.0f, 2.0f, 2.0f);
-	bCube5.SetPos(91.0f, 0.0f, 0.0f);
-	pb_bCube5 = App->physics->AddBody(bCube5, 0.0f);
-
-	bCube6 = Cube(2.0f, 2.0f, 2.0f);
-	bCube6.SetPos(-91.0f, 0.0f, 0.0f);
-	pb_bCube6 = App->physics->AddBody(bCube6, 0.0f);
-
-	bCubeCenter.color = bCube.color = bCube2.color = bCube3.color = bCube4.color = bCube5.color = bCube6.color = Red;
-	pb_bCubeCenter->type = pb_bCube3->type = pb_bCube4->type = pb_bCube5->type = pb_bCube6->type = PhysBodyType::BOUNCE_Y;
-	pb_bCube->type = pb_bCube2->type = PhysBodyType::BOUNCE_XZ;
+	//Balls
+	CreateSceneSphere(2.0f, vec3(-50.0f, 20.0f, 55.0f), 1.0f, PhysBodyType::DEFAULT, Sob_state::BOUNCE, Color(0.6f, 0, 0.6f), true);
+	CreateSceneSphere(2.0f, vec3(-50.0f, 20.0f, -55.0f), 1.0f, PhysBodyType::DEFAULT, Sob_state::BOUNCE, Color(0.6f, 0, 0.6f), true);
+	CreateSceneSphere(5.0f, vec3(-30.0f, 20.0f, 60.0f), 1.0f, PhysBodyType::DEFAULT, Sob_state::NON, Color(0.6f, 0, 0.6f));
+	CreateSceneSphere(5.0f, vec3(-30.0f, 20.0f, -60.0f), 1.0f, PhysBodyType::DEFAULT, Sob_state::NON, Color(0.6f, 0, 0.6f));
 
 
 	//General Scenario Settings
-	App->audio->PlayMusic("audio/track_intro.ogg", 0, 0.0f);
+	gameOver_fx1 = App->audio->LoadFx("audio/fx/GameOver.wav");
+	gameOver_fx2 = App->audio->LoadFx("audio/fx/LoseSound.wav");
+	gameOver_fx3 = App->audio->LoadFx("audio/fx/IwinSound.wav");
+
+	App->audio->PlayMusic("audio/gameOver_mus_intro.ogg", 0, 0.0f);
 
 	App->camera->Move(vec3(0.0f, 103.28f, 167.10f));
-	//App->camera->Move(vec3(0.0f, 30.0f, 30.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 
 	//To hear music, comment or delete the next line
-	Mix_VolumeMusic(0);
+	//Mix_VolumeMusic(0);
 	return ret;
 }
 
@@ -163,174 +109,95 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::Update(float dt)
 {
 
-	p2List_item<Coin>*item = c_list.getFirst();
-	while (item != nullptr) {
-
-		//if (item->data.pb_Coin != nullptr) {
-
-			item->data.pb_Coin->AddRotation(vec3(0.0f, 1.0f, 0.0f), 10.0f);
-			item->data.pb_Coin->GetTransform(&item->data.Coin_c.transform);
-			item->data.Coin_c.Render();
-		//}
-
-		item = item->next;
-	}
-
-	if (Mix_PlayingMusic() == 0)
-		App->audio->PlayMusic("audio/track_loop.ogg", -1, 0.0f);
-
-
 	Plane p(0, 1, 0, 0);
 	p.axis = false;
 	p.Render();
 
-	pb_limit1->GetTransform(&limit1.transform);
-	limit1.Render();
+	if (gameOver == true) {
 
-	pb_limit2->GetTransform(&limit2.transform);
-	limit2.Render();
-
-	pb_limit3->GetTransform(&limit3.transform);
-	limit3.Render();
-
-	pb_limit4->GetTransform(&limit4.transform);
-	limit4.Render();
-
-	//Center Slopes
-	pb_slope1->GetTransform(&slope1.transform);
-	slope1.Render();
-
-	pb_slope2->GetTransform(&slope2.transform);
-	slope2.Render();
-
-	pb_slope3->GetTransform(&slope3.transform);
-	slope3.Render();
-
-	pb_slope4->GetTransform(&slope4.transform);
-	slope4.Render();
-
-	//Side Slopes
-	pb_slope5->GetTransform(&slope5.transform);
-	slope6.Render();
-
-	pb_slope6->GetTransform(&slope6.transform);
-	slope5.Render();
-
-	pb_slope7->GetTransform(&slope7.transform);
-	slope7.Render();
-
-	pb_slope8->GetTransform(&slope8.transform);
-	slope8.Render();
-
-	pb_slCube->GetTransform(&slCube.transform);
-	slCube.Render();
-
-	pb_slCube2->GetTransform(&slCube2.transform);
-	slCube2.Render();
-
-	//Traversal Slopes
-	pb_slTraversal->GetTransform(&slTraversal.transform);
-	slTraversal.Render();
-
-	pb_slTraversal2->GetTransform(&slTraversal2.transform);
-	slTraversal2.Render();
-
-	pb_slTraversal3->GetTransform(&slTraversal3.transform);
-	slTraversal3.Render();
-
-	pb_slTraversal4->GetTransform(&slTraversal4.transform);
-	slTraversal4.Render();
-
-	//Shperes
-	pb_sunkenSphere->GetTransform(&sunkenSphere.transform);
-	sunkenSphere.Render();
-
-	pb_sunkenSphere2->GetTransform(&sunkenSphere2.transform);
-	sunkenSphere2.Render();
+		if (Mix_PlayingMusic() == 0 && !playMus)
+				App->audio->PlayMusic("audio/gameOver_mus_loop.ogg", -1, 0.0f);
 
 
-	//Balls
-	pb_bBall->GetTransform(&bBall.transform);
-	bBall.Render();
+		if (fx_timer.Read() >= 1500 && play2) {
 
-	pb_bBall2->GetTransform(&bBall2.transform);
-	bBall2.Render();
+			App->audio->PlayFx(gameOver_fx2);
+			play2 = false;
+			play3 = true;
+		}
 
-	pb_bBall3->GetTransform(&bBall3.transform);
-	bBall3.Render();
 
-	pb_bBall4->GetTransform(&bBall4.transform);
-	bBall4.Render();
+		if (fx_timer.Read() >= 4500 && play3) {
 
-	//Balls 1 & 2 bounce
-	if (MustBounce(bBall)) {
+			App->audio->PlayFx(gameOver_fx3);
+			play3 = false;
+		}
 
-		vec3 v = pb_bBall->GetLinearVelocity();
-		pb_bBall->SetLinearVelocity(vec3(0.0f, 0.0f, 0.0f));
-		pb_bBall->Push(v.x, 20.0f, v.z);
+		if (fx_timer.Read() >= 6500 && playMus) {
 
+			App->audio->PlayMusic("audio/gameOver_mus_intro.ogg", 0, 0.0f);
+			playMus = false;
+
+		}
+
+
+		App->physics->debug = true;
 	}
+	else {
 
-	if (MustBounce(bBall2)) {
+		p2List_item<Coin>*item = c_list.getFirst();
+		while (item != nullptr) {
 
-		vec3 v = pb_bBall2->GetLinearVelocity();
-		pb_bBall2->SetLinearVelocity(vec3(0.0f, 0.0f, 0.0f));
-		pb_bBall2->Push(v.x, 20.0f, v.z);
+			item->data.pb_Coin->AddRotation(vec3(0.0f, 1.0f, 0.0f), 10.0f);
+			item->data.pb_Coin->GetTransform(&item->data.Coin_c.transform);
+			item->data.Coin_c.Render();
+			item->data.Coin_c.SetPos(item->data.iPos.x, item->data.iPos.y, item->data.iPos.z);
 
+
+			item = item->next;
+		}
+
+		//Cubes
+		p2List_item<Scene_Cube> *so_itemCube = SoCube_list.getFirst();
+		for (; so_itemCube; so_itemCube = so_itemCube->next) {
+
+			if (so_itemCube->data.state == Sob_state::ROTATE)
+				so_itemCube->data.pb_Sobject->AddRotation(vec3(0.0f, 1.0f, 0.0f), 10.0f);
+
+			so_itemCube->data.pb_Sobject->GetTransform(&so_itemCube->data.p_Sobject.transform);
+			so_itemCube->data.p_Sobject.Render();
+		}
+
+		//Spheres
+		p2List_item<Scene_Sphere> *so_itemSphere = SoSphere_list.getFirst();
+		for (; so_itemSphere; so_itemSphere = so_itemSphere->next) {
+
+			if (so_itemSphere->data.state == Sob_state::BOUNCE && MustBounce(so_itemSphere->data.p_Sobject)) {
+			
+					vec3 v = so_itemSphere->data.pb_Sobject->GetLinearVelocity();
+					so_itemSphere->data.pb_Sobject->SetLinearVelocity(vec3(0.0f, 0.0f, 0.0f));
+					so_itemSphere->data.pb_Sobject->Push(v.x, 20.0f, v.z);
+			}
+
+			so_itemSphere->data.pb_Sobject->GetTransform(&so_itemSphere->data.p_Sobject.transform);
+			so_itemSphere->data.p_Sobject.Render();
+		}
 	}
-	//Bouncing Cubes
-	pb_bCubeCenter->AddRotation(vec3(0.0f, 1.0f, 0.0f), 10.0f);
-	pb_bCubeCenter->GetTransform(&bCubeCenter.transform);
-	bCubeCenter.Render();
-
-	pb_bCube->AddRotation(vec3(0.0f, 1.0f, 0.0f), 10.0f);
-	pb_bCube->GetTransform(&bCube.transform);
-	bCube.Render();
-
-	pb_bCube2->AddRotation(vec3(0.0f, 1.0f, 0.0f), 10.0f);
-	pb_bCube2->GetTransform(&bCube2.transform);
-	bCube2.Render();
-
-	pb_bCube3->AddRotation(vec3(0.0f, 1.0f, 0.0f), 10.0f);
-	pb_bCube3->GetTransform(&bCube3.transform);
-	bCube3.Render();
-
-	pb_bCube4->AddRotation(vec3(0.0f, 1.0f, 0.0f), 10.0f);
-	pb_bCube4->GetTransform(&bCube4.transform);
-	bCube4.Render();
-
-	pb_bCube5->AddRotation(vec3(0.0f, 1.0f, 0.0f), 10.0f);
-	pb_bCube5->GetTransform(&bCube5.transform);
-	bCube5.Render();
-
-	pb_bCube6->AddRotation(vec3(0.0f, 1.0f, 0.0f), 10.0f);
-	pb_bCube6->GetTransform(&bCube6.transform);
-	bCube6.Render();
 
 //	LOG("CAMERA POS: %.2f %.2f %.2f", App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
 	return UPDATE_CONTINUE;
 }
 
 
-PhysBody3D * ModuleSceneIntro::CreateSlope(Cube &slope, vec3 sizes, vec3 pos, float Xangle, float Yangle, float Zangle) {
+void ModuleSceneIntro::RunGameOver() {
 
-	vec3 Yaxis = vec3(0.0f, 1.0f, 0.0f);
-	vec3 Xaxis = vec3(1.0f, 0.0f, 0.0f);
+	Mix_HaltMusic();
+	fx_timer.Start();
 
-	vec3 Zaxis = vec3(0.0f, 0.0f, 1.0f);
-
-	slope = Cube(sizes.x, sizes.y, sizes.z);
-	slope.SetPos(pos.x, pos.y, pos.z);
-
-	PhysBody3D*pb_slope = nullptr;
-	pb_slope = App->physics->AddBody(slope, 0.0f);
-	pb_slope->AddRotation(Yaxis, Yangle);
-	pb_slope->AddRotation(Xaxis, Xangle);
-	pb_slope->AddRotation(Zaxis, Zangle);
-
-	pb_slope->type = PhysBodyType::OBJECT;
-	slope.axis = false;
-	return pb_slope;
+	App->audio->PlayFx(gameOver_fx1);
+	play2 = true;
+	gameOver = true;
+	playMus = true;
 }
 
 
@@ -343,34 +210,74 @@ bool ModuleSceneIntro::MustBounce(Sphere sphere) {
 
 void ModuleSceneIntro::OnCollision(PhysBody3D *bodyA, PhysBody3D *bodyB) {
 
-	if (bodyB->type == PhysBodyType::BOUNCE_Y || bodyB->type == PhysBodyType::OBJECT) {
+	if (bodyB->type == PhysBodyType::BOUNCE_Y || bodyB->type == PhysBodyType::OBJECT)
+			bodyA->Push(0.0f, 10.5f, 0.0f);
 
-		if (bodyA == pb_bBall)
-			pb_bBall->Push(0.0f, 10.5f, 0.0f);
-
-		if (bodyA == pb_bBall2)
-			pb_bBall2->Push(0.0f, 10.5f, 0.0f);
-	}
 }
 
 
 void ModuleSceneIntro::CreateCoin() {
 
-	vec3 pos;
-	pos.x = rand() % 200 + -100;
-	pos.z = rand() % 200 + -100;
-	pos.y = rand() % 1 + 1;
+	Coin coin;
+	coin.iPos.x = rand() % 200 + -100;
+	coin.iPos.z = rand() % 200 + -100;
+	coin.iPos.y = rand() % 1 + 1;
 
 	Cylinder Coin_Cyl = Cylinder(1.0f, 0.3f);
-	Coin_Cyl.SetPos(pos.x, pos.y, pos.z);
+	Coin_Cyl.SetPos(coin.iPos.x, coin.iPos.y, coin.iPos.z);
 	Coin_Cyl.color = Color(1.0f, 1.0f, 0.0f);
 
 	PhysBody3D* pb_Coin = App->physics->AddBody(Coin_Cyl, 0.2f);
 	pb_Coin->type = PhysBodyType::COIN;
 
-	Coin coin;
 	coin.Coin_c = Coin_Cyl;
 	coin.pb_Coin = pb_Coin;
 	
 	c_list.add(coin);
+}
+
+
+void ModuleSceneIntro::CreateSceneCube(vec3 sizes, vec3 pos, float Xangle, float Yangle, float Zangle, PhysBodyType ptype, Sob_state state, Color col) {
+
+	Scene_Cube OBJcube;
+
+	vec3 Yaxis = vec3(0.0f, 1.0f, 0.0f);
+	vec3 Xaxis = vec3(1.0f, 0.0f, 0.0f);
+	vec3 Zaxis = vec3(0.0f, 0.0f, 1.0f);
+
+	OBJcube.p_Sobject = Cube(sizes.x, sizes.y, sizes.z);
+	OBJcube.p_Sobject.SetPos(pos.x, pos.y, pos.z);
+	OBJcube.p_Sobject.color = col;
+	OBJcube.p_Sobject.axis = false;
+
+	OBJcube.pb_Sobject = App->physics->AddBody(OBJcube.p_Sobject, 0.0f);
+	OBJcube.pb_Sobject->AddRotation(Yaxis, Yangle);
+	OBJcube.pb_Sobject->AddRotation(Xaxis, Xangle);
+	OBJcube.pb_Sobject->AddRotation(Zaxis, Zangle);
+
+	OBJcube.pb_Sobject->type = ptype;
+	
+	OBJcube.state = state;
+	SoCube_list.add(OBJcube);
+}
+
+
+void ModuleSceneIntro::CreateSceneSphere(float radius, vec3 pos, float mass, PhysBodyType ptype, Sob_state state, Color col, bool listen) {
+
+	Scene_Sphere OBJsphere;
+
+	OBJsphere.p_Sobject = Sphere(radius);
+	OBJsphere.p_Sobject.SetPos(pos.x, pos.y, pos.z);
+	OBJsphere.p_Sobject.color = col;
+	OBJsphere.p_Sobject.axis = false;
+
+	OBJsphere.pb_Sobject = nullptr;
+	OBJsphere.pb_Sobject = App->physics->AddBody(OBJsphere.p_Sobject, mass);
+	OBJsphere.pb_Sobject->type = ptype;
+
+	if (listen)
+		OBJsphere.pb_Sobject->collision_listeners.add(this);
+
+	OBJsphere.state = state;
+	SoSphere_list.add(OBJsphere);
 }

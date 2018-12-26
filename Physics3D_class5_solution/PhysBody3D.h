@@ -4,6 +4,8 @@
 #include "p2List.h"
 #include "glmath.h"
 
+#include "Bullet/include/btBulletDynamicsCommon.h"
+
 class btRigidBody;
 class Module;
 
@@ -33,8 +35,11 @@ public:
 	void SetTransform(const float* matrix) const;
 
 	void SetPos(float x, float y, float z);
+	btVector3 GetPos();
 	void SetRotation(vec3 axis, float angle, bool converse = true);
 	void AddRotation(vec3 axis, float angle, float converse = true);
+
+	void SetAngularVelocity(vec3 an_vel);
 	void SetLinearVelocity(vec3 vel);
 	const vec3 GetLinearVelocity() const;
 
