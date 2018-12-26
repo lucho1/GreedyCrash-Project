@@ -143,7 +143,7 @@ update_status ModulePhysics3D::Update(float dt)
 			item = item->next;
 		}
 
-		if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
+		if(App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
 		{
 			Sphere s(1);
 			s.SetPos(App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
