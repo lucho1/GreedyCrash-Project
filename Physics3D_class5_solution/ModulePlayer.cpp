@@ -171,7 +171,7 @@ void ModulePlayer::HandleInput_P1() {
 
 		App->audio->PlayFx(shout_fx);
 		RestartCar(veh1.IOrientation_vector, veh1.vehicle, veh1.Ipos);
-		veh1.Coins--;
+		veh1.Coins-=2;
 		App->audio->PlayFx(loseCoin_fx);
 
 	}
@@ -250,7 +250,7 @@ void ModulePlayer::HandleInput_P2() {
 	if (App->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN && veh2.Coins > 0) {
 
 		RestartCar(veh2.IOrientation_vector, veh2.vehicle, veh2.Ipos, true);
-		veh2.Coins--;
+		veh2.Coins-=2;
 		App->audio->PlayFx(loseCoin_fx);
 	}
 
@@ -441,7 +441,7 @@ void ModulePlayer::OnCollision(PhysBody3D* bA, PhysBody3D* bB) {
 		if (bB == veh2.vehicle && veh1.boosting == true && veh1.vehicle->GetKmh() > 150) {
 
 			veh2.vehicle->info.color = Color(1.0f, 0.0f, 0.0f, 1.0f);
-			veh2.Coins--;
+			veh2.Coins-=2;
 			App->audio->PlayFx(loseCoin_fx);
 			veh1.boosting = false;
 		}
@@ -472,7 +472,7 @@ void ModulePlayer::OnCollision(PhysBody3D* bA, PhysBody3D* bB) {
 		if (bB == veh1.vehicle && veh2.boosting == true && veh2.vehicle->GetKmh() > 150) {
 
 			veh1.vehicle->info.color = Red;
-			veh1.Coins--;
+			veh1.Coins-=2;
 			App->audio->PlayFx(loseCoin_fx);
 			veh2.boosting = false;
 		}

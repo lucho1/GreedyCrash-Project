@@ -20,7 +20,7 @@ bool ModuleSceneIntro::Start()
 	bool ret = true;
 
 	//Scene Limits
-	float height = 20.0f;
+	float height = 30.0f;
 	float width = 2.0f;
 	float longitude = 200.0f;
 	float limit_mass = 0.0f; //0 for Static bodies
