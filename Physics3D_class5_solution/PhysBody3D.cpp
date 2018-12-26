@@ -1,5 +1,4 @@
 #include "PhysBody3D.h"
-#include "Bullet/include/btBulletDynamicsCommon.h"
 
 // =================================================
 PhysBody3D::PhysBody3D(btRigidBody* body) : body(body)
@@ -53,6 +52,14 @@ void PhysBody3D::SetPos(float x, float y, float z)
 }
 
 
+btVector3 PhysBody3D::GetPos() {
+
+	btTransform t = body->getWorldTransform();
+	//return t.getOrigin();
+	return body->getCenterOfMassPosition();
+}
+
+
 void PhysBody3D::SetRotation(vec3 axis, float angle, bool converse) {
 
 	btVector3 ax = btVector3(axis.x, axis.y, axis.z);
@@ -63,7 +70,6 @@ void PhysBody3D::SetRotation(vec3 axis, float angle, bool converse) {
 	btTransform t = body->getWorldTransform();
 	t.setRotation(btQuaternion(ax, angle));
 	body->setWorldTransform(t);
-
 }
 
 
@@ -88,7 +94,13 @@ void PhysBody3D::SetLinearVelocity(vec3 vel) {
 
 	const btVector3 velocity = btVector3(vel.x, vel.y, vel.z);
 	body->setLinearVelocity(velocity);
+}
 
+
+void PhysBody3D::SetAngularVelocity(vec3 an_vel) {
+
+	const btVector3 velocity = btVector3(an_vel.x, an_vel.y, an_vel.z);
+	body->setAngularVelocity(velocity);
 }
 
 

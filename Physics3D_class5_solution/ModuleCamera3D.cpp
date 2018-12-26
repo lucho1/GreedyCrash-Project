@@ -45,17 +45,17 @@ update_status ModuleCamera3D::Update(float dt)
 	vec3 newPos(0,0,0);
 	float speed = 10.0f * dt;
 	if(App->input->GetKey(SDL_SCANCODE_N) == KEY_REPEAT)
-		speed = 20.0f * dt;
+		speed = 10*20.0f * dt;
 
 	if(App->input->GetKey(SDL_SCANCODE_U) == KEY_REPEAT) newPos.y += speed;
 	if(App->input->GetKey(SDL_SCANCODE_H) == KEY_REPEAT) newPos.y -= speed;
 
-	if(App->input->GetKey(SDL_SCANCODE_I) == KEY_REPEAT) newPos -= Z * speed;
-	if(App->input->GetKey(SDL_SCANCODE_K) == KEY_REPEAT) newPos += Z * speed;
+	if(App->input->GetKey(SDL_SCANCODE_I) == KEY_REPEAT) newPos -= Z * speed*10;
+	if (App->input->GetKey(SDL_SCANCODE_K) == KEY_REPEAT) newPos += Z * speed * 10;
 
 
-	if(App->input->GetKey(SDL_SCANCODE_J) == KEY_REPEAT) newPos -= X * speed;
-	if(App->input->GetKey(SDL_SCANCODE_L) == KEY_REPEAT) newPos += X * speed;
+	if(App->input->GetKey(SDL_SCANCODE_J) == KEY_REPEAT) newPos -= X * speed * 10;
+	if(App->input->GetKey(SDL_SCANCODE_L) == KEY_REPEAT) newPos += X * speed * 10;
 
 	Position += newPos;
 	Reference += newPos;
