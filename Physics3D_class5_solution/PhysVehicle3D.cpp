@@ -55,15 +55,12 @@ void PhysVehicle3D::Render()
 	vehicle->getChassisWorldTransform().getOpenGLMatrix(&cabina.transform);
 	btVector3 cabina_offset(0, 3, 0);
 	
-	/*btQuaternion q2 = q;
-	q2.setRotation(btVector3(1, 0, 0), 45);*/
 	cabina_offset = cabina_offset.rotate(q.getAxis(), q.getAngle());
 
 	cabina.transform.M[12] += cabina_offset.getX();
 	cabina.transform.M[13] += cabina_offset.getY();
 	cabina.transform.M[14] += cabina_offset.getZ();
 	
-	//cabina.SetRotation(10, vec3(1, 0, 0));
 	cabina.color.Set(0, 1, 1);
 
 
@@ -95,9 +92,6 @@ void PhysVehicle3D::Render()
 	light3.transform.M[12] += light3_offset.getX();
 	light3.transform.M[13] += light3_offset.getY();
 	light3.transform.M[14] += light3_offset.getZ();
-
-	
-		
 
 	light4 = Cube(0.8, 0.5, 0.5);
 	vehicle->getChassisWorldTransform().getOpenGLMatrix(&light4.transform);

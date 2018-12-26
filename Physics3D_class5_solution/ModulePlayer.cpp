@@ -57,25 +57,9 @@ update_status ModulePlayer::Update(float dt)
 	HandleInput_P1();
 	HandleInput_P2();
 
-	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
-		vehicle2->forward = true;
-	}
-	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN) {
-		vehicle2->forward = false;
-	}
-	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN) {
-		vehicle->forward = true;
-	}
-	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN) {
-		vehicle->forward = false;
-	}
-
 	//Debug
 	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
 		boost_quantity = boost_quantity2 = 100.0f;
-
-	//BOTH VEHICLES
-	//vehicle->cabina.SetRotation(10, vec3(1, 0, 0));
 
 	//Vehicle 1 move
 	vehicle->ApplyEngineForce(acceleration);
@@ -108,6 +92,12 @@ void ModulePlayer::HandleInput_P1() {
 
 	if (App->input->GetKey(SDL_SCANCODE_Y) == KEY_DOWN)
 		RestartCar(IOrientation_vector, vehicle, IposP1);
+
+	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN)
+		vehicle->forward = true;
+
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN)
+		vehicle->forward = false;
 
 	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 		acceleration = MAX_ACCELERATION;
@@ -145,6 +135,12 @@ void ModulePlayer::HandleInput_P2() {
 
 	if (App->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN)
 		RestartCar(IOrientation_vector2, vehicle2, IposP2, true);
+
+	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN)
+		vehicle2->forward = true;
+
+	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN)
+		vehicle2->forward = false;
 
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 		acceleration2 = MAX_ACCELERATION;
