@@ -21,8 +21,8 @@ bool ModulePlayer::Start()
 
 	VehicleInfo car = SetDefaultCar(); //Default car
 
-	veh1.Ipos = vec3(0.0f, 0.0f, -92.0f);
-	veh2.Ipos = vec3(0.0f, 0.0f, 92.0f);
+	veh1.Ipos = vec3(0.0f, 0.0f, -85.0f);
+	veh2.Ipos = vec3(0.0f, 0.0f, 85.0f);
 
 	veh1.vehicle = App->physics->AddVehicle(car);
 	veh2.vehicle = App->physics->AddVehicle(car);
@@ -64,8 +64,15 @@ update_status ModulePlayer::Update(float dt)
 		veh1.vehicle->SetPos(0.0f, 0.0f, -20.0f);
 		veh2.vehicle->SetPos(0.0f, 0.0f, 20.0f);
 
-		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+
+			for (int i = 0; i < 10; i++)
+				App->scene_intro->CreateCoin();
+
 			Restart();
+			App->camera->Move(vec3(-133.6f, 81.37f, 0.0f));
+			App->camera->LookAt(vec3(0, 0, 0));
+		}
 
 		char title[250];
 		//FOR SOME REASON, /t doesn't work here :(

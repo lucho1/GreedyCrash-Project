@@ -13,11 +13,11 @@ ModuleSceneIntro::~ModuleSceneIntro() {}
 // Load assets
 bool ModuleSceneIntro::Start()
 {
-	for (int i = 0; i < 10; i++) 
-		CreateCoin();
 
 	LOG("Loading Intro assets");
 	bool ret = true;
+
+	CreateSceneCube(vec3(250.0f, 1.0f, 250.0f), vec3(0.0f, -0.8f, 0.0f), 0.0f, 0.0f, 0.0f, PhysBodyType::DEFAULT, Sob_state::NON, Color(0.25f, 0.45f, 0.1f));
 
 	//Scene Limits
 	float height = 27.0f;
@@ -32,16 +32,17 @@ bool ModuleSceneIntro::Start()
 	cam_wall.p_Sobject = Cube(limit_size.x, limit_size.y, limit_size.z);
 	cam_wall.p_Sobject.SetPos(-dFromAxis, height / 2.0f, 0.0f);
 	cam_wall.p_Sobject.axis = false;
+	cam_wall.p_Sobject.color = Color(0.25f, 0.3f, 0.1f);
 
 	cam_wall.pb_Sobject = App->physics->AddBody(cam_wall.p_Sobject, 0.0f);
 	cam_wall.pb_Sobject->type = PhysBodyType::LIMIT;
 
 	///Other walls
-	CreateSceneCube(limit_size, vec3(dFromAxis, height / 2.0f, 0.0f), 0.0f, 0.0f, 0.0f, PhysBodyType::LIMIT);
+	CreateSceneCube(limit_size, vec3(dFromAxis, height / 2.0f, 0.0f), 0.0f, 0.0f, 0.0f, PhysBodyType::LIMIT, Sob_state::NON, SceneColor);
 
 	limit_size = vec3(longitude + 2.0f, height, width);
-	CreateSceneCube(limit_size, vec3(0.0f, height / 2.0f, -dFromAxis - 1.0f), 0.0f, 0.0f, 0.0f, PhysBodyType::LIMIT);
-	CreateSceneCube(limit_size, vec3(0.0f, height / 2.0f, dFromAxis + 1.0f), 0.0f, 0.0f, 0.0f, PhysBodyType::LIMIT);
+	CreateSceneCube(limit_size, vec3(0.0f, height / 2.0f, -dFromAxis - 1.0f), 0.0f, 0.0f, 0.0f, PhysBodyType::LIMIT, Sob_state::NON, SceneColor);
+	CreateSceneCube(limit_size, vec3(0.0f, height / 2.0f, dFromAxis + 1.0f), 0.0f, 0.0f, 0.0f, PhysBodyType::LIMIT, Sob_state::NON, SceneColor);
 
 	//Slopes
 	vec3 slope_sizes = vec3(10.0f, 6.0f, 13.0f);
@@ -82,8 +83,8 @@ bool ModuleSceneIntro::Start()
 	CreateSceneCube(bCubes_size, vec3(-91.0f, 0.2f, 0.0f), 0.0f, 0.0f, 0.0f, PhysBodyType::BOUNCE_Y, Sob_state::ROTATE, Red);
 
 	//Sunken Spheres
-	CreateSceneSphere(15.0f, vec3(50.0f, -11.0f, 55.0f), 0.0f, PhysBodyType::OBJECT, Sob_state::NON, Black);
-	CreateSceneSphere(15.0f, vec3(-50.0f, -11.0f, -55.0f), 0.0f, PhysBodyType::OBJECT, Sob_state::NON, Black);
+	CreateSceneSphere(15.0f, vec3(50.0f, -11.0f, 55.0f), 0.0f, PhysBodyType::OBJECT, Sob_state::NON, Color(0.2f, 0.2f, 0.2f));
+	CreateSceneSphere(15.0f, vec3(-50.0f, -11.0f, -55.0f), 0.0f, PhysBodyType::OBJECT, Sob_state::NON, Color(0.2f, 0.2f, 0.2f));
 
 	//Balls
 	CreateSceneSphere(2.0f, vec3(-50.0f, 20.0f, 55.0f), 1.0f, PhysBodyType::DEFAULT, Sob_state::BOUNCE, Color(0.6f, 0, 0.6f), true);
@@ -91,6 +92,37 @@ bool ModuleSceneIntro::Start()
 	CreateSceneSphere(5.0f, vec3(-30.0f, 20.0f, 60.0f), 1.0f, PhysBodyType::DEFAULT, Sob_state::NON, Color(0.6f, 0, 0.6f));
 	CreateSceneSphere(5.0f, vec3(30.0f, 20.0f, -60.0f), 1.0f, PhysBodyType::DEFAULT, Sob_state::NON, Color(0.6f, 0, 0.6f));
 
+	//A couple of constraints to put more interesting obstacles
+	float size = 2.0f;
+	for (int i = 0; i < 6; ++i)
+	{
+		//Snake1
+		snake1[i].p_Sobject.radius = size;
+		snake1[i].p_Sobject.SetPos(0.0f , 0.0f, 94.0f);
+		snake1[i].pb_Sobject = App->physics->AddBody(snake1[i].p_Sobject, 10.0f);
+
+		snake2[i].p_Sobject.radius = size;
+		snake2[i].p_Sobject.SetPos(0.0f, 0.0f, -94.0f);
+		snake2[i].pb_Sobject = App->physics->AddBody(snake2[i].p_Sobject, 10.0f);
+
+		if (i > 0) {
+
+			App->physics->AddConstraintHinge(*snake1[i].pb_Sobject, *snake1[i - 1].pb_Sobject, vec3(size + 2, 0, 0), vec3(0, 0, 0), vec3(0, 1, 0), vec3(0, 1, 0));
+			App->physics->AddConstraintHinge(*snake2[i].pb_Sobject, *snake2[i - 1].pb_Sobject, vec3(size + 2, 0, 0), vec3(0, 0, 0), vec3(0, 1, 0), vec3(0, 1, 0));
+		}
+
+		snake1[i].p_Sobject.color = Color(0.0f, 0.0f, 0.14f * i);
+		snake1[i].p_Sobject.axis = false;
+
+		snake2[i].p_Sobject.color = Color(0.14f * i, 0.5f, 0.13f);
+		snake2[i].p_Sobject.axis = false;
+		
+	}
+
+	//Start Coin
+	start_coin.SetPos(1.0f, 0.0f, 0.0f);
+	start_coin.color = Color(1.0f, 1.0f, 0.0f);
+	st_coin = App->physics->AddBody(start_coin, 0.0f);
 
 	//General Scenario Settings
 	gameOver_fx1 = App->audio->LoadFx("audio/fx/GameOver.wav");
@@ -99,8 +131,8 @@ bool ModuleSceneIntro::Start()
 
 	App->audio->PlayMusic("audio/gameOver_mus_intro.ogg", 0, 0.0f);
 
-	//App->camera->Move(vec3(0.0f, 103.28f, 167.10f));
-	App->camera->Move(vec3(-176.27f, 87.99f, -0.58f));
+	App->camera->Move(vec3(-35.69f, 21.13f, 0.0f));
+	//App->camera->Move(vec3(-169.29f, 102.5f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 
 	//To hear music, comment or delete the next line
@@ -119,16 +151,21 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::Update(float dt)
 {
 
-	Plane p(0, 1, 0, 0);
-	p.axis = false;
-	p.Render();
-
 	if (gameOver == true) {
 
+		Plane p(0, 1, 0, 0);
+		p.axis = false;
+		p.Render();
+
+		start_coin.SetPos(1.0f, 0.0f, 0.0f);
+		st_coin->GetTransform(&start_coin.transform);
+		start_coin.Render();
+		st_coin->AddRotation(vec3(0.0f, 1.0f, 0.0f), 10.0f);
+		
 		if (Mix_PlayingMusic() == 0 && !playMus)
 				App->audio->PlayMusic("audio/gameOver_mus_loop.ogg", -1, 0.0f);
 
-
+		
 		if (fx_timer.Read() >= 1500 && play2) {
 
 			App->audio->PlayFx(gameOver_fx2);
@@ -150,7 +187,6 @@ update_status ModuleSceneIntro::Update(float dt)
 
 		}
 
-
 		App->physics->debug = true;
 	}
 	else {
@@ -162,7 +198,6 @@ update_status ModuleSceneIntro::Update(float dt)
 			item->data.pb_Coin->GetTransform(&item->data.Coin_c.transform);
 			item->data.Coin_c.Render();
 			item->data.Coin_c.SetPos(item->data.iPos.x, item->data.iPos.y, item->data.iPos.z);
-
 
 			item = item->next;
 		}
@@ -195,9 +230,18 @@ update_status ModuleSceneIntro::Update(float dt)
 			so_itemSphere->data.pb_Sobject->GetTransform(&so_itemSphere->data.p_Sobject.transform);
 			so_itemSphere->data.p_Sobject.Render();
 		}
+
+		for (int i = 0; i < 6; ++i)
+		{
+			snake1[i].pb_Sobject->GetTransform(&snake1[i].p_Sobject.transform);
+			snake1[i].p_Sobject.Render();
+			snake2[i].pb_Sobject->GetTransform(&snake2[i].p_Sobject.transform);
+			snake2[i].p_Sobject.Render();
+			
+		}
 	}
 
-	//LOG("CAMERA POS: %.2f %.2f %.2f", App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
+	LOG("CAMERA POS: %.2f %.2f %.2f", App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
 	return UPDATE_CONTINUE;
 }
 
@@ -211,6 +255,13 @@ void ModuleSceneIntro::RunGameOver() {
 	play2 = true;
 	gameOver = true;
 	playMus = true;
+
+	p2List_item<Coin>*c_item = App->scene_intro->c_list.getFirst();
+	for (; c_item; c_item = c_item->next)
+		c_item->data.pb_Coin->to_delete = true;
+
+	App->camera->Move(vec3(133.6, -81.37f, 0.0f));
+	App->camera->LookAt(vec3(0, 0, 0));
 }
 
 

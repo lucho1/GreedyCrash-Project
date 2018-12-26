@@ -62,6 +62,12 @@ private:
 	p2List<Scene_Cube> SoCube_list;
 	p2List<Scene_Sphere> SoSphere_list;
 
+	Scene_Sphere snake1[6];
+	Scene_Sphere snake2[6];
+
+	Cylinder start_coin = Cylinder(1.0f, 0.3f);
+	PhysBody3D* st_coin = nullptr;
+
 	Scene_Cube cam_wall;
 
 public:
