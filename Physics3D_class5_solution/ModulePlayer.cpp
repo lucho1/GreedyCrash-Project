@@ -115,7 +115,7 @@ update_status ModulePlayer::Update(float dt)
 		veh2.vehicle->info.color = Blue;
 
 		char title[350];
-		sprintf_s(title, "PLAYER 1:     Speed %.1f Km/h     Boost %.2f     BoostRecover: %i/3     Coins %i                                                    PLAYER 2:     Speed %.1f Km/h     Boost %.2f     BoostRecover: %i/3     Coins %i",
+		sprintf_s(title, "PLAYER 1:     Speed %.1f Km/h     Boost %.2f     BoostRecover: %i/2     Coins %i                                                    PLAYER 2:     Speed %.1f Km/h     Boost %.2f     BoostRecover: %i/2     Coins %i",
 			veh1.vehicle->GetKmh(), veh1.boost_quantity, veh1.boost_recover, veh1.Coins, veh2.vehicle->GetKmh(), veh2.boost_quantity, veh2.boost_recover, veh2.Coins);
 
 		App->window->SetTitle(title);
@@ -147,7 +147,7 @@ bool ModulePlayer::LimitsReached(defCar vehicle) {
 
 	btVector3 curr_pos = vehicle.vehicle->GetPos();
 
-	if (curr_pos.getX() > 200 || curr_pos.getX() < -200 || curr_pos.getZ() > 200 || curr_pos.getZ() < -200 || curr_pos.getY() > 100)
+	if (curr_pos.getX() > 150 || curr_pos.getX() < -150 || curr_pos.getZ() > 150 || curr_pos.getZ() < -150 || curr_pos.getY() > 100)
 		return true;
 
 	return false;
@@ -156,7 +156,7 @@ bool ModulePlayer::LimitsReached(defCar vehicle) {
 
 void ModulePlayer::HandleInput_P1() {
 
-	if (veh1.boost_recover >= 3) {
+	if (veh1.boost_recover >= 2) {
 
 		veh1.boost_quantity = 100.0f;
 		veh1.boost_recover = 0;
@@ -171,7 +171,7 @@ void ModulePlayer::HandleInput_P1() {
 
 		App->audio->PlayFx(shout_fx);
 		RestartCar(veh1.IOrientation_vector, veh1.vehicle, veh1.Ipos);
-		veh1.Coins--;
+		veh1.Coins -= 2;
 		App->audio->PlayFx(loseCoin_fx);
 
 	}
@@ -227,7 +227,7 @@ void ModulePlayer::HandleInput_P1() {
 
 void ModulePlayer::HandleInput_P2() {
 
-	if (veh2.boost_recover >= 3) {
+	if (veh2.boost_recover >= 2) {
 
 		veh2.boost_quantity = 100.0f;
 		veh2.boost_recover = 0;
@@ -242,7 +242,7 @@ void ModulePlayer::HandleInput_P2() {
 
 		App->audio->PlayFx(shout_fx);
 		RestartCar(veh2.IOrientation_vector, veh2.vehicle, veh2.Ipos, true);
-		veh2.Coins--;
+		veh2.Coins -= 2;
 		App->audio->PlayFx(loseCoin_fx);
 
 	}
@@ -441,7 +441,8 @@ void ModulePlayer::OnCollision(PhysBody3D* bA, PhysBody3D* bB) {
 		if (bB == veh2.vehicle && veh1.boosting == true && veh1.vehicle->GetKmh() > 150) {
 
 			veh2.vehicle->info.color = Color(1.0f, 0.0f, 0.0f, 1.0f);
-			veh2.Coins--;
+			veh2.Coins -= 2;
+			veh2.Coins++;
 			App->audio->PlayFx(loseCoin_fx);
 			veh1.boosting = false;
 		}
@@ -472,7 +473,8 @@ void ModulePlayer::OnCollision(PhysBody3D* bA, PhysBody3D* bB) {
 		if (bB == veh1.vehicle && veh2.boosting == true && veh2.vehicle->GetKmh() > 150) {
 
 			veh1.vehicle->info.color = Red;
-			veh1.Coins--;
+			veh1.Coins -= 2;
+			veh2.Coins++;
 			App->audio->PlayFx(loseCoin_fx);
 			veh2.boosting = false;
 		}
