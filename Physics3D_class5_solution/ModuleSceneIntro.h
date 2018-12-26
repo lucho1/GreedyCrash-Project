@@ -62,6 +62,8 @@ private:
 	p2List<Scene_Cube> SoCube_list;
 	p2List<Scene_Sphere> SoSphere_list;
 
+	Scene_Cube cam_wall;
+
 public:
 
 	void CreateCoin();

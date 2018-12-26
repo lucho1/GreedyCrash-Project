@@ -27,7 +27,16 @@ bool ModuleSceneIntro::Start()
 
 	float dFromAxis = 100.0f;
 	vec3 limit_size = vec3(width, height, longitude);
-	CreateSceneCube(limit_size, vec3(-dFromAxis, height / 2.0f, 0.0f), 0.0f, 0.0f, 0.0f, PhysBodyType::LIMIT);
+
+	///Wall where camera is placed
+	cam_wall.p_Sobject = Cube(limit_size.x, limit_size.y, limit_size.z);
+	cam_wall.p_Sobject.SetPos(-dFromAxis, height / 2.0f, 0.0f);
+	cam_wall.p_Sobject.axis = false;
+
+	cam_wall.pb_Sobject = App->physics->AddBody(cam_wall.p_Sobject, 0.0f);
+	cam_wall.pb_Sobject->type = PhysBodyType::LIMIT;
+
+	///Other walls
 	CreateSceneCube(limit_size, vec3(dFromAxis, height / 2.0f, 0.0f), 0.0f, 0.0f, 0.0f, PhysBodyType::LIMIT);
 
 	limit_size = vec3(longitude + 2.0f, height, width);
@@ -69,8 +78,8 @@ bool ModuleSceneIntro::Start()
 	CreateSceneCube(bCubes_size, vec3(0.0f, 0.0f, -pos_correction), 0.0f, 0.0f, 0.0f, PhysBodyType::BOUNCE_XZ, Sob_state::ROTATE, Red); //Center Left
 	CreateSceneCube(bCubes_size, vec3(pos_correction, 0.0f, 0.0f), 0.0f, 0.0f, 0.0f, PhysBodyType::BOUNCE_Y, Sob_state::ROTATE, Red); //Center Up
 	CreateSceneCube(bCubes_size, vec3(-pos_correction, 0.0f, 0.0f), 0.0f, 0.0f, 0.0f, PhysBodyType::BOUNCE_Y, Sob_state::ROTATE, Red); //Center Down
-	CreateSceneCube(bCubes_size, vec3(91.0f, 0.0f, 0.0f), 0.0f, 0.0f, 0.0f, PhysBodyType::BOUNCE_Y, Sob_state::ROTATE, Red);
-	CreateSceneCube(bCubes_size, vec3(-91.0f, 0.0f, 0.0f), 0.0f, 0.0f, 0.0f, PhysBodyType::BOUNCE_Y, Sob_state::ROTATE, Red);
+	CreateSceneCube(bCubes_size, vec3(91.0f, 0.2f, 0.0f), 0.0f, 0.0f, 0.0f, PhysBodyType::BOUNCE_Y, Sob_state::ROTATE, Red);
+	CreateSceneCube(bCubes_size, vec3(-91.0f, 0.2f, 0.0f), 0.0f, 0.0f, 0.0f, PhysBodyType::BOUNCE_Y, Sob_state::ROTATE, Red);
 
 	//Sunken Spheres
 	CreateSceneSphere(15.0f, vec3(50.0f, -11.0f, 55.0f), 0.0f, PhysBodyType::OBJECT, Sob_state::NON, Black);
@@ -78,9 +87,9 @@ bool ModuleSceneIntro::Start()
 
 	//Balls
 	CreateSceneSphere(2.0f, vec3(-50.0f, 20.0f, 55.0f), 1.0f, PhysBodyType::DEFAULT, Sob_state::BOUNCE, Color(0.6f, 0, 0.6f), true);
-	CreateSceneSphere(2.0f, vec3(-50.0f, 20.0f, -55.0f), 1.0f, PhysBodyType::DEFAULT, Sob_state::BOUNCE, Color(0.6f, 0, 0.6f), true);
+	CreateSceneSphere(2.0f, vec3(50.0f, 20.0f, -55.0f), 1.0f, PhysBodyType::DEFAULT, Sob_state::BOUNCE, Color(0.6f, 0, 0.6f), true);
 	CreateSceneSphere(5.0f, vec3(-30.0f, 20.0f, 60.0f), 1.0f, PhysBodyType::DEFAULT, Sob_state::NON, Color(0.6f, 0, 0.6f));
-	CreateSceneSphere(5.0f, vec3(-30.0f, 20.0f, -60.0f), 1.0f, PhysBodyType::DEFAULT, Sob_state::NON, Color(0.6f, 0, 0.6f));
+	CreateSceneSphere(5.0f, vec3(30.0f, 20.0f, -60.0f), 1.0f, PhysBodyType::DEFAULT, Sob_state::NON, Color(0.6f, 0, 0.6f));
 
 
 	//General Scenario Settings
@@ -90,7 +99,8 @@ bool ModuleSceneIntro::Start()
 
 	App->audio->PlayMusic("audio/gameOver_mus_intro.ogg", 0, 0.0f);
 
-	App->camera->Move(vec3(0.0f, 103.28f, 167.10f));
+	//App->camera->Move(vec3(0.0f, 103.28f, 167.10f));
+	App->camera->Move(vec3(-176.27f, 87.99f, -0.58f));
 	App->camera->LookAt(vec3(0, 0, 0));
 
 	//To hear music, comment or delete the next line
@@ -157,6 +167,9 @@ update_status ModuleSceneIntro::Update(float dt)
 			item = item->next;
 		}
 
+		cam_wall.pb_Sobject->GetTransform(&cam_wall.p_Sobject.transform);
+		cam_wall.p_Sobject.CameraWall_Render();
+
 		//Cubes
 		p2List_item<Scene_Cube> *so_itemCube = SoCube_list.getFirst();
 		for (; so_itemCube; so_itemCube = so_itemCube->next) {
@@ -184,7 +197,7 @@ update_status ModuleSceneIntro::Update(float dt)
 		}
 	}
 
-//	LOG("CAMERA POS: %.2f %.2f %.2f", App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
+	//LOG("CAMERA POS: %.2f %.2f %.2f", App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
 	return UPDATE_CONTINUE;
 }
 

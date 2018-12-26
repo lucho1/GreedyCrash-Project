@@ -111,8 +111,11 @@ update_status ModulePlayer::Update(float dt)
 
 		veh2.vehicle->Render();
 
+		veh1.vehicle->info.color = Color(1.0f, 0.65f, 0.13f);
+		veh2.vehicle->info.color = Blue;
+
 		char title[350];
-		sprintf_s(title, "PLAYER 1:     Speed %.1f Km/h     Boost %.2f     BoostRecover: %i/3     Coins %i                                                     PLAYER 2:     Speed %.1f Km/h     Boost %.2f     BoostRecover: %i/3     Coins %i",
+		sprintf_s(title, "PLAYER 1:     Speed %.1f Km/h     Boost %.2f     BoostRecover: %i/3     Coins %i                                                    PLAYER 2:     Speed %.1f Km/h     Boost %.2f     BoostRecover: %i/3     Coins %i",
 			veh1.vehicle->GetKmh(), veh1.boost_quantity, veh1.boost_recover, veh1.Coins, veh2.vehicle->GetKmh(), veh2.boost_quantity, veh2.boost_recover, veh2.Coins);
 
 		App->window->SetTitle(title);
@@ -144,7 +147,7 @@ bool ModulePlayer::LimitsReached(defCar vehicle) {
 
 	btVector3 curr_pos = vehicle.vehicle->GetPos();
 
-	if (curr_pos.getX() > 200 || curr_pos.getX() < -200 || curr_pos.getZ() > 200 || curr_pos.getZ() < -200 || curr_pos.getY() > 30)
+	if (curr_pos.getX() > 200 || curr_pos.getX() < -200 || curr_pos.getZ() > 200 || curr_pos.getZ() < -200 || curr_pos.getY() > 100)
 		return true;
 
 	return false;
@@ -182,10 +185,10 @@ void ModulePlayer::HandleInput_P1() {
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN)
-		vehicle->forward = true;
+		veh1.vehicle->forward = true;
 
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN)
-		vehicle->forward = false;
+		veh1.vehicle->forward = false;
 
 	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 		veh1.acceleration = MAX_ACCELERATION;
@@ -213,13 +216,12 @@ void ModulePlayer::HandleInput_P1() {
 	if (App->input->GetKey(SDL_SCANCODE_RCTRL) == KEY_REPEAT && veh1.boost_quantity >= 0) {
 
 		btVector3 vec = veh1.vehicle->vehicle->getForwardVector();
-		veh1.vehicle->Push(vec.getX() * 150.0f, 0.0f, vec.getZ() * 150.0f);
+		veh1.vehicle->Push(vec.getX() * 50.0f, 0.0f, vec.getZ() * 50.0f);
 		veh1.boost_quantity -= 1.0f;
-		veh1.boosting = true;
 	}
 
-	if (veh1.vehicle->GetKmh() < 150)
-		veh1.boosting = false;
+	if (App->input->GetKey(SDL_SCANCODE_RCTRL) == KEY_DOWN)
+		veh1.boosting = true;
 }
 
 
@@ -253,10 +255,10 @@ void ModulePlayer::HandleInput_P2() {
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN)
-		vehicle2->forward = true;
+		veh2.vehicle->forward = true;
 
 	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN)
-		vehicle2->forward = false;
+		veh2.vehicle->forward = false;
 
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 		veh2.acceleration = MAX_ACCELERATION;
@@ -284,13 +286,12 @@ void ModulePlayer::HandleInput_P2() {
 	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT && veh2.boost_quantity >= 0) {
 
 		btVector3 vec = veh2.vehicle->vehicle->getForwardVector();
-		veh2.vehicle->Push(vec.getX() * 80.0f, 0.0f, vec.getZ() * 80.0f);
+		veh2.vehicle->Push(vec.getX() * 50.0f, 0.0f, vec.getZ() * 50.0f);
 		veh2.boost_quantity -= 1.0f;
-		veh2.boosting = true;
 	}
 
-	if (veh2.vehicle->GetKmh() < 150)
-		veh2.boosting = false;
+	if(App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_DOWN)
+		veh2.boosting = true;
 }
 
 VehicleInfo ModulePlayer::SetDefaultCar() {
@@ -437,12 +438,12 @@ void ModulePlayer::OnCollision(PhysBody3D* bA, PhysBody3D* bB) {
 			}
 		}
 
-		if (bB == veh2.vehicle && veh1.boosting) {
+		if (bB == veh2.vehicle && veh1.boosting == true && veh1.vehicle->GetKmh() > 150) {
 
-			veh1.boosting = false;
 			veh2.vehicle->info.color = Color(1.0f, 0.0f, 0.0f, 1.0f);
 			veh2.Coins--;
 			App->audio->PlayFx(loseCoin_fx);
+			veh1.boosting = false;
 		}
 	}
 	if (bA == veh2.vehicle) {
@@ -468,13 +469,12 @@ void ModulePlayer::OnCollision(PhysBody3D* bA, PhysBody3D* bB) {
 			}	
 		}
 
-		if (bB == veh1.vehicle && veh2.boosting) {
+		if (bB == veh1.vehicle && veh2.boosting == true && veh2.vehicle->GetKmh() > 150) {
 
-			veh2.boosting = false;
-			veh1.vehicle->info.color = Color(0.0f, 1.0f, 0.0f, 1.0f);
+			veh1.vehicle->info.color = Red;
 			veh1.Coins--;
 			App->audio->PlayFx(loseCoin_fx);
-
+			veh2.boosting = false;
 		}
 
 	}

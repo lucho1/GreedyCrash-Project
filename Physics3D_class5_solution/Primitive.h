@@ -43,6 +43,7 @@ public :
 	Cube();
 	Cube(float sizeX, float sizeY, float sizeZ);
 	void InnerRender() const;
+	void CameraWall_Render() const;
 public:
 	vec3 size;
 };
