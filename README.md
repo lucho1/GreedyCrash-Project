@@ -3,6 +3,8 @@ Greedy Crash is a cars fighting game for two players where the objective is to m
 
 This game was developed by students Jaume Avinyó and Lucho Suaya for Physics II subject in Game Design and Development degree of UPC, Barcelona (CITM School).
 
+![](https://github.com/lucho1/GreedyCrash-Project/blob/master/Captura.PNG)
+
 ## Instructions & Controls
 -Player 1 moves the car with Arrow keys and boosts with Right Control. Y key to reset car position (costs 2 coins).
 
@@ -50,7 +52,3 @@ The objective is to get the opponent to lose all its coins, but be careful, rest
 
 ## Credits
 Music by Loquillo and Desgraciaus and modified by Lucho Suaya with Audacity. Done with SDL, OpenGL, Bullet Library and Visual Studio. Game licensed under a MIT License (see full license at game folder or github repository). By Lucho Suaya and Jaume Avinyó.
-
-
-
-
